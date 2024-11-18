@@ -40,6 +40,7 @@ $events->created=date('Y-m-d H:i:s');
 $events->modified=date('Y-m-d H:i:s');
 $events->id=$data->id;
 
+// Messagem que aparece ao Utilizador / Admin
 if($events->update())
 {
     echo json_encode(array("message"=>"Events was Updated."));

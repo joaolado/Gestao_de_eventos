@@ -18,26 +18,29 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 // Incluir os ficheiros do modelo e da ligação à BD
 include_once '../config/database.php';
-include_once '../objects/category.php';
+include_once '../objects/events_category.php';
 
 // Instanciar a base de dados
 $database= new Database();
 $db=$database->getConnection();
 
 // Inicializar o objeto das categorias
-$category= new Category($db);
+$events_category= new Events_category($db);
 
 // Receber valores de um formulario
 $data=json_decode(file_get_contents("php://input"));
-$category->id=$data->id;
+$events_category->name=$data->name;
+$events_category->description=$data->description;
+$events_category->modified=date('Y-m-d H:i:s');
+$events_category->id=$data->id;
 
-if($category->delete())
+if($events_category->update())
 {
-    echo json_encode(array("message"=>"Category was Deleted."));
+    echo json_encode(array("message"=>"Events Category was Updated."));
 }
 else
 {
-    echo json_encode(array("message"=>"Unable to Delete Category."));
+    echo json_encode(array("message"=>"Unable to Update Events Category."));
 };
 
 ?>

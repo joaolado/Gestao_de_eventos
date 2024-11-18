@@ -64,8 +64,11 @@ class Events
 
         // Inicializar as variaveis / Não Adicionar FK
         $this->name=htmlspecialchars(strip_tags($this->name));
-        $this->description=htmlspecialchars(strip_tags($this->description));
-        $this->price=htmlspecialchars(strip_tags($this->price));
+        $this->desc=htmlspecialchars(strip_tags($this->desc));
+        $this->cover=htmlspecialchars(strip_tags($this->cover));
+        $this->date=htmlspecialchars(strip_tags($this->date));
+        $this->location=htmlspecialchars(strip_tags($this->location));
+        $this->capacity=htmlspecialchars(strip_tags($this->capacity));
         
         // Bind values
         $st->bindParam(1,$this->name);
@@ -100,7 +103,7 @@ class Events
     public function update()
     {
         // Consulta para buscar o category_id com base no category_name
-        $category_query = "SELECT id FROM categories WHERE name = ?";
+        $category_query = "SELECT id FROM events_category WHERE name = ?";
 
         $category_stmt = $this->conn->prepare($category_query);
         $category_stmt->bindParam(1, $this->category_name);
@@ -117,21 +120,27 @@ class Events
         return false;
         }
 
-        $qry="UPDATE ".$this->table_name. " SET name=?, description=?, price=?, category_id=?, modified=? WHERE id=?";
+        $qry="UPDATE ".$this->table_name. " SET name=?, description=?, cover=?, date=?, location=?, capacity=?, category_id=?, modified=? WHERE id=?";
         $st=$this->conn->prepare($qry);
 
         // Inicializar as variaveis
         $this->name=htmlspecialchars(strip_tags($this->name));
-        $this->description=htmlspecialchars(strip_tags($this->description));
-        $this->price=htmlspecialchars(strip_tags($this->price));
+        $this->desc=htmlspecialchars(strip_tags($this->desc));
+        $this->cover=htmlspecialchars(strip_tags($this->cover));
+        $this->date=htmlspecialchars(strip_tags($this->date));
+        $this->location=htmlspecialchars(strip_tags($this->location));
+        $this->capacity=htmlspecialchars(strip_tags($this->capacity));
 
         // Bind values
         $st->bindParam(1,$this->name);
-        $st->bindParam(2,$this->description);
-        $st->bindParam(3,$this->price);
-        $st->bindParam(4,$this->category_id);
-        $st->bindParam(5,$this->modified);
-        $st->bindParam(6,$this->id);
+        $st->bindParam(2,$this->desc);
+        $st->bindParam(3,$this->cover);
+        $st->bindParam(4,$this->date);
+        $st->bindParam(5,$this->location);
+        $st->bindParam(6,$this->capacity);
+        $st->bindParam(7,$this->category_id);
+        $st->bindParam(8,$this->modified);
+        $st->bindParam(9,$this->id);
 
         // Executar
         if($st->execute()){return true;}

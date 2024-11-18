@@ -56,6 +56,7 @@ if ($num>0)
     echo json_encode($events_arr);
 }
 
+// Messagem que aparece ao Utilizador / Admin
 // Não existem registos na BD
 else
 {

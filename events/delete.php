@@ -31,6 +31,7 @@ $events= new Events($db);
 $data=json_decode(file_get_contents("php://input"));
 $events->id=$data->id;
 
+// Messagem que aparece ao Utilizador / Admin
 if($events->delete())
 {
     echo json_encode(array("message"=>"Events was Deleted."));

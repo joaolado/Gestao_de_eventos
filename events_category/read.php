@@ -9,15 +9,15 @@ header("Content-Type: application/json; charset=UTF-8");
 
 // Incluir os ficheiros do modelo e da ligação à BD
 include_once '../config/database.php';
-include_once '../objects/category.php';
+include_once '../objects/events_category.php';
 
 // Instanciar a base de dados
 $database= new Database();
 $db=$database->getConnection();
 
 // Inicializar o objeto das categorias
-$category= new Category($db);
-$st=$category->read();
+$events_category= new Events_category($db);
+$st=$events_category->read();
 
 // Numero de registos retornados pela BD
 $num=$st->rowCount();
@@ -26,15 +26,15 @@ $num=$st->rowCount();
 if ($num>0)
 {
     // Categorias no array
-    $categories_arr=array();
-    $categories_arr["records"]=array();
+    $events_category_arr=array();
+    $events_category_arr["records"]=array();
 
     // Ler os registos na BD e colocar no array de json
     while($row=$st->fetch(PDO::FETCH_ASSOC))
     {
         // Extrair os valores das linhas
         extract($row);
-        $category_items=array
+        $events_category_items=array
         (
             "id"=>$id,
             "name"=>$name,
@@ -44,17 +44,17 @@ if ($num>0)
         );
 
         // Adiciona o registo ao conjunto de elementos
-        array_push($categories_arr["records"], $category_items);
+        array_push($events_category_arr["records"], $events_category_items);
     }
 
     http_response_code(200);
-    echo json_encode($categories_arr);
+    echo json_encode($events_category_arr);
 }
 
 // Não existem registos na BD
 else
 {
-    echo json_encode(array("message"=>"No Categories Found."));
+    echo json_encode(array("message"=>"No Events Category Found."));
 }
 
 ?>
