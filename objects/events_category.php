@@ -25,8 +25,8 @@ class Events_category
     {
         // Selecionar todos os registos
         // SLOW QUERRY - $querry="SELECT * FROM ". $this->table_name;
-        
-        $querry="SELECT id,name,description,created,modified FROM ". $this->table_name. " order by name";
+
+        $querry="SELECT id,name,desc,created,modified FROM ". $this->table_name. " order by name";
         $st=$this->conn->prepare($querry);
         $st->execute();
 
@@ -35,16 +35,16 @@ class Events_category
 
     public function create()
     {
-        $qry="INSERT INTO ".$this->table_name. " SET name=?, description=?, created=?, modified=?";
+        $qry="INSERT INTO ".$this->table_name. " SET name=?, desc=?, created=?, modified=?";
         $st=$this->conn->prepare($qry);
 
         // Inicializar as variaveis
         $this->name=htmlspecialchars(strip_tags($this->name));
-        $this->description=htmlspecialchars(strip_tags($this->description));
+        $this->desc=htmlspecialchars(strip_tags($this->desc));
 
         // Bind values
         $st->bindParam(1,$this->name);
-        $st->bindParam(2,$this->description);
+        $st->bindParam(2,$this->desc);
         $st->bindParam(3,$this->created);
         $st->bindParam(4,$this->created);
 
@@ -66,16 +66,16 @@ class Events_category
 
     public function update()
     {
-        $qry="UPDATE ".$this->table_name. " SET name=?, description=?, modified=? WHERE id=?";
+        $qry="UPDATE ".$this->table_name. " SET name=?, desc=?, modified=? WHERE id=?";
         $st=$this->conn->prepare($qry);
 
         // Inicializar as variaveis
         $this->name=htmlspecialchars(strip_tags($this->name));
-        $this->description=htmlspecialchars(strip_tags($this->description));
+        $this->desc=htmlspecialchars(strip_tags($this->desc));
 
         // Bind values
         $st->bindParam(1,$this->name);
-        $st->bindParam(2,$this->description);
+        $st->bindParam(2,$this->desc);
         $st->bindParam(3,$this->modified);
         $st->bindParam(4,$this->id);
 

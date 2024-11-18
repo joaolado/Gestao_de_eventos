@@ -30,8 +30,8 @@ class Events
     {
         // Selecionar todos os registos
         // SLOW QUERRY - $querry="SELECT * FROM ". $this->table_name;
-        $querry="SELECT p.id, p.name, p.desc, p.price, p.category_id, c.name AS category_name, p.created, p.modified 
-                    FROM ". $this->table_name. " p LEFT JOIN categories c ON p.category_id = c.id  order by p.name";
+        $querry="SELECT p.id, p.name, p.desc, p.cover, p.date, p.location, p.capacity, p.category_id, ec.name AS category_name, p.created, p.modified 
+                    FROM ". $this->table_name. " p LEFT JOIN events_category ec ON p.category_id = ec.id  order by p.name";
         $st=$this->conn->prepare($querry);
         $st->execute();
 
@@ -41,17 +41,17 @@ class Events
     public function create()
     {   
         // Consulta para buscar o category_id com base no category_name
-        $category_query = "SELECT id FROM categories WHERE name = ?";
+        $events_category_query = "SELECT id FROM events_category WHERE name = ?";
 
-        $category_stmt = $this->conn->prepare($category_query);
-        $category_stmt->bindParam(1, $this->category_name);
-        $category_stmt->execute();
+        $events_category_stmt = $this->conn->prepare($events_category_query);
+        $events_category_stmt->bindParam(1, $this->events_category_name);
+        $events_category_stmt->execute();
 
-        $category_row = $category_stmt->fetch(PDO::FETCH_ASSOC);
+        $events_category_row = $events_category_stmt->fetch(PDO::FETCH_ASSOC);
 
         // Verifica se encontrou a categoria
-        if ($category_row){
-        $this->category_id = $category_row['id'];
+        if ($events_category_row){
+        $this->category_id = $events_category_row['id'];
         } else 
         {
 
@@ -59,10 +59,10 @@ class Events
         return false;
         }
 
-        $qry="INSERT INTO ".$this->table_name. " SET name=?, description=?, price=?, category_id=?, created=?, modified=?";
+        $qry="INSERT INTO ".$this->table_name. " SET name=?, desc=?, cover=?, date=?, location=?, capacity=?, category_id=?, created=?, modified=?";
         $st=$this->conn->prepare($qry);
 
-        // Inicializar as variaveis
+        // Inicializar as variaveis / Não Adicionar FK
         $this->name=htmlspecialchars(strip_tags($this->name));
         $this->description=htmlspecialchars(strip_tags($this->description));
         $this->price=htmlspecialchars(strip_tags($this->price));
