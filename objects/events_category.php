@@ -1,18 +1,20 @@
 <?php
 
-class Category
+class Events_category
 {
 
     // Definir atributos
     private $conn;
-    private $table_name="categories";
+    private $table_name="events_category";
 
     // Propriedades do objeto
     public $id;
     public $name;
-    public $description;
+    public $desc;
     public $created;
     public $modified;
+    public $deleted;
+
 
     public function __construct($db)
     {
@@ -23,6 +25,7 @@ class Category
     {
         // Selecionar todos os registos
         // SLOW QUERRY - $querry="SELECT * FROM ". $this->table_name;
+        
         $querry="SELECT id,name,description,created,modified FROM ". $this->table_name. " order by name";
         $st=$this->conn->prepare($querry);
         $st->execute();

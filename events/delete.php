@@ -18,30 +18,26 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 // Incluir os ficheiros do modelo e da ligação à BD
 include_once '../config/database.php';
-include_once '../objects/product.php';
+include_once '../objects/events.php';
 
 // Instanciar a base de dados
 $database= new Database();
 $db=$database->getConnection();
 
 // Inicializar o objeto das categorias
-$product= new Product($db);
+$events= new Events($db);
 
 // Receber valores de um formulario
 $data=json_decode(file_get_contents("php://input"));
-$product->name=$data->name;
-$product->description=$data->description;
-$product->price=$data->price;
-$product->category_name=$data->category_name;
-$product->created=date('Y-m-d H:i:s');
+$events->id=$data->id;
 
-if($product->create())
+if($events->delete())
 {
-    echo json_encode(array("message"=>"Product was Created."));
+    echo json_encode(array("message"=>"Events was Deleted."));
 }
 else
 {
-    echo json_encode(array("message"=>"Unable to Create Product."));
+    echo json_encode(array("message"=>"Unable to Delete Events."));
 };
 
 ?>
