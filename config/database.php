@@ -4,7 +4,7 @@ class Database{
 
     // Credenciais para acesso à BD
     private $host="localhost";
-    private $db_name="api_db";
+    private $db_name="gestao_de_eventos";
     private $username="root";
     private $password="";
     public $conn;
