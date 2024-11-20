@@ -55,7 +55,7 @@ CREATE TABLE users_type_users (
     PRIMARY KEY (users_id, users_type_id),
     CONSTRAINT users_type_users_fk1
             FOREIGN KEY (users_id) REFERENCES users (id),
-            FOREIGN KEY (users_type_id) REFERENCES users_type (id));
+            FOREIGN KEY (users_type_id) REFERENCES users_type (id) );
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 /* CREATE TABLE - Users Payments */
@@ -77,11 +77,11 @@ CREATE TABLE users_payments (
 CREATE TABLE events_category (
     id INT AUTO_INCREMENT,
     name VARCHAR(100),
-    desc VARCHAR(250),
+    description VARCHAR(250),
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted TIMESTAMP NULL DEFAULT NULL,
-    PRIMARY KEY (id));
+    PRIMARY KEY (id) );
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 /* CREATE TABLE - Events */
@@ -89,8 +89,8 @@ CREATE TABLE events_category (
 CREATE TABLE events (
     id INT AUTO_INCREMENT,
     name VARCHAR(250),
-    desc VARCHAR(500),
-    cover VARCHAR(250),       /* IMAGE - BLOB Type ??? */
+    description VARCHAR(500),
+    cover VARCHAR(250),
     d_day DATETIME,
     capacity INT,
     address_line1 VARCHAR(250),
@@ -114,7 +114,7 @@ CREATE TABLE events (
 CREATE TABLE tickets_type (
     id INT AUTO_INCREMENT,
     tickets_type VARCHAR(100),
-    desc VARCHAR(250),
+    description VARCHAR(250),
     status ENUM('Active', 'Disabled') DEFAULT 'Active',
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -151,8 +151,8 @@ CREATE TABLE ordered_tickets (
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    CONSTRAINT events_fk2
-		    FOREIGN KEY (events_id) REFERENCES events (id), );
+    CONSTRAINT tickets_info_fk1
+		    FOREIGN KEY (tickets_info_id) REFERENCES tickets_info (id) );
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 /* CREATE TABLE - Order Details */
@@ -185,7 +185,7 @@ CREATE TABLE payment_details (
     status ENUM('Paid', 'Failed', 'Refunded') DEFAULT 'Paid',
     PRIMARY KEY (id),
     CONSTRAINT order_fk1
-		    FOREIGN KEY (order_id) REFERENCES order (id),
+		    FOREIGN KEY (order_id) REFERENCES order_details (id),
     CONSTRAINT users_payments_fk2
 		    FOREIGN KEY (users_payments_id) REFERENCES users_payments (id) );
 
