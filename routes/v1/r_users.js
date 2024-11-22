@@ -1,12 +1,12 @@
 
 const usersRouter = require('express').Router();
-const controller = require( '../../controllers/v1/c_users' ) ;
+const controller = require('../../controllers/v1/c_Users');
 
-// users CRUD
-usersRouter.get('/', controller.getAll); //read all
-usersRouter.get('/:number', controller.getById); //read one by his id (User number)
-usersRouter.post('/create', controller.create); //create new User
-usersRouter.put('/update', controller.update); //update User
-usersRouter.delete('/delete/:number', controller.delete); //delete User
+// Users CRUD
+usersRouter.get('/', controller.getAll);              // Get all Users
+usersRouter.get('/:id', controller.getById);          // Get a Users by ID
+usersRouter.post('/create', controller.create);       // Create a new Users
+usersRouter.put('/update', controller.update);        // Update a Users
+usersRouter.delete('/delete/:id', controller.delete); // Delete a Users by ID
 
 module.exports = usersRouter;
