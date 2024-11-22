@@ -1,0 +1,31 @@
+{
+  "name": "gestao_de_eventos",
+  "version": "1.0.0",
+  "description": "Gestao de Eventos PRJ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaolado/Gestao_de_eventos.git"
+  },
+  "author": "João Carmo & Márcio Pinheiro",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.7"
+  },
+  "bugs": {
+    "url": "https://github.com/joaolado/Gestao_de_eventos/issues"
+  },
+  "homepage": "https://github.com/joaolado/Gestao_de_eventos#readme",
+  "prisma": {
+    "schema": "data/prisma/schema.prisma"
+  }
+}

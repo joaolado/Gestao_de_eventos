@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum StatusEvents {
+  Active
+  Scheduled
+  Cancelled
+}
+
+enum StatusTicketsType {
+  Active
+  Disabled
+}
+
+enum StatusTicketsInfo {
+  Available
+  Sold_Out
+  Coming_Soon
+}
+
+enum StatusOnCart {
+  Active
+  Scheduled
+  Cancelled
+}
+
+enum StatusOrderDetails {
+  Pending
+  Completed
+  Cancelled
+}
+
+enum StatusPaymentDetails {
+  Paid
+  Failed
+  Refunded
+}
+
+// Models
+model UsersType {
+  id         Int      @id @default(autoincrement())
+  usersType  String   @map("users_type")
+  created    DateTime @default(now())
+  modified   DateTime @updatedAt
+  deleted    DateTime?
+  users      UsersTypeUsers[]
+}
+
+model UsersAddress {
+  id          Int      @id @default(autoincrement())
+  addressLine1 String  @map("address_line1")
+  addressLine2 String? @map("address_line2")
+  postalCode   String  @map("postal_code")
+  city         String
+  region       String
+  country      String
+  users        Users[]
+}
+
+model Users {
+  id           Int             @id @default(autoincrement())
+  userName     String          @map("user_name")
+  userPassword String          @map("user_password")
+  firstName    String?
+  lastName     String?
+  phone        String?
+  email        String?
+  addressId    Int?
+  address      UsersAddress?   @relation(fields: [addressId], references: [id])
+  created      DateTime        @default(now())
+  modified     DateTime        @updatedAt
+  deleted      DateTime?
+  usersType    UsersTypeUsers[]
+  payments     UsersPayments[]
+  orders       OrderDetails[]
+}
+
+model UsersTypeUsers {
+  usersId      Int     @map("users_id")
+  usersTypeId  Int     @map("users_type_id")
+  users        Users   @relation(fields: [usersId], references: [id])
+  usersType    UsersType @relation(fields: [usersTypeId], references: [id])
+  @@id([usersId, usersTypeId])
+}
+
+model UsersPayments {
+  id             Int      @id @default(autoincrement())
+  usersId        Int      @map("users_id")
+  paymentType    String   @map("payment_type")
+  paymentProvider String  @map("payment_provider")
+  created        DateTime @default(now())
+  modified       DateTime @updatedAt
+  user           Users    @relation(fields: [usersId], references: [id])
+  paymentDetails PaymentDetails[]
+}
+
+model EventsCategory {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  created     DateTime @default(now())
+  modified    DateTime @updatedAt
+  deleted     DateTime?
+  events      Events[]
+}
+
+model Events {
+  id           Int             @id @default(autoincrement())
+  name         String
+  description  String?
+  cover        String?
+  dDay         DateTime        @map("d_day")
+  capacity     Int
+  addressLine1 String          @map("address_line1")
+  addressLine2 String?         @map("address_line2")
+  postalCode   String          @map("postal_code")
+  city         String
+  region       String
+  country      String
+  categoryId   Int?
+  status       StatusEvents    @default(Scheduled)
+  created      DateTime        @default(now())
+  modified     DateTime        @updatedAt
+  deleted      DateTime?
+  category     EventsCategory? @relation(fields: [categoryId], references: [id])
+  tickets      TicketsInfo[]
+}
+
+model TicketsType {
+  id          Int             @id @default(autoincrement())
+  ticketsType String          @map("tickets_type")
+  description String?
+  status      StatusTicketsType @default(Active)
+  created     DateTime        @default(now())
+  modified    DateTime        @updatedAt
+  deleted     DateTime?
+  tickets     TicketsInfo[]
+}
+
+model TicketsInfo {
+  id             Int              @id @default(autoincrement())
+  eventsId       Int              @map("events_id")
+  ticketsTypeId  Int              @map("tickets_type_id")
+  SKU            String
+  price          Float
+  quantity       Int
+  status         StatusTicketsInfo @default(Available)
+  created        DateTime         @default(now())
+  modified       DateTime         @updatedAt
+  deleted        DateTime?
+  event          Events           @relation(fields: [eventsId], references: [id])
+  ticketsType    TicketsType      @relation(fields: [ticketsTypeId], references: [id])
+  orderedTickets OrderedTickets[]
+}
+
+model OrderedTickets {
+  id            Int           @id @default(autoincrement())
+  ticketsInfoId Int           @map("tickets_info_id")
+  quantity      Int
+  created       DateTime      @default(now())
+  modified      DateTime      @updatedAt
+  ticketsInfo   TicketsInfo   @relation(fields: [ticketsInfoId], references: [id])
+  orders        OrderDetails[]
+}
+
+model OrderDetails {
+  id                Int                 @id @default(autoincrement())
+  usersId           Int                 @map("users_id")
+  orderedTicketsId  Int                 @map("ordered_tickets_id")
+  orderTotal        Float               @map("order_total")
+  orderDate         DateTime            @map("order_date") @default(now())
+  statusCart        StatusOnCart        @default(Scheduled)
+  statusOrder       StatusOrderDetails  @default(Pending)
+  created           DateTime            @default(now())
+  modified          DateTime            @updatedAt
+  user              Users               @relation(fields: [usersId], references: [id])
+  orderedTickets    OrderedTickets      @relation(fields: [orderedTicketsId], references: [id])
+  paymentDetails    PaymentDetails[]
+}
+
+model PaymentDetails {
+  id             Int                 @id @default(autoincrement())
+  orderId        Int                 @map("order_id")
+  usersPaymentsId Int                @map("users_payments_id")
+  paymentAmount  Float               @map("payment_amount")
+  paymentDate    DateTime            @map("payment_date") @default(now())
+  status         StatusPaymentDetails @default(Paid)
+  order          OrderDetails        @relation(fields: [orderId], references: [id])
+  usersPayments  UsersPayments       @relation(fields: [usersPaymentsId], references: [id])
+}
