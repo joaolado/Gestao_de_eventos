@@ -1,16 +1,17 @@
 <?php
 
-class PaymentDetails
+class TicketsType
 {
     // Definir atributos
     private $conn;
-    private $table_name = "payment_details";
+    private $table_name = "tickets_type";
 
     // Propriedades do objeto
     public $id;
-    public $payments_id;
-    public $payment_amount;
-    public $payment_date;
+    public $name;
+    public $description;
+    public $created_at;
+    public $modified_at;
 
     // Construtor
     public function __construct($db)
@@ -18,36 +19,39 @@ class PaymentDetails
         $this->conn = $db;
     }
 
-    // Método para ler todos os detalhes de pagamento
+    // Método para ler todos os tipos de tickets
     public function read()
     {
-        $query = "SELECT * FROM " . $this->table_name . " ORDER BY id ASC";
+        $query = "SELECT * FROM " . $this->table_name . " ORDER BY name ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
         return $stmt;
     }
 
-    // Método para criar um novo detalhe de pagamento
+    // Método para criar um novo tipo de ticket
     public function create()
     {
         $query = "INSERT INTO " . $this->table_name . "
                   SET 
-                    payments_id = :payments_id,
-                    payment_amount = :payment_amount,
-                    payment_date = :payment_date";
+                    name = :name,
+                    description = :description,
+                    created_at = :created_at,
+                    modified_at = :modified_at";
 
         $stmt = $this->conn->prepare($query);
 
         // Limpar dados
-        $this->payments_id = htmlspecialchars(strip_tags($this->payments_id));
-        $this->payment_amount = htmlspecialchars(strip_tags($this->payment_amount));
-        $this->payment_date = htmlspecialchars(strip_tags($this->payment_date));
+        $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->created_at = htmlspecialchars(strip_tags($this->created_at));
+        $this->modified_at = htmlspecialchars(strip_tags($this->modified_at));
 
         // Bind values
-        $stmt->bindParam(":payments_id", $this->payments_id);
-        $stmt->bindParam(":payment_amount", $this->payment_amount);
-        $stmt->bindParam(":payment_date", $this->payment_date);
+        $stmt->bindParam(":name", $this->name);
+        $stmt->bindParam(":description", $this->description);
+        $stmt->bindParam(":created_at", $this->created_at);
+        $stmt->bindParam(":modified_at", $this->modified_at);
 
         // Executar
         if ($stmt->execute()) {
@@ -57,7 +61,7 @@ class PaymentDetails
         return false;
     }
 
-    // Método para deletar um detalhe de pagamento
+    // Método para deletar um tipo de ticket
     public function delete()
     {
         $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
@@ -78,28 +82,28 @@ class PaymentDetails
         return false;
     }
 
-    // Método para atualizar um detalhe de pagamento
+    // Método para atualizar um tipo de ticket
     public function update()
     {
         $query = "UPDATE " . $this->table_name . "
                   SET 
-                    payments_id = :payments_id,
-                    payment_amount = :payment_amount,
-                    payment_date = :payment_date
+                    name = :name,
+                    description = :description,
+                    modified_at = :modified_at
                   WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
 
         // Limpar dados
-        $this->payments_id = htmlspecialchars(strip_tags($this->payments_id));
-        $this->payment_amount = htmlspecialchars(strip_tags($this->payment_amount));
-        $this->payment_date = htmlspecialchars(strip_tags($this->payment_date));
+        $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->modified_at = htmlspecialchars(strip_tags($this->modified_at));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
         // Bind values
-        $stmt->bindParam(":payments_id", $this->payments_id);
-        $stmt->bindParam(":payment_amount", $this->payment_amount);
-        $stmt->bindParam(":payment_date", $this->payment_date);
+        $stmt->bindParam(":name", $this->name);
+        $stmt->bindParam(":description", $this->description);
+        $stmt->bindParam(":modified_at", $this->modified_at);
         $stmt->bindParam(":id", $this->id);
 
         // Executar
@@ -110,7 +114,7 @@ class PaymentDetails
         return false;
     }
 
-    // Método para obter detalhes de pagamento por ID
+    // Método para obter um tipo de ticket por ID
     public function readById()
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id";

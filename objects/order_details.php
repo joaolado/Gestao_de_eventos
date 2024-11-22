@@ -1,135 +1,164 @@
 <?php
 
-class Product
+class OrderDetails
 {
-
     // Definir atributos
     private $conn;
-    private $table_name="products";
+    private $table_name = "order_details";
 
     // Propriedades do objeto
     public $id;
-    public $name;
-    public $description;
-    public $price;
-    public $category_id;
+    public $users_id;
+    public $ordered_tickets_id;
+    public $order_total;
+    public $order_date;
+    public $on_cart;
+    public $status;
     public $created;
     public $modified;
 
+    // Construtor
     public function __construct($db)
     {
-        $this->conn=$db;
+        $this->conn = $db;
     }
 
+    // Método para ler todas as ordens
     public function read()
     {
-        // Selecionar todos os registos
-        // SLOW QUERRY - $querry="SELECT * FROM ". $this->table_name;
-        $querry="SELECT p.id, p.name, p.description, p.price, p.category_id, c.name AS category_name, p.created, p.modified 
-                    FROM ". $this->table_name. " p LEFT JOIN categories c ON p.category_id = c.id  order by p.name";
-        $st=$this->conn->prepare($querry);
-        $st->execute();
+        $query = "SELECT * FROM " . $this->table_name . " ORDER BY id ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
 
-        return $st;
+        return $stmt;
     }
 
+    // Método para criar uma nova ordem
     public function create()
-    {   
-        // Consulta para buscar o category_id com base no category_name
-        $category_query = "SELECT id FROM categories WHERE name = ?";
+    {
+        $query = "INSERT INTO " . $this->table_name . "
+                  SET 
+                    users_id = :users_id,
+                    ordered_tickets_id = :ordered_tickets_id,
+                    order_total = :order_total,
+                    order_date = :order_date,
+                    on_cart = :on_cart,
+                    status = :status,
+                    created = :created,
+                    modified = :modified";
 
-        $category_stmt = $this->conn->prepare($category_query);
-        $category_stmt->bindParam(1, $this->category_name);
-        $category_stmt->execute();
+        $stmt = $this->conn->prepare($query);
 
-        $category_row = $category_stmt->fetch(PDO::FETCH_ASSOC);
+        // Limpar dados
+        $this->users_id = htmlspecialchars(strip_tags($this->users_id));
+        $this->ordered_tickets_id = htmlspecialchars(strip_tags($this->ordered_tickets_id));
+        $this->order_total = htmlspecialchars(strip_tags($this->order_total));
+        $this->order_date = htmlspecialchars(strip_tags($this->order_date));
+        $this->on_cart = htmlspecialchars(strip_tags($this->on_cart));
+        $this->status = htmlspecialchars(strip_tags($this->status));
+        $this->created = htmlspecialchars(strip_tags($this->created));
+        $this->modified = htmlspecialchars(strip_tags($this->modified));
 
-        // Verifica se encontrou a categoria
-        if ($category_row){
-        $this->category_id = $category_row['id'];
-        } else 
-        {
-
-        // Se a categoria não existir, retorna falso para indicar falha
-        return false;
-        }
-
-        $qry="INSERT INTO ".$this->table_name. " SET name=?, description=?, price=?, category_id=?, created=?, modified=?";
-        $st=$this->conn->prepare($qry);
-
-        // Inicializar as variaveis
-        $this->name=htmlspecialchars(strip_tags($this->name));
-        $this->description=htmlspecialchars(strip_tags($this->description));
-        $this->price=htmlspecialchars(strip_tags($this->price));
-        
         // Bind values
-        $st->bindParam(1,$this->name);
-        $st->bindParam(2,$this->description);
-        $st->bindParam(3,$this->price);
-        $st->bindParam(4,$this->category_id);
-        $st->bindParam(5,$this->created);
-        $st->bindParam(6,$this->created);
+        $stmt->bindParam(":users_id", $this->users_id);
+        $stmt->bindParam(":ordered_tickets_id", $this->ordered_tickets_id);
+        $stmt->bindParam(":order_total", $this->order_total);
+        $stmt->bindParam(":order_date", $this->order_date);
+        $stmt->bindParam(":on_cart", $this->on_cart);
+        $stmt->bindParam(":status", $this->status);
+        $stmt->bindParam(":created", $this->created);
+        $stmt->bindParam(":modified", $this->modified);
 
         // Executar
-        if ($st->execute()) {
-            $this->category_name = $this->category_name;
+        if ($stmt->execute()) {
             return true;
         }
+
         return false;
     }
 
+    // Método para deletar uma ordem
     public function delete()
     {
-        $qry="DELETE FROM ".$this->table_name." WHERE id=?";
-        $st=$this->conn->prepare($qry);
-        $st->bindParam(1,$this->id);
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Limpar dados
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        // Bind value
+        $stmt->bindParam(":id", $this->id);
 
         // Executar
-        if($st->execute()){return true;}
-        return false;
-    }
-
-    public function update()
-    {
-        // Consulta para buscar o category_id com base no category_name
-        $category_query = "SELECT id FROM categories WHERE name = ?";
-
-        $category_stmt = $this->conn->prepare($category_query);
-        $category_stmt->bindParam(1, $this->category_name);
-        $category_stmt->execute();
-
-        $category_row = $category_stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Verifica se encontrou a categoria
-        if ($category_row) {
-        $this->category_id = $category_row['id'];
-        } else {
-
-        // Se a categoria não existir, retorna falso para indicar falha
-        return false;
+        if ($stmt->execute()) {
+            return true;
         }
 
-        $qry="UPDATE ".$this->table_name. " SET name=?, description=?, price=?, category_id=?, modified=? WHERE id=?";
-        $st=$this->conn->prepare($qry);
-
-        // Inicializar as variaveis
-        $this->name=htmlspecialchars(strip_tags($this->name));
-        $this->description=htmlspecialchars(strip_tags($this->description));
-        $this->price=htmlspecialchars(strip_tags($this->price));
-
-        // Bind values
-        $st->bindParam(1,$this->name);
-        $st->bindParam(2,$this->description);
-        $st->bindParam(3,$this->price);
-        $st->bindParam(4,$this->category_id);
-        $st->bindParam(5,$this->modified);
-        $st->bindParam(6,$this->id);
-
-        // Executar
-        if($st->execute()){return true;}
         return false;
     }
 
+    // Método para atualizar uma ordem
+    public function update()
+    {
+        $query = "UPDATE " . $this->table_name . "
+                  SET 
+                    users_id = :users_id,
+                    ordered_tickets_id = :ordered_tickets_id,
+                    order_total = :order_total,
+                    order_date = :order_date,
+                    on_cart = :on_cart,
+                    status = :status,
+                    modified = :modified
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Limpar dados
+        $this->users_id = htmlspecialchars(strip_tags($this->users_id));
+        $this->ordered_tickets_id = htmlspecialchars(strip_tags($this->ordered_tickets_id));
+        $this->order_total = htmlspecialchars(strip_tags($this->order_total));
+        $this->order_date = htmlspecialchars(strip_tags($this->order_date));
+        $this->on_cart = htmlspecialchars(strip_tags($this->on_cart));
+        $this->status = htmlspecialchars(strip_tags($this->status));
+        $this->modified = htmlspecialchars(strip_tags($this->modified));
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        // Bind values
+        $stmt->bindParam(":users_id", $this->users_id);
+        $stmt->bindParam(":ordered_tickets_id", $this->ordered_tickets_id);
+        $stmt->bindParam(":order_total", $this->order_total);
+        $stmt->bindParam(":order_date", $this->order_date);
+        $stmt->bindParam(":on_cart", $this->on_cart);
+        $stmt->bindParam(":status", $this->status);
+        $stmt->bindParam(":modified", $this->modified);
+        $stmt->bindParam(":id", $this->id);
+
+        // Executar
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    // Método para obter detalhes de uma ordem por ID
+    public function readById()
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Limpar dados
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        // Bind value
+        $stmt->bindParam(":id", $this->id);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
 }
 
 ?>

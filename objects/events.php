@@ -2,151 +2,163 @@
 
 class Events
 {
-
     // Definir atributos
     private $conn;
-    private $table_name="events";
+    private $table_name = "events";
 
     // Propriedades do objeto
     public $id;
-    public $name;
-    public $desc;
-    public $cover;
-    public $date;
-    public $location;
-    public $capacity;
+    public $title;
+    public $description;
     public $category_id;
-    public $created;
-    public $modified;
-    public $deleted;
+    public $start_datetime;
+    public $end_datetime;
+    public $location;
+    public $created_at;
+    public $modified_at;
 
-
+    // Construtor
     public function __construct($db)
     {
-        $this->conn=$db;
+        $this->conn = $db;
     }
 
+    // Método para ler todos os eventos
     public function read()
     {
-        // Selecionar todos os registos
-        // SLOW QUERRY - $querry="SELECT * FROM ". $this->table_name;
-        $querry="SELECT p.id, p.name, p.desc, p.cover, p.date, p.location, p.capacity, p.category_id, ec.name AS category_name, p.created, p.modified 
-                    FROM ". $this->table_name. " p LEFT JOIN events_category ec ON p.category_id = ec.id  order by p.name";
-        $st=$this->conn->prepare($querry);
-        $st->execute();
+        $query = "SELECT * FROM " . $this->table_name . " ORDER BY start_datetime ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
 
-        return $st;
+        return $stmt;
     }
 
+    // Método para criar um novo evento
     public function create()
-    {   
-        // Consulta para buscar o category_id com base no category_name
-        $events_category_query = "SELECT id FROM events_category WHERE name = ?";
+    {
+        $query = "INSERT INTO " . $this->table_name . "
+                  SET 
+                    title = :title,
+                    description = :description,
+                    category_id = :category_id,
+                    start_datetime = :start_datetime,
+                    end_datetime = :end_datetime,
+                    location = :location,
+                    created_at = :created_at,
+                    modified_at = :modified_at";
 
-        $events_category_stmt = $this->conn->prepare($events_category_query);
-        $events_category_stmt->bindParam(1, $this->events_category_name);
-        $events_category_stmt->execute();
+        $stmt = $this->conn->prepare($query);
 
-        $events_category_row = $events_category_stmt->fetch(PDO::FETCH_ASSOC);
+        // Limpar dados
+        $this->title = htmlspecialchars(strip_tags($this->title));
+        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+        $this->start_datetime = htmlspecialchars(strip_tags($this->start_datetime));
+        $this->end_datetime = htmlspecialchars(strip_tags($this->end_datetime));
+        $this->location = htmlspecialchars(strip_tags($this->location));
+        $this->created_at = htmlspecialchars(strip_tags($this->created_at));
+        $this->modified_at = htmlspecialchars(strip_tags($this->modified_at));
 
-        // Verifica se encontrou a categoria
-        if ($events_category_row){
-        $this->category_id = $events_category_row['id'];
-        } else 
-        {
-
-        // Se a categoria não existir, retorna falso para indicar falha
-        return false;
-        }
-
-        $qry="INSERT INTO ".$this->table_name. " SET name=?, desc=?, cover=?, date=?, location=?, capacity=?, category_id=?, created=?, modified=?";
-        $st=$this->conn->prepare($qry);
-
-        // Inicializar as variaveis / Não Adicionar FK
-        $this->name=htmlspecialchars(strip_tags($this->name));
-        $this->desc=htmlspecialchars(strip_tags($this->desc));
-        $this->cover=htmlspecialchars(strip_tags($this->cover));
-        $this->date=htmlspecialchars(strip_tags($this->date));
-        $this->location=htmlspecialchars(strip_tags($this->location));
-        $this->capacity=htmlspecialchars(strip_tags($this->capacity));
-        
         // Bind values
-        $st->bindParam(1,$this->name);
-        $st->bindParam(2,$this->desc);
-        $st->bindParam(3,$this->cover);
-        $st->bindParam(4,$this->date);
-        $st->bindParam(5,$this->location);
-        $st->bindParam(6,$this->capacity);
-        $st->bindParam(7,$this->category_id);
-        $st->bindParam(8,$this->created);
-        $st->bindParam(9,$this->created);
+        $stmt->bindParam(":title", $this->title);
+        $stmt->bindParam(":description", $this->description);
+        $stmt->bindParam(":category_id", $this->category_id);
+        $stmt->bindParam(":start_datetime", $this->start_datetime);
+        $stmt->bindParam(":end_datetime", $this->end_datetime);
+        $stmt->bindParam(":location", $this->location);
+        $stmt->bindParam(":created_at", $this->created_at);
+        $stmt->bindParam(":modified_at", $this->modified_at);
 
         // Executar
-        if ($st->execute()) {
-            $this->category_name = $this->category_name;
+        if ($stmt->execute()) {
             return true;
         }
+
         return false;
     }
 
+    // Método para deletar um evento
     public function delete()
     {
-        $qry="DELETE FROM ".$this->table_name." WHERE id=?";
-        $st=$this->conn->prepare($qry);
-        $st->bindParam(1,$this->id);
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Limpar dados
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        // Bind value
+        $stmt->bindParam(":id", $this->id);
 
         // Executar
-        if($st->execute()){return true;}
-        return false;
-    }
-
-    public function update()
-    {
-        // Consulta para buscar o category_id com base no category_name
-        $category_query = "SELECT id FROM events_category WHERE name = ?";
-
-        $category_stmt = $this->conn->prepare($category_query);
-        $category_stmt->bindParam(1, $this->category_name);
-        $category_stmt->execute();
-
-        $category_row = $category_stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Verifica se encontrou a categoria
-        if ($category_row) {
-        $this->category_id = $category_row['id'];
-        } else {
-
-        // Se a categoria não existir, retorna falso para indicar falha
-        return false;
+        if ($stmt->execute()) {
+            return true;
         }
 
-        $qry="UPDATE ".$this->table_name. " SET name=?, description=?, cover=?, date=?, location=?, capacity=?, category_id=?, modified=? WHERE id=?";
-        $st=$this->conn->prepare($qry);
-
-        // Inicializar as variaveis
-        $this->name=htmlspecialchars(strip_tags($this->name));
-        $this->desc=htmlspecialchars(strip_tags($this->desc));
-        $this->cover=htmlspecialchars(strip_tags($this->cover));
-        $this->date=htmlspecialchars(strip_tags($this->date));
-        $this->location=htmlspecialchars(strip_tags($this->location));
-        $this->capacity=htmlspecialchars(strip_tags($this->capacity));
-
-        // Bind values
-        $st->bindParam(1,$this->name);
-        $st->bindParam(2,$this->desc);
-        $st->bindParam(3,$this->cover);
-        $st->bindParam(4,$this->date);
-        $st->bindParam(5,$this->location);
-        $st->bindParam(6,$this->capacity);
-        $st->bindParam(7,$this->category_id);
-        $st->bindParam(8,$this->modified);
-        $st->bindParam(9,$this->id);
-
-        // Executar
-        if($st->execute()){return true;}
         return false;
     }
 
+    // Método para atualizar um evento
+    public function update()
+    {
+        $query = "UPDATE " . $this->table_name . "
+                  SET 
+                    title = :title,
+                    description = :description,
+                    category_id = :category_id,
+                    start_datetime = :start_datetime,
+                    end_datetime = :end_datetime,
+                    location = :location,
+                    modified_at = :modified_at
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Limpar dados
+        $this->title = htmlspecialchars(strip_tags($this->title));
+        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+        $this->start_datetime = htmlspecialchars(strip_tags($this->start_datetime));
+        $this->end_datetime = htmlspecialchars(strip_tags($this->end_datetime));
+        $this->location = htmlspecialchars(strip_tags($this->location));
+        $this->modified_at = htmlspecialchars(strip_tags($this->modified_at));
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        // Bind values
+        $stmt->bindParam(":title", $this->title);
+        $stmt->bindParam(":description", $this->description);
+        $stmt->bindParam(":category_id", $this->category_id);
+        $stmt->bindParam(":start_datetime", $this->start_datetime);
+        $stmt->bindParam(":end_datetime", $this->end_datetime);
+        $stmt->bindParam(":location", $this->location);
+        $stmt->bindParam(":modified_at", $this->modified_at);
+        $stmt->bindParam(":id", $this->id);
+
+        // Executar
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    // Método para obter um evento por ID
+    public function readById()
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Limpar dados
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        // Bind value
+        $stmt->bindParam(":id", $this->id);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
 }
 
 ?>
