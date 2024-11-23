@@ -14,7 +14,7 @@ exports.getAll = async (req, res) =>
     
     catch (error) 
     {
-        res.status(500).json({ error: 'Failed to Retrieve UsersType.' });
+        res.status(500).json({ error: 'Failed to Retrieve UsersType.', details: error.message });
     }
 };
 
@@ -41,7 +41,7 @@ exports.getById = async (req, res) =>
 
     catch (error) 
     {
-        res.status(404).json({ error: 'UsersType Not Found.' });
+        res.status(404).json({ error: 'UsersType Not Found.', details: error.message });
     }
 };
 
@@ -49,7 +49,11 @@ exports.getById = async (req, res) =>
 exports.create = async (req, res) => 
 {
     // Get requested UsersType properties
-    const { usersType } = req.body;
+    const 
+    { 
+        usersType,
+
+    } = req.body;
 
     try 
     {
@@ -68,15 +72,19 @@ exports.create = async (req, res) =>
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Create UsersType.' });
+        res.status(400).json({ error: 'Failed to Create UsersType.', details: error.message });
     }
 };
 
 // Updates UsersType by ID
 exports.update = async (req, res) => 
 {
-
-    const { id, usersType } = req.body;
+    const 
+    { 
+        id, 
+        usersType,
+    
+    } = req.body;
 
     try 
     {   
@@ -90,7 +98,7 @@ exports.update = async (req, res) =>
 
             data: 
             {
-                usersType,
+                usersType: usersType,
             },
         });
 
@@ -100,14 +108,13 @@ exports.update = async (req, res) =>
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Update UsersType.' });
+        res.status(400).json({ error: 'Failed to Update UsersType.', details: error.message });
     }
 };
 
 // Delete UsersType by ID
 exports.delete = async (req, res) => 
 {
-
     // Get UsersType ID requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
@@ -115,6 +122,7 @@ exports.delete = async (req, res) =>
     {   
         // Delete UsersType
         await prisma.usersType.delete({
+            
             where: 
             { 
                 id: id,
@@ -122,11 +130,11 @@ exports.delete = async (req, res) =>
         });
 
         // Returns UsersType Deleted
-        res.status(200).json({ message: 'UsersType deleted successfully.' });
+        res.status(200).json({ message: 'UsersType Deleted Successfully.' });
     }
 
     catch (error)
     {
-        res.status(400).json({ error: 'Failed to Delete UsersType.' });
+        res.status(400).json({ error: 'Failed to Delete UsersType.', details: error.message });
     }
 };

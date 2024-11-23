@@ -14,7 +14,7 @@ exports.getAll = async (req, res) =>
     
     catch (error) 
     {
-        res.status(500).json({ error: 'Failed to Retrieve UsersAddress.' });
+        res.status(500).json({ error: 'Failed to Retrieve UsersAddress.', details: error.message });
     }
 };
 
@@ -41,7 +41,7 @@ exports.getById = async (req, res) =>
 
     catch (error) 
     {
-        res.status(404).json({ error: 'UsersAddress Not Found.' });
+        res.status(404).json({ error: 'UsersAddress Not Found.', details: error.message });
     }
 };
 
@@ -49,7 +49,16 @@ exports.getById = async (req, res) =>
 exports.create = async (req, res) => 
 {
     // Get requested UsersAddress properties
-    const { usersAddress } = req.body;
+    const 
+    { 
+        addressLine1, 
+        addressLine2, 
+        postalCode, 
+        city, 
+        region, 
+        country,
+
+    } = req.body;
 
     try 
     {
@@ -58,7 +67,12 @@ exports.create = async (req, res) =>
 
             data: 
             {
-                usersAddress: usersAddress,
+                addressLine1: addressLine1,
+                addressLine2: addressLine2,
+                postalCode: postalCode,
+                city: city,
+                region: region,
+                country: country,
             },
         });
 
@@ -68,15 +82,24 @@ exports.create = async (req, res) =>
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Create UsersAddress.' });
+        res.status(400).json({ error: 'Failed to Create UsersAddress.', details: error.message });
     }
 };
 
 // Updates UsersAddress by ID
 exports.update = async (req, res) => 
 {
-
-    const { id, usersAddress } = req.body;
+    const 
+    { 
+        id, 
+        addressLine1, 
+        addressLine2, 
+        postalCode, 
+        city, 
+        region, 
+        country,
+    
+    } = req.body;
 
     try 
     {   
@@ -90,7 +113,12 @@ exports.update = async (req, res) =>
 
             data: 
             {
-                usersAddress,
+                addressLine1: addressLine1,
+                addressLine2: addressLine2,
+                postalCode: postalCode,
+                city: city,
+                region: region,
+                country: country,
             },
         });
 
@@ -100,14 +128,13 @@ exports.update = async (req, res) =>
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Update UsersAddress.' });
+        res.status(400).json({ error: 'Failed to Update UsersAddress.', details: error.message });
     }
 };
 
 // Delete UsersAddress by ID
 exports.delete = async (req, res) => 
 {
-
     // Get UsersAddress ID requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
@@ -115,6 +142,7 @@ exports.delete = async (req, res) =>
     {   
         // Delete UsersAddress
         await prisma.usersAddress.delete({
+            
             where: 
             { 
                 id: id,
@@ -122,11 +150,11 @@ exports.delete = async (req, res) =>
         });
 
         // Returns UsersAddress Deleted
-        res.status(200).json({ message: 'UsersAddress deleted successfully.' });
+        res.status(200).json({ message: 'UsersAddress Deleted Successfully.' });
     }
 
     catch (error)
     {
-        res.status(400).json({ error: 'Failed to Delete UsersAddress.' });
+        res.status(400).json({ error: 'Failed to Delete UsersAddress.', details: error.message });
     }
 };

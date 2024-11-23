@@ -2,86 +2,130 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// Return all UsersType
+// Return all Users
 exports.getAll = async (req, res) => 
 {
     try 
     {
         // Read all from DB
-        const response = await prisma.usersType.findMany();
+        const response = await prisma.users.findMany({
+
+            where: 
+            {
+                deleted: null, // Only includes Non-Deleted Users
+            },
+
+            include: 
+            {
+                address: true, // Include related UsersAddress
+            } 
+        });
+
         res.status(200).json(response);
     }
     
     catch (error) 
     {
-        res.status(500).json({ error: 'Failed to Retrieve UsersType.' });
+        res.status(500).json({ error: 'Failed to Retrieve Users.', details: error.message });
     }
 };
 
-// Return UsersType by ID
+// Return Users by ID
 exports.getById = async (req, res) => 
 {
-    // Get UsersType ID requested
+    // Get Users ID requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
     try 
     {
-        // Finds UsersType by ID
-        const response = await prisma.usersType.findUnique({
+        // Finds Users by ID
+        const response = await prisma.users.findUnique({
 
             where: 
             { 
                 id: id,
+                deleted: null, // Only if Users is Not-Deleted 
+            },
+
+            include: 
+            {      
+                address: true, // Include related UsersAddress
             },
         });
 
-        // Return UsersType
+        // Return Users
         res.status(200).json(response);
     }
 
     catch (error) 
     {
-        res.status(404).json({ error: 'UsersType Not Found.' });
+        res.status(404).json({ error: 'Users Not Found.', details: error.message });
     }
 };
 
-// Creates UsersType
+// Creates Users
 exports.create = async (req, res) => 
 {
-    // Get requested UsersType properties
-    const { usersType } = req.body;
+    // Get requested Users properties
+    const 
+    { 
+        userName,
+        userPassword,
+        firstName,
+        lastName,
+        phone,
+        email,
+        addressId, 
+
+    } = req.body;
 
     try 
     {
-        // Creates new UsersType
-        const newUsersType = await prisma.usersType.create({
+        // Creates new Users
+        const newUsers = await prisma.users.create({
 
             data: 
             {
-                usersType: usersType,
+                userName: userName,
+                userPassword: userPassword,
+                firstName: firstName,
+                lastName: lastName,
+                phone: phone,
+                email: email,
+                addressId: addressId, // Nullable Field
             },
         });
 
-        // Return UsersType created
-        res.status(201).json(newUsersType);
+        // Return Users created
+        res.status(201).json(newUsers);
     }
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Create UsersType.' });
+        res.status(400).json({ error: 'Failed to Create Users.', details: error.message });
     }
 };
 
-// Updates UsersType by ID
+// Updates Users by ID
 exports.update = async (req, res) => 
 {
+    const 
+    { 
+        id,
+        userName,
+        userPassword,
+        firstName,
+        lastName,
+        phone,
+        email,
+        addressId, 
 
-    const { id, usersType } = req.body;
+    } = req.body;
 
     try 
     {   
-        // Finds UsersType to Update their Data
-        const updatedUsersType = await prisma.usersType.update({
+        // Finds Users to Update their Data
+        const updatedUsers = await prisma.users.update({
 
             where: 
             { 
@@ -90,43 +134,86 @@ exports.update = async (req, res) =>
 
             data: 
             {
-                usersType,
+                userName: userName,
+                userPassword: userPassword,
+                firstName: firstName,
+                lastName: lastName,
+                phone: phone,
+                email: email,
+                addressId: addressId, // Nullable Field
             },
         });
 
-        // Return UsersType Updated
-        res.status(200).json(updatedUsersType);
+        // Return Users Updated
+        res.status(200).json(updatedUsers);
     }
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Update UsersType.' });
+        res.status(400).json({ error: 'Failed to Update Users.', details: error.message });
     }
 };
 
-// Delete UsersType by ID
+// Delete Users by ID
 exports.delete = async (req, res) => 
 {
-
-    // Get UsersType ID requested
+    // Get Users ID requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
     try
     {   
-        // Delete UsersType
-        await prisma.usersType.delete({
+        // Delete Users ( Soft delete by setting the `deleted` field )
+        const deletedUsers = await prisma.users.update({
+
             where: 
             { 
                 id: id,
             },
+
+            data: 
+            { 
+                deleted: new Date(),
+            },
         });
 
-        // Returns UsersType Deleted
-        res.status(200).json({ message: 'UsersType deleted successfully.' });
+        // Returns Users Deleted
+        res.status(200).json({ message: 'User Deleted successfully: ', deletedUsers });
     }
 
     catch (error)
     {
-        res.status(400).json({ error: 'Failed to Delete UsersType.' });
+        res.status(400).json({ error: 'Failed to Delete User.', details: error.message });
+    }
+};
+
+// Restore Users by ID
+exports.restore = async (req, res) => 
+{
+     // Get Users ID requested
+    const id = parseInt(req.params.id); // Ensure ID is an integer
+
+    try 
+    {   
+        // Restore Users
+        const restoredUser = await prisma.users.update({
+
+            where: 
+            { 
+                id: id,
+            },
+
+            data: 
+            {   
+                deleted: null, // Clear the Deleted Field
+            }, 
+        });
+
+        // Returns Users Restored
+        res.status(200).json({ message: 'User Restored Successfully: ', restoredUser });
+    } 
+
+    catch (error) 
+    {
+        res.status(400).json({ error: 'Failed to Restore User.', details: error.message });
     }
 };
