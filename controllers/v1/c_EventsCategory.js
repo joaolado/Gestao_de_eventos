@@ -9,6 +9,8 @@ exports.getAll = async (req, res) =>
     {
         // Read all from DB
         const response = await prisma.eventsCategory.findMany();
+
+        // Return All EventsCategory
         res.status(200).json(response);
     }
     

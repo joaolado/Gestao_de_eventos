@@ -21,6 +21,7 @@ exports.getAll = async (req, res) =>
             } 
         });
 
+        // Return All Events
         res.status(200).json(response);
     }
     
@@ -152,7 +153,7 @@ exports.update = async (req, res) =>
                 name: name,
                 description: description,
                 cover: cover,
-                dDay: dDay ? new Date(dDay) : undefined, // Only update if provided
+                dDay: dDay ? new Date(dDay) : undefined, // Only Update if Provided
                 capacity: capacity,
                 addressLine1: addressLine1,
                 addressLine2: addressLine2,
@@ -240,12 +241,12 @@ exports.delete = async (req, res) =>
         });
 
         // Returns Events Deleted
-        res.status(200).json({ message: 'User Deleted successfully: ', deletedEvents });
+        res.status(200).json({ message: 'Event Deleted successfully: ', deletedEvents });
     }
 
     catch (error)
     {
-        res.status(400).json({ error: 'Failed to Delete User.', details: error.message });
+        res.status(400).json({ error: 'Failed to Delete Event.', details: error.message });
     }
 };
 
@@ -258,7 +259,7 @@ exports.restore = async (req, res) =>
     try 
     {   
         // Restore Events
-        const restoredUser = await prisma.events.update({
+        const restoredEvent = await prisma.events.update({
 
             where: 
             { 
@@ -272,11 +273,11 @@ exports.restore = async (req, res) =>
         });
 
         // Returns Events Restored
-        res.status(200).json({ message: 'User Restored Successfully: ', restoredUser });
+        res.status(200).json({ message: 'Event Restored Successfully: ', restoredEvent });
     } 
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Restore User.', details: error.message });
+        res.status(400).json({ error: 'Failed to Restore Event.', details: error.message });
     }
 };

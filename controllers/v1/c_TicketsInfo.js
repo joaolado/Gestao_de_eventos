@@ -2,130 +2,127 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// Return all Users
+// Return all TicketsInfo
 exports.getAll = async (req, res) => 
 {
     try 
     {
         // Read all from DB
-        const response = await prisma.users.findMany({
+        const response = await prisma.ticketsInfo.findMany({
 
             where: 
             {
-                deleted: null, // Only includes Non-Deleted Users
+                deleted: null, // Only includes Non-Deleted TicketsInfo
             },
 
             include: 
             {
-                address: true, // Include related UsersAddress
+                event: true,       // Include related Events
+                ticketsType: true, // Include related TicketsType
             } 
         });
 
+        // Return All TicketsInfo
         res.status(200).json(response);
     }
     
     catch (error) 
     {
-        res.status(500).json({ error: 'Failed to Retrieve Users.', details: error.message });
+        res.status(500).json({ error: 'Failed to Retrieve TicketsInfo.', details: error.message });
     }
 };
 
-// Return Users by ID
+// Return TicketsInfo by ID
 exports.getById = async (req, res) => 
 {
-    // Get Users ID requested
+    // Get TicketsInfo ID requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
     try 
     {
-        // Finds Users by ID
-        const response = await prisma.users.findUnique({
+        // Finds TicketsInfo by ID
+        const response = await prisma.ticketsInfo.findUnique({
 
             where: 
             { 
                 id: id,
-                deleted: null, // Only if Users is Not-Deleted 
+                deleted: null, // Only if TicketsInfo is Not-Deleted 
             },
 
             include: 
             {      
-                address: true, // Include related UsersAddress
+                event: true,       // Include related Events
+                ticketsType: true, // Include related TicketsType
             },
         });
 
-        // Return Users
+        // Return TicketsInfo
         res.status(200).json(response);
     }
 
     catch (error) 
     {
-        res.status(404).json({ error: 'Users Not Found.', details: error.message });
+        res.status(404).json({ error: 'TicketsInfo Not Found.', details: error.message });
     }
 };
 
-// Creates Users
+// Creates TicketsInfo
 exports.create = async (req, res) => 
 {
-    // Get requested Users properties
+    // Get requested TicketsInfo properties
     const 
     { 
-        userName,
-        userPassword,
-        firstName,
-        lastName,
-        phone,
-        email,
-        addressId, 
+        eventsId,
+        ticketsTypeId,
+        SKU,
+        price,
+        quantity, 
 
     } = req.body;
 
     try 
     {
-        // Creates new Users
-        const newUsers = await prisma.users.create({
+        // Creates new TicketsInfo
+        const newTicketsInfo = await prisma.ticketsInfo.create({
 
             data: 
             {
-                userName: userName,
-                userPassword: userPassword,
-                firstName: firstName,
-                lastName: lastName,
-                phone: phone,
-                email: email,
-                addressId: addressId, // Nullable Field
+                eventsId: eventsId,           // Nullable Field
+                ticketsTypeId: ticketsTypeId, // Nullable Field
+                SKU: SKU,
+                price: price,
+                quantity: quantity,
             },
         });
 
-        // Return Users created
-        res.status(201).json(newUsers);
+        // Return TicketsInfo created
+        res.status(201).json(newTicketsInfo);
     }
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Create Users.', details: error.message });
+        res.status(400).json({ error: 'Failed to Create TicketsInfo.', details: error.message });
     }
 };
 
-// Updates Users by ID
+// Updates TicketsInfo by ID
 exports.update = async (req, res) => 
 {
     const 
     { 
         id,
-        userName,
-        userPassword,
-        firstName,
-        lastName,
-        phone,
-        email,
-        addressId, 
+        eventsId,
+        ticketsTypeId,
+        SKU,
+        price,
+        quantity, 
 
     } = req.body;
 
     try 
     {   
-        // Finds Users to Update their Data
-        const updatedUsers = await prisma.users.update({
+        // Finds TicketsInfo to Update their Data
+        const updatedTicketsInfo = await prisma.ticketsInfo.update({
 
             where: 
             { 
@@ -134,36 +131,77 @@ exports.update = async (req, res) =>
 
             data: 
             {
-                userName: userName,
-                userPassword: userPassword,
-                firstName: firstName,
-                lastName: lastName,
-                phone: phone,
-                email: email,
-                addressId: addressId, // Nullable Field
+                eventsId: eventsId,           // Nullable Field
+                ticketsTypeId: ticketsTypeId, // Nullable Field
+                SKU: SKU,
+                price: price,
+                quantity: quantity,
             },
         });
 
-        // Return Users Updated
-        res.status(200).json(updatedUsers);
+        // Return TicketsInfo Updated
+        res.status(200).json(updatedTicketsInfo);
     }
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Update Users.', details: error.message });
+        res.status(400).json({ error: 'Failed to Update TicketsInfo.', details: error.message });
     }
 };
 
-// Delete Users by ID
+// Update TicketsInfo Status by ID
+// Valid Status
+const validStatuses = ['Available', 'Sold_Out', 'Coming_Soon'];
+
+exports.updateStatus = async (req, res) => 
+{
+    const 
+    { 
+        id, 
+        status,
+
+    } = req.body;
+
+    // Validate Status
+    if (!validStatuses.includes(status)) 
+    {
+        return res.status(400).json({ error: `Invalid Status. Allowed Status are: ${validStatuses.join(', ')}` });
+    }
+
+    try 
+    {
+        const updatedTicketsInfo = await prisma.ticketsInfo.update({
+
+            where: 
+            {
+                id: id,
+            },
+
+            data: 
+            {
+                status: status, // Update the Status Field
+            },
+        });
+
+        res.status(200).json({ message: 'Ticket Info Status Updated Successfully: ', updatedTicketsInfo });
+    } 
+
+    catch (error) 
+    {
+        res.status(400).json({ error: 'Failed to Update Ticket Info Status.', details: error.message });
+    }
+};
+
+// Delete TicketsInfo by ID
 exports.delete = async (req, res) => 
 {
-    // Get Users ID requested
+    // Get TicketsInfo ID requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
     try
     {   
-        // Delete Users ( Soft delete by setting the `deleted` field )
-        const deletedUsers = await prisma.users.update({
+        // Delete TicketsInfo ( Soft delete by setting the `deleted` field )
+        const deletedTicketsInfo = await prisma.ticketsInfo.update({
 
             where: 
             { 
@@ -176,8 +214,8 @@ exports.delete = async (req, res) =>
             },
         });
 
-        // Returns Users Deleted
-        res.status(200).json({ message: 'User Deleted successfully: ', deletedUsers });
+        // Returns TicketsInfo Deleted
+        res.status(200).json({ message: 'User Deleted successfully: ', deletedTicketsInfo });
     }
 
     catch (error)
@@ -186,16 +224,16 @@ exports.delete = async (req, res) =>
     }
 };
 
-// Restore Users by ID
+// Restore TicketsInfo by ID
 exports.restore = async (req, res) => 
 {
-     // Get Users ID requested
+     // Get TicketsInfo ID requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
     try 
     {   
-        // Restore Users
-        const restoredUser = await prisma.users.update({
+        // Restore TicketsInfo
+        const restoredTicketInfo  = await prisma.ticketsInfo.update({
 
             where: 
             { 
@@ -208,12 +246,12 @@ exports.restore = async (req, res) =>
             }, 
         });
 
-        // Returns Users Restored
-        res.status(200).json({ message: 'User Restored Successfully: ', restoredUser });
+        // Returns TicketsInfo Restored
+        res.status(200).json({ message: 'Ticket Info Restored Successfully: ', restoredTicketInfo });
     } 
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Restore User.', details: error.message });
+        res.status(400).json({ error: 'Failed to Restore Ticket Info.', details: error.message });
     }
 };

@@ -22,6 +22,7 @@ exports.getAll = async (req, res) =>
             } 
         });
 
+        // Return All Users that are Not-Deleted
         res.status(200).json(response);
     }
     

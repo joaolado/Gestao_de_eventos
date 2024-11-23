@@ -1,7 +1,7 @@
 
 /* CREATE DATABASE - Event Management */
 
-CREATE DATABASE event_management;
+CREATE DATABASE Gestao_de_eventos;
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 /* CREATE TABLE - Users Type */
@@ -86,7 +86,7 @@ CREATE TABLE events_category (
 /* ----------------------------------------------------------------------------------------------------------------- */
 /* CREATE TABLE - Events */
 
-CREATE TYPE status_events AS ENUM1 ('Active', 'Scheduled', 'Cancelled');
+CREATE TYPE status_events AS ENUM1 ('Active', 'Scheduled', 'Completed', 'Cancelled');
 
 CREATE TABLE events (
     id SERIAL PRIMARY KEY,

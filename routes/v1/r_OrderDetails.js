@@ -9,4 +9,8 @@ orderDetailsRouter.post('/create', controller.create);       // Create a new Ord
 orderDetailsRouter.put('/update', controller.update);        // Update a OrderDetails
 orderDetailsRouter.delete('/delete/:id', controller.delete); // Delete a OrderDetails by ID
 
+// PATCH Used for Parcial Update
+orderDetailsRouter.patch('/update-cart', controller.updateCart);     // Update Cart Status by ID
+orderDetailsRouter.patch('/update-status', controller.updateStatus); // Update OrderDetails Status by ID
+
 module.exports = orderDetailsRouter;

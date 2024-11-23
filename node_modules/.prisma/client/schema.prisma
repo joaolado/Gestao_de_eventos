@@ -23,6 +23,7 @@ datasource db {
 enum StatusEvents {
   Active
   Scheduled
+  Completed
   Cancelled
 }
 

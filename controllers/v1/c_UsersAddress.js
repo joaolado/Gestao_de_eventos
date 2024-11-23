@@ -9,6 +9,8 @@ exports.getAll = async (req, res) =>
     {
         // Read all from DB
         const response = await prisma.usersAddress.findMany();
+
+        // Return All UsersAddress
         res.status(200).json(response);
     }
     

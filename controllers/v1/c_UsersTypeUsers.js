@@ -17,6 +17,7 @@ exports.getAll = async (req, res) =>
             },
         });
 
+        // Return All UsersTypeUsers
         res.status(200).json(response);
     }
     
@@ -76,7 +77,7 @@ exports.getById = async (req, res) =>
 
             include: 
             {
-                users: true, // Include related UsersType
+                users: true, // Include related Users
             },
         });
 
@@ -108,8 +109,8 @@ exports.create = async (req, res) =>
 
             data: 
             {
-                usersId: usersId,
-                usersTypeId: usersTypeId,
+                usersId: usersId,         // Nullable Field
+                usersTypeId: usersTypeId, // Nullable Field
             },
         });
 
@@ -141,7 +142,7 @@ exports.delete = async (req, res) =>
             
             where: 
             { 
-                usersId_usersTypeId: { usersId, usersTypeId }, // Composite key
+                usersId_usersTypeId: { usersId, usersTypeId }, // Composite Key
             },
         });
 

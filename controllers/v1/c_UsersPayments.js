@@ -12,9 +12,11 @@ exports.getAll = async (req, res) =>
 
             include: 
             {
-                user: true, // Include related User
+                user: true, // Include related Users
             } 
         });
+
+        // Return All UsersPayments
         res.status(200).json(response);
     }
     
@@ -42,7 +44,7 @@ exports.getById = async (req, res) =>
 
             include: 
             {
-                user: true, // Include related User
+                user: true, // Include related Users
             },
         });
 
