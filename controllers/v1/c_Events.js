@@ -15,14 +15,33 @@ exports.getAll = async (req, res) =>
                 deleted: null, // Only includes Non-Deleted Events
             },
 
-            include: 
+            select: 
             {
-                category: true, // Include related EventsCategory
-            } 
+                id: true,
+                name: true,
+                description: true,
+                cover: true,
+                dDay: true,
+                capacity: true,
+                category: { select: { name: true, }, }, // Only select the EventsCategory name
+                addressLine1: true,
+                addressLine2: true,
+                postalCode: true,
+                city: true,
+                region: true,
+                country: true,
+            }
         });
 
+
+        // Transform the response to replace category object with category name - Makes it Linear
+        const formattedResponse = response.map(event => ({
+            ...event,
+            category: event.category?.name || null, // Simplify EventsCategory to its name
+        }));
+
         // Return All Events
-        res.status(200).json(response);
+        res.status(200).json(formattedResponse);
     }
     
     catch (error) 
@@ -48,14 +67,37 @@ exports.getById = async (req, res) =>
                 deleted: null, // Only if Events is Not-Deleted 
             },
 
-            include: 
-            {   
-                category: true, // Include related EventsCategory
-            },
+            select: 
+            {
+                id: true,
+                name: true,
+                description: true,
+                cover: true,
+                dDay: true,
+                capacity: true,
+                category: { select: { name: true, }, }, // Only select the EventsCategory name
+                addressLine1: true,
+                addressLine2: true,
+                postalCode: true,
+                city: true,
+                region: true,
+                country: true,
+            }
         });
 
-        // Return Events
-        res.status(200).json(response);
+        if (!response) 
+        {
+            return res.status(404).json({ error: 'Event Not Found.' });
+        }
+        
+        // Transform the response to replace category object with category name - Makes it Linear
+        const formattedResponse = {
+            ...response,
+            category: response.category?.name || null, // Simplify EventsCategory to its name
+        };
+        
+        // Return Event
+        res.status(200).json(formattedResponse);
     }
 
     catch (error) 
@@ -75,18 +117,32 @@ exports.create = async (req, res) =>
         cover,
         dDay,
         capacity,
+        categoryName, // Return categoryName instead of categoryId 
         addressLine1,
         addressLine2,
         postalCode,
         city,
         region,
-        country,
-        categoryId, 
+        country, 
 
     } = req.body;
 
     try 
-    {
+    {   
+        // Find the category ID based on the categoryName
+        const category = await prisma.eventsCategory.findUnique({
+
+            where: 
+            { 
+                name: categoryName 
+            }
+        });
+
+        if (!category)
+        {
+            return res.status(404).json({ error: 'Category Not Found.' });
+        }
+
         // Creates new Events
         const newEvents = await prisma.events.create({
 
@@ -97,13 +153,13 @@ exports.create = async (req, res) =>
                 cover: cover,
                 dDay: new Date(dDay),
                 capacity: capacity,
+                categoryId: category.id,
                 addressLine1: addressLine1,
                 addressLine2: addressLine2,
                 postalCode: postalCode,
                 city: city,
                 region: region,
                 country: country,
-                categoryId: categoryId, // Nullable Field
             },
         });
 
@@ -128,18 +184,39 @@ exports.update = async (req, res) =>
         cover,
         dDay,
         capacity,
+        categoryName, // Return categoryName instead of categoryId 
         addressLine1,
         addressLine2,
         postalCode,
         city,
         region,
         country,
-        categoryId,  
 
     } = req.body;
 
     try 
     {   
+        // If categoryName is provided, find the categoryId
+        let categoryId = undefined;
+
+        if (categoryName) 
+        {
+            const category = await prisma.eventsCategory.findUnique({
+                where: 
+                { 
+                    name: categoryName 
+                }
+            });
+
+            if (!category) 
+            {
+                return res.status(404).json({ error: 'Category Not Found.' });
+            }
+
+            // If EventsCategory is found, get the categoryId
+            categoryId = category.id;
+        }
+
         // Finds Events to Update their Data
         const updatedEvents = await prisma.events.update({
 
@@ -155,13 +232,13 @@ exports.update = async (req, res) =>
                 cover: cover,
                 dDay: dDay ? new Date(dDay) : undefined, // Only Update if Provided
                 capacity: capacity,
+                categoryId: categoryId !== undefined ? categoryId : undefined,
                 addressLine1: addressLine1,
                 addressLine2: addressLine2,
                 postalCode: postalCode,
                 city: city,
                 region: region,
                 country: country,
-                categoryId: categoryId, // Nullable Field
             },
         });
 
