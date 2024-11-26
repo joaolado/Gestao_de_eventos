@@ -1,6 +1,8 @@
 
 const router = require('express').Router();
 
+const authRouter = require('./auth');
+
 const eventsRouter = require('./r_Events');
 const eventsCategoryRouter = require('./r_EventsCategory');
 const orderDetailsRouter = require('./r_OrderDetails');
@@ -13,6 +15,8 @@ const usersAddressRouter = require('./r_UsersAddress');
 const usersPaymentsRouter = require('./r_UsersPayments');
 const usersTypeRouter = require('./r_UsersType');
 // const usersTypeUsersRouter = require('./r_UsersTypeUsers');
+
+router.use('/auth', authRouter);
 
 router.use('/events', eventsRouter);
 router.use('/eventsCategory', eventsCategoryRouter);
