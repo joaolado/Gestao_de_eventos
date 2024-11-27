@@ -12,12 +12,32 @@ exports.getAll = async (req, res) =>
 
             where: 
             {
-                deleted: null, // Only includes Non-Deleted Users
+                deleted: null,   // Only includes Non-Deleted Users
             },
 
-            include: 
+            select: 
             {
-                address: true,   // Include related UsersAddress
+                id: true,
+                userName: true,
+                userPassword: true,
+                firstName: true,
+                lastName: true,
+                phone: true,
+                email: true,
+
+                // Include related UsersAddress
+                address: 
+                { 
+                    select:
+                    {   
+                        addressLine1: true, 
+                        addressLine2: true,
+                        postalCode: true,
+                        city: true,
+                        region: true,
+                        country: true,
+                    }, 
+                },
             } 
         });
 
@@ -48,10 +68,30 @@ exports.getById = async (req, res) =>
                 deleted: null, // Only if Users is Not-Deleted 
             },
 
-            include: 
-            {   
-                address: true,   // Include related UsersAddress
-            },
+            select: 
+            {
+                id: true,
+                userName: true,
+                userPassword: true,
+                firstName: true,
+                lastName: true,
+                phone: true,
+                email: true,
+
+                // Include related UsersAddress
+                address: 
+                { 
+                    select:
+                    {   
+                        addressLine1: true, 
+                        addressLine2: true,
+                        postalCode: true,
+                        city: true,
+                        region: true,
+                        country: true,
+                    }, 
+                },
+            } 
         });
 
         // Return Users
@@ -76,7 +116,13 @@ exports.create = async (req, res) =>
         lastName,
         phone,
         email,
-        addressId, 
+        
+        addressLine1, 
+        addressLine2, 
+        postalCode, 
+        city, 
+        region, 
+        country,
 
     } = req.body;
 
@@ -93,7 +139,24 @@ exports.create = async (req, res) =>
                 lastName: lastName,
                 phone: phone,
                 email: email,
-                addressId: addressId, // Nullable Field
+                
+                address: 
+                {
+                    create: 
+                    {
+                        addressLine1: addressLine1,
+                        addressLine2: addressLine2,
+                        postalCode: postalCode,
+                        city: city,
+                        region: region,
+                        country: country,
+                    },
+                },
+            },
+
+            include: 
+            {
+                address: true,
             },
         });
 
@@ -119,7 +182,13 @@ exports.update = async (req, res) =>
         lastName,
         phone,
         email,
-        addressId, 
+        
+        addressLine1, 
+        addressLine2, 
+        postalCode, 
+        city, 
+        region, 
+        country,
 
     } = req.body;
 
@@ -141,7 +210,24 @@ exports.update = async (req, res) =>
                 lastName: lastName,
                 phone: phone,
                 email: email,
-                addressId: addressId, // Nullable Field
+
+                address: 
+                {
+                    create: 
+                    {
+                        addressLine1: addressLine1,
+                        addressLine2: addressLine2,
+                        postalCode: postalCode,
+                        city: city,
+                        region: region,
+                        country: country,
+                    },
+                },
+            },
+
+            include: 
+            {
+                address: true,
             },
         });
 

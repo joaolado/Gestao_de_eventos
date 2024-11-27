@@ -15,15 +15,39 @@ exports.getAll = async (req, res) =>
                 deleted: null, // Only includes Non-Deleted TicketsInfo
             },
 
-            include: 
+            select: 
             {
-                event: true,       // Include related Events
-                ticketsType: true, // Include related TicketsType
+                id: true,
+                SKU: true,
+                price: true,
+                quantity: true,
+                status: true,
+
+                ticketsType: { select: { name: true, }, }, // Only select the TicketsType name
+
+                // Include Important Event Info
+                event: 
+                {
+                     select: 
+                     { 
+                        id: true,
+                        name: true, 
+                        startDate: true, 
+                        endDate: true,
+                        addressLine1: true,
+                    }, 
+                },
             } 
         });
 
+        // Transform the response to replace ticketsType object with ticketsType name - Makes it Linear
+        const formattedResponse = response.map(ticketsInfo => ({
+            ...ticketsInfo,
+            ticketsType: ticketsInfo.ticketsType?.name || null, // Simplify ticketsType to its name
+        }));
+
         // Return All TicketsInfo
-        res.status(200).json(response);
+        res.status(200).json(formattedResponse);
     }
     
     catch (error) 
@@ -49,15 +73,44 @@ exports.getById = async (req, res) =>
                 deleted: null, // Only if TicketsInfo is Not-Deleted 
             },
 
-            include: 
-            {      
-                event: true,       // Include related Events
-                ticketsType: true, // Include related TicketsType
-            },
+            select: 
+            {
+                id: true,
+                SKU: true,
+                price: true,
+                quantity: true,
+                status: true,
+
+                ticketsType: { select: { name: true, }, }, // Only select the TicketsType name
+
+                // Include Important Event Info
+                event: 
+                {
+                     select: 
+                     { 
+                        id: true,
+                        name: true, 
+                        startDate: true, 
+                        endDate: true,
+                        addressLine1: true,
+                    }, 
+                },
+            } 
         });
 
+        if (!response) 
+        {
+            return res.status(404).json({ error: 'Event Not Found.' });
+        }
+        
+        // Transform the response to replace ticketsType object with ticketsType name - Makes it Linear
+        const formattedResponse = {
+            ...response,
+            ticketsType: response.ticketsType?.name || null, // Simplify ticketsType to its name
+        };
+
         // Return TicketsInfo
-        res.status(200).json(response);
+        res.status(200).json(formattedResponse);
     }
 
     catch (error) 
@@ -72,26 +125,61 @@ exports.create = async (req, res) =>
     // Get requested TicketsInfo properties
     const 
     { 
-        eventsId,
-        ticketsTypeId,
         SKU,
         price,
         quantity, 
+
+        ticketName, // Return ticketsType instead of ticket Type ID
+
+        name, 
+        startDate, 
+        endDate,
+        addressLine1,
 
     } = req.body;
 
     try 
     {
+        // Find the ticketsType ID based on the ticketsType
+        const type = await prisma.ticketsType.findUnique({
+
+            where: 
+            { 
+                name: ticketName,
+            }
+        });
+
+        if (!type)
+        {
+            return res.status(404).json({ error: 'Ticket Type Not Found.' });
+        }
+
         // Creates new TicketsInfo
         const newTicketsInfo = await prisma.ticketsInfo.create({
 
             data: 
             {
-                eventsId: eventsId,           // Nullable Field
-                ticketsTypeId: ticketsTypeId, // Nullable Field
                 SKU: SKU,
                 price: price,
                 quantity: quantity,
+
+                ticketsTypeId: type.id,
+
+                event: 
+                {
+                    create: 
+                    { 
+                        name: name, 
+                        startDate: startDate, 
+                        endDate: endDate,
+                        addressLine1: addressLine1,
+                    }, 
+                },
+            },
+
+            include: 
+            {
+                event: true,
             },
         });
 

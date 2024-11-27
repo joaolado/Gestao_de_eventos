@@ -53,7 +53,7 @@ exports.create = async (req, res) =>
     // Get requested TicketsType properties
     const 
     { 
-        ticketsType, 
+        name, 
         description, 
 
     } = req.body;
@@ -65,7 +65,7 @@ exports.create = async (req, res) =>
 
             data: 
             {
-                ticketsType: ticketsType,
+                name: name,
                 description: description,
             },
         });
@@ -86,7 +86,7 @@ exports.update = async (req, res) =>
     const 
     { 
         id, 
-        ticketsType, 
+        name, 
         description,
     
     } = req.body;
@@ -103,7 +103,7 @@ exports.update = async (req, res) =>
 
             data: 
             {
-                ticketsType: ticketsType,
+                name: name,
                 description: description,
             },
         });

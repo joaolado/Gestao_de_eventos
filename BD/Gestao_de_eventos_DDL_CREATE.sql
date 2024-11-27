@@ -99,7 +99,7 @@ CREATE TYPE status_tickets_type AS ENUM2 ('Active', 'Disabled');
 
 CREATE TABLE tickets_type (
     id SERIAL PRIMARY KEY,
-    tickets_type VARCHAR(100),
+    name VARCHAR(100),
     description VARCHAR(250),
     status status_tickets_type DEFAULT 'Active',
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
