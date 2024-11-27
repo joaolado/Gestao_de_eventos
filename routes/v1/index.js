@@ -12,6 +12,8 @@ const usersRouter = require('./r_Users');
 const usersAddressRouter = require('./r_UsersAddress');
 const usersPaymentsRouter = require('./r_UsersPayments');
 
+const profileRouter = require('./profile');
+
 router.use('/events', eventsRouter);
 router.use('/eventsCategory', eventsCategoryRouter);
 router.use('/orderDetails', orderDetailsRouter);
@@ -22,5 +24,7 @@ router.use('/ticketsType', ticketsTypeRouter);
 router.use('/users', usersRouter);
 router.use('/usersAddress', usersAddressRouter);
 router.use('/usersPayments', usersPaymentsRouter);
+
+router.use('/profile', profileRouter);
 
 module.exports = router;
