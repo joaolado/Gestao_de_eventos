@@ -58,16 +58,16 @@ enum StatusPaymentDetails {
 
 // Models
 model UsersType {
-  id         Int       @id @default(autoincrement())
-  usersType  String    @unique @map("users_type")
-  created    DateTime  @default(now())
-  modified   DateTime  @updatedAt
+  id         Int      @id @default(autoincrement())
+  usersType  String   @map("users_type")
+  created    DateTime @default(now())
+  modified   DateTime @updatedAt
   deleted    DateTime?
   users      UsersTypeUsers[]
 }
 
 model UsersAddress {
-  id           Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   addressLine1 String  @map("address_line1")
   addressLine2 String? @map("address_line2")
   postalCode   String  @map("postal_code")
@@ -79,7 +79,7 @@ model UsersAddress {
 
 model Users {
   id           Int             @id @default(autoincrement())
-  userName     String          @unique @map("user_name")
+  userName     String          @map("user_name")
   userPassword String          @map("user_password")
   firstName    String?
   lastName     String?
@@ -96,30 +96,30 @@ model Users {
 }
 
 model UsersTypeUsers {
-  usersId      Int       @map("users_id")
-  usersTypeId  Int       @map("users_type_id")
-  users        Users     @relation(fields: [usersId], references: [id])
+  usersId      Int     @map("users_id")
+  usersTypeId  Int     @map("users_type_id")
+  users        Users   @relation(fields: [usersId], references: [id])
   usersType    UsersType @relation(fields: [usersTypeId], references: [id])
   @@id([usersId, usersTypeId])
 }
 
 model UsersPayments {
-  id              Int      @id @default(autoincrement())
-  usersId         Int      @map("users_id")
-  paymentType     String   @map("payment_type")
-  paymentProvider String   @map("payment_provider")
-  created         DateTime @default(now())
-  modified        DateTime @updatedAt
-  user            Users    @relation(fields: [usersId], references: [id])
-  paymentDetails  PaymentDetails[]
+  id             Int      @id @default(autoincrement())
+  usersId        Int      @map("users_id")
+  paymentType    String   @map("payment_type")
+  paymentProvider String  @map("payment_provider")
+  created        DateTime @default(now())
+  modified       DateTime @updatedAt
+  user           Users    @relation(fields: [usersId], references: [id])
+  paymentDetails PaymentDetails[]
 }
 
 model EventsCategory {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
   description String?
-  created     DateTime  @default(now())
-  modified    DateTime  @updatedAt
+  created     DateTime @default(now())
+  modified    DateTime @updatedAt
   deleted     DateTime?
   events      Events[]
 }
@@ -129,8 +129,7 @@ model Events {
   name         String
   description  String?
   cover        String?
-  startDate    DateTime        @map("start_date")
-  endDate      DateTime        @map("end_date")
+  dDay         DateTime        @map("d_day")
   capacity     Int
   addressLine1 String          @map("address_line1")
   addressLine2 String?         @map("address_line2")
@@ -148,29 +147,29 @@ model Events {
 }
 
 model TicketsType {
-  id          Int               @id @default(autoincrement())
-  ticketsType String            @unique @map("tickets_type")
+  id          Int             @id @default(autoincrement())
+  ticketsType String          @map("tickets_type")
   description String?
   status      StatusTicketsType @default(Active)
-  created     DateTime          @default(now())
-  modified    DateTime          @updatedAt
+  created     DateTime        @default(now())
+  modified    DateTime        @updatedAt
   deleted     DateTime?
   tickets     TicketsInfo[]
 }
 
 model TicketsInfo {
-  id             Int               @id @default(autoincrement())
-  eventsId       Int               @map("events_id")
-  ticketsTypeId  Int               @map("tickets_type_id")
+  id             Int              @id @default(autoincrement())
+  eventsId       Int              @map("events_id")
+  ticketsTypeId  Int              @map("tickets_type_id")
   SKU            String
   price          Float
   quantity       Int
   status         StatusTicketsInfo @default(Available)
-  created        DateTime          @default(now())
-  modified       DateTime          @updatedAt
+  created        DateTime         @default(now())
+  modified       DateTime         @updatedAt
   deleted        DateTime?
-  event          Events            @relation(fields: [eventsId], references: [id])
-  ticketsType    TicketsType       @relation(fields: [ticketsTypeId], references: [id])
+  event          Events           @relation(fields: [eventsId], references: [id])
+  ticketsType    TicketsType      @relation(fields: [ticketsTypeId], references: [id])
   orderedTickets OrderedTickets[]
 }
 
@@ -200,12 +199,12 @@ model OrderDetails {
 }
 
 model PaymentDetails {
-  id             Int                  @id @default(autoincrement())
-  orderId        Int                  @map("order_id")
-  usersPaymentsId Int                 @map("users_payments_id")
-  paymentAmount  Float                @map("payment_amount")
-  paymentDate    DateTime             @map("payment_date") @default(now())
+  id             Int                 @id @default(autoincrement())
+  orderId        Int                 @map("order_id")
+  usersPaymentsId Int                @map("users_payments_id")
+  paymentAmount  Float               @map("payment_amount")
+  paymentDate    DateTime            @map("payment_date") @default(now())
   status         StatusPaymentDetails @default(Paid)
-  order          OrderDetails         @relation(fields: [orderId], references: [id])
-  usersPayments  UsersPayments        @relation(fields: [usersPaymentsId], references: [id])
+  order          OrderDetails        @relation(fields: [orderId], references: [id])
+  usersPayments  UsersPayments       @relation(fields: [usersPaymentsId], references: [id])
 }

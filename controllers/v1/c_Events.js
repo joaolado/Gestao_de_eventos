@@ -4,92 +4,14 @@ const prisma = new PrismaClient();
 
 // Return all Events
 exports.getAll = async (req, res) => 
-{   
-    // Valid Statuses
-    const validStatuses = ['Active', 'Scheduled', 'Completed', 'Cancelled'];
-
-    const 
-    {
-        name,         // Filter by Event Name (partial match)
-        city,         // Filter by City
-        country,      // Filter by Country
-        categoryName, // Filter by Category Name
-        status,       // Filter by Event Status
-        startDate,    // Start of Date range filter
-        endDate,      //   End of Date range filter
-
-        sortBy,       // Sort By field
-        sortOrder,    // Sort Order ('asc' or 'desc')
-              
-    } = req.query;
-
+{
     try 
-    {   
-        // Filters
-        const filters = { deleted: null }; // Exclude Deleted Events
-
-        if (name) { filters.name = { contains: name, mode: 'insensitive' }; }        // Case-insensitive Partial Match
-
-        if (city) { filters.city = { equals: city, mode: 'insensitive' }; }          // Exact Match
-
-        if (country) { filters.country = { equals: country, mode: 'insensitive' }; } // Exact Match
-
-        // Greater than or equal to startDate
-        if (startDate) { filters.startDate = {...(startDate && { gte: new Date(startDate) }), }; }
-
-        // Less than or equal to endDate
-        if (endDate) { filters.endDate = {...(endDate && { lte: new Date(endDate) }) }; }
-
-        // Status Filter and validate status
-        if (status) 
-        {
-            if (!validStatuses.includes(status)) 
-            {
-                return res.status(404).json({ error: `Invalid Status. Allowed Status are: ${validStatuses.join(', ')}` });
-            }
-
-            filters.status = { equals: status }; // Filter by valid status
-        }
-
-        // Include EventsCategory Filter if categoryName is provided
-        let categoryFilter = {};
-        if (categoryName) {
-            const category = await prisma.eventsCategory.findUnique({
-                where: { name: categoryName }
-            });
-            if (!category) {
-                return res.status(404).json({ error: 'Category Not Found.' });
-            }
-            categoryFilter.categoryId = category.id;
-        }
-
-        // Sort by
-        const orderBy = {};
-
-        if (sortBy) 
-        {   
-            // Valid Fields
-            const validSortFields = 
-            ['name', 'city', 'country', 'categoryName', 'status', 'startDate', 'endDate']; 
-
-            if (validSortFields.includes(sortBy)) 
-            {
-                orderBy[sortBy] = sortOrder === 'desc' ? 'desc' : 'asc'; // Default to 'asc' if sortOrder is invalid
-            } 
-
-            else 
-            {
-                return res.status(400).json({ error: `Invalid Sort Field. Valid Fields are: ${validSortFields.join(', ')}` });
-            }
-        }
-
-        // Read all from DB or Filters
+    {
+        // Read all from DB
         const response = await prisma.events.findMany({
 
             where: 
-            {   
-                ...filters,
-                ...categoryFilter,
+            {
                 deleted: null, // Only includes Non-Deleted Events
             },
 
@@ -99,10 +21,8 @@ exports.getAll = async (req, res) =>
                 name: true,
                 description: true,
                 cover: true,
-                startDate: true,
-                endDate: true,
+                dDay: true,
                 capacity: true,
-                status: true,
                 category: { select: { name: true, }, }, // Only select the EventsCategory name
                 addressLine1: true,
                 addressLine2: true,
@@ -110,10 +30,7 @@ exports.getAll = async (req, res) =>
                 city: true,
                 region: true,
                 country: true,
-            },
-
-            // Dynamic Sorting if orderBy has any Value
-            orderBy: orderBy,
+            }
         });
 
 
@@ -139,7 +56,7 @@ exports.getById = async (req, res) =>
     // Get Events ID requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
-    try
+    try 
     {
         // Finds Events by ID
         const response = await prisma.events.findUnique({
@@ -156,8 +73,7 @@ exports.getById = async (req, res) =>
                 name: true,
                 description: true,
                 cover: true,
-                startDate: true,
-                endDate: true,
+                dDay: true,
                 capacity: true,
                 category: { select: { name: true, }, }, // Only select the EventsCategory name
                 addressLine1: true,
@@ -199,8 +115,7 @@ exports.create = async (req, res) =>
         name,
         description,
         cover,
-        startDate,
-        endDate,
+        dDay,
         capacity,
         categoryName, // Return categoryName instead of categoryId 
         addressLine1,
@@ -236,8 +151,7 @@ exports.create = async (req, res) =>
                 name: name,
                 description: description,
                 cover: cover,
-                startDate: new Date(startDate),
-                endDate: new Date(endDate),
+                dDay: new Date(dDay),
                 capacity: capacity,
                 categoryId: category.id,
                 addressLine1: addressLine1,
@@ -268,8 +182,7 @@ exports.update = async (req, res) =>
         name,
         description,
         cover,
-        startDate,
-        endDate,
+        dDay,
         capacity,
         categoryName, // Return categoryName instead of categoryId 
         addressLine1,
@@ -317,8 +230,7 @@ exports.update = async (req, res) =>
                 name: name,
                 description: description,
                 cover: cover,
-                startDate: startDate ? new Date(startDate) : undefined, // Only Update if Provided
-                endDate: endDate ? new Date(endDate) : undefined, // Only Update if Provided
+                dDay: dDay ? new Date(dDay) : undefined, // Only Update if Provided
                 capacity: capacity,
                 categoryId: categoryId !== undefined ? categoryId : undefined,
                 addressLine1: addressLine1,
