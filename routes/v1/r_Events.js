@@ -14,4 +14,10 @@ eventsRouter.patch('/restore/:id', controller.restore);            // Restore Ev
 eventsRouter.patch('/update-status', controller.updateStatus);     // Update Events Status by ID
 
 
+// Search with Filters and Order
+// GET Single Filter    /events?const=text
+// GET Multiple Filters /events?const=text&const=text
+
+// GET Sort By and Sort Order /events?sortBy=text&sortOrder=desc or asc
+
 module.exports = eventsRouter;
