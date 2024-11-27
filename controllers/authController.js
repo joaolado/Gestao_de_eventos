@@ -28,7 +28,7 @@ const registerUser = async (req, res) =>
         });
 
         // Successful Registration
-        res.status(201).json(user);
+        res.status(201).json( {message: 'Successful Registration.', user });
     } 
 
     catch (error) 
@@ -57,8 +57,7 @@ const loginUser = async (req, res) =>
             const token = jwt.sign({ usersId: users.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
             // Successful Login
-            res.status(200).json({ message: 'Successful Login.' });
-            res.json({ token });
+            res.json({ message: 'Successful Login.', token });
         }
 
         else 
