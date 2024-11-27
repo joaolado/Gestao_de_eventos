@@ -5,34 +5,41 @@ const prisma = new PrismaClient();
 
 // User registration
 const registerUser = async (req, res) => {
-    const { email, password } = req.body;
+    const 
+    { 
+        email, 
+        userPassword, 
+
+    } = req.body;
+    
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await prisma.user.create({
-            data: {
+        const hashedPassword = await bcrypt.hash(userPassword, 10);
+        const user = await prisma.users.create({
+            data: 
+            {
                 email,
-                password: hashedPassword,
+                userPassword: hashedPassword,
             },
         });
         res.status(201).json(user);
     } catch (error) {
-        res.status(400).json({ error: 'Failed to register user.', details: error.message });
+        res.status(400).json({ error: 'Failed to Register user.', details: error.message });
     }
 };
 
 // User login
 const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, userPassword } = req.body;
     try {
-        const user = await prisma.user.findUnique({ where: { email } });
-        if (user && await bcrypt.compare(password, user.password)) {
-            const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const users = await prisma.users.findUnique({ where: { email } });
+        if (users && await bcrypt.compare(userPassword, users.userPassword)) {
+            const token = jwt.sign({ usersId: users.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
             res.json({ token });
         } else {
             res.status(401).json({ error: 'Invalid credentials' });
         }
     } catch (error) {
-        res.status(400).json({ error: 'Failed to login.', details: error.message });
+        res.status(400).json({ error: 'Failed to Login.', details: error.message });
     }
 };
 

@@ -9,12 +9,12 @@ const authenticateToken = (req, res, next) => {
         return res.status(401).json({ error: 'No token provided' });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, users) => {
         if (err) {
             return res.status(403).json({ error: 'Invalid token' });
         }
 
-        req.user = user; // Store the user info in request
+        req.users = users; // Store the user info in request
         next(); // Proceed to the next middleware or route handler
     });
 };

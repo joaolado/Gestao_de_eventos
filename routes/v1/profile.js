@@ -16,7 +16,7 @@ const authenticate = (req, res, next) => {
 // Update user profile
 router.put('/profile', authenticate, async (req, res) => {
     const { name, address } = req.body;
-    const user = await prisma.user.update({
+    const user = await prisma.users.update({
         where: { id: req.userId },
         data: { name, address },
     });
