@@ -111,7 +111,8 @@ exports.getAll = async (req, res) =>
                 region: true,
                 country: true,
 
-                tickets: { // Include ticketsInfo with its related fields
+                // Include ticketsInfo with its Related fields
+                tickets: { 
                     select: {
                         price: true,
                         quantity: true,
@@ -130,6 +131,11 @@ exports.getAll = async (req, res) =>
         const formattedResponse = response.map(event => ({
             ...event,
             category: event.category?.name || null, // Simplify EventsCategory to its name
+
+            tickets: event.tickets.map(ticket => ({
+                ...ticket,
+                type: ticket.type?.name || null,    // Simplify Tickets Type to its name
+            })),
         }));
 
         // Return All Events
@@ -175,6 +181,16 @@ exports.getById = async (req, res) =>
                 city: true,
                 region: true,
                 country: true,
+
+                // Include ticketsInfo with its Related fields
+                tickets: { 
+                    select: {
+                        price: true,
+                        quantity: true,
+                        status: true,
+                        type: { select: { name: true } }, // Include the Related ticketsType name
+                    },
+                },
             }
         });
 
@@ -187,6 +203,12 @@ exports.getById = async (req, res) =>
         const formattedResponse = {
             ...response,
             category: response.category?.name || null, // Simplify EventsCategory to its name
+
+            tickets: response.tickets?.map(ticket => ({
+                ...ticket,
+                type: ticket.type?.name || null,       // Simplify ticketsType to its name
+            })) 
+            || [], // Empty Array if no Tickets are found
         };
         
         // Return Event
