@@ -110,6 +110,15 @@ exports.getAll = async (req, res) =>
                 city: true,
                 region: true,
                 country: true,
+
+                tickets: { // Include ticketsInfo with its related fields
+                    select: {
+                        price: true,
+                        quantity: true,
+                        status: true,
+                        type: { select: { name: true } }, // Include the related ticketsType name
+                    },
+                },
             },
 
             // Dynamic Sorting if orderBy has any Value

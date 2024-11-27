@@ -23,7 +23,7 @@ exports.getAll = async (req, res) =>
                 quantity: true,
                 status: true,
 
-                ticketsType: { select: { name: true, }, }, // Only select the TicketsType name
+                type: { select: { name: true, }, }, // Only select the TicketsType name
 
                 // Include Important Event Info
                 event: 
@@ -43,7 +43,7 @@ exports.getAll = async (req, res) =>
         // Transform the response to replace ticketsType object with ticketsType name - Makes it Linear
         const formattedResponse = response.map(ticketsInfo => ({
             ...ticketsInfo,
-            ticketsType: ticketsInfo.ticketsType?.name || null, // Simplify ticketsType to its name
+            type: ticketsInfo.type?.name || null, // Simplify ticketsType to its name
         }));
 
         // Return All TicketsInfo
@@ -81,7 +81,7 @@ exports.getById = async (req, res) =>
                 quantity: true,
                 status: true,
 
-                ticketsType: { select: { name: true, }, }, // Only select the TicketsType name
+                type: { select: { name: true, }, }, // Only select the TicketsType name
 
                 // Include Important Event Info
                 event: 
@@ -106,7 +106,7 @@ exports.getById = async (req, res) =>
         // Transform the response to replace ticketsType object with ticketsType name - Makes it Linear
         const formattedResponse = {
             ...response,
-            ticketsType: response.ticketsType?.name || null, // Simplify ticketsType to its name
+            type: response.type?.name || null, // Simplify ticketsType to its name
         };
 
         // Return TicketsInfo
@@ -129,12 +129,9 @@ exports.create = async (req, res) =>
         price,
         quantity, 
 
-        ticketName, // Return ticketsType instead of ticket Type ID
+        ticketType, // Return ticketsType instead of ticket Type ID
 
-        name, 
-        startDate, 
-        endDate,
-        addressLine1,
+        eventsId,   // Return associated Event info
 
     } = req.body;
 
@@ -145,7 +142,7 @@ exports.create = async (req, res) =>
 
             where: 
             { 
-                name: ticketName,
+                name: ticketType,
             }
         });
 
@@ -163,18 +160,11 @@ exports.create = async (req, res) =>
                 price: price,
                 quantity: quantity,
 
-                ticketsTypeId: type.id,
+                // Connect to the existing Ticket Type
+                type: { connect: { id: type.id, }, },
 
-                event: 
-                {
-                    create: 
-                    { 
-                        name: name, 
-                        startDate: startDate, 
-                        endDate: endDate,
-                        addressLine1: addressLine1,
-                    }, 
-                },
+                // Connect to the Event
+                event: { connect: { id: eventsId, }, },
             },
 
             include: 
@@ -199,16 +189,39 @@ exports.update = async (req, res) =>
     const 
     { 
         id,
-        eventsId,
-        ticketsTypeId,
         SKU,
         price,
         quantity, 
 
+        ticketType, // Return ticketsType instead of ticket Type ID
+
+        eventsId,   // Return associated Event info
+
     } = req.body;
 
     try 
-    {   
+    {  
+        // If ticketType is provided, find the ticketsTypeId
+        let typeConnect = null;
+
+        if (ticketType) 
+        {
+            const type = await prisma.ticketsType.findUnique({
+                where: 
+                { 
+                    name: ticketType 
+                }
+            });
+
+            if (!type) 
+            {
+                return res.status(404).json({ error: 'Ticket Type Not Found.' });
+            }
+
+            // If ticketType is found, get the ticketsTypeId
+            typeConnect = { id: type.id };
+        }
+
         // Finds TicketsInfo to Update their Data
         const updatedTicketsInfo = await prisma.ticketsInfo.update({
 
@@ -219,11 +232,13 @@ exports.update = async (req, res) =>
 
             data: 
             {
-                eventsId: eventsId,           // Nullable Field
-                ticketsTypeId: ticketsTypeId, // Nullable Field
                 SKU: SKU,
                 price: price,
                 quantity: quantity,
+
+                type: typeConnect ? { connect: typeConnect } : undefined,
+
+                event: eventsId ? { connect: { id: eventsId } } : undefined,
             },
         });
 

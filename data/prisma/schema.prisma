@@ -150,7 +150,7 @@ model TicketsType {
 model TicketsInfo {
   id             Int               @id @default(autoincrement())
   eventsId       Int               @map("events_id")
-  ticketsTypeId  Int?              
+  typeId         Int?              
   SKU            String
   price          Float
   quantity       Int
@@ -159,7 +159,7 @@ model TicketsInfo {
   modified       DateTime          @updatedAt
   deleted        DateTime?
   event          Events            @relation(fields: [eventsId], references: [id])
-  ticketsType    TicketsType?      @relation(fields: [ticketsTypeId], references: [id])
+  type           TicketsType?      @relation(fields: [typeId], references: [id])
   orderedTickets OrderedTickets[]
 }
 
