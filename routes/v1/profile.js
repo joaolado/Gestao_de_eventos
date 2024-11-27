@@ -1,3 +1,4 @@
+
 const profileRouter = require('express').Router();
 const authenticateToken = require('../../middlewares/authMiddleware'); // Import the JWT auth Middleware
 const controller = require('../../controllers/v1/profileController');
