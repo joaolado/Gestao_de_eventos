@@ -4,17 +4,6 @@
 CREATE DATABASE Gestao_de_eventos;
 
 /* ----------------------------------------------------------------------------------------------------------------- */
-/* CREATE TABLE - Users Type */
-
-CREATE TABLE users_type (
-    id SERIAL PRIMARY KEY,
-    users_type VARCHAR(250),
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted TIMESTAMP NULL DEFAULT NULL,
-    PRIMARY KEY (id) );
-
-/* ----------------------------------------------------------------------------------------------------------------- */
 /* CREATE TABLE - Users Address */
 
 CREATE TABLE users_address (
@@ -30,10 +19,13 @@ CREATE TABLE users_address (
 /* ----------------------------------------------------------------------------------------------------------------- */
 /* CREATE TABLE - Users */
 
+CREATE TYPE user_type AS ENUM0 ('UserClient', 'UserAdmin', 'UserSuperAdmin');
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     user_name VARCHAR(100) NOT NULL,
     user_password VARCHAR(250) NOT NULL,
+    status user_type DEFAULT 'UserClient',
     first_name VARCHAR(100),
     last_name VARCHAR(100),
     phone VARCHAR(20),
@@ -45,17 +37,6 @@ CREATE TABLE users (
     PRIMARY KEY (id),
     CONSTRAINT address_fk1
 		    FOREIGN KEY (address_id) REFERENCES users_address (id) );
-
-/* ----------------------------------------------------------------------------------------------------------------- */
-/* CREATE TABLE - Users Type / Users */
-
-CREATE TABLE users_type_users (
-    users_id INT,
-    users_type_id INT,
-    PRIMARY KEY (users_id, users_type_id),
-    CONSTRAINT users_type_users_fk1
-            FOREIGN KEY (users_id) REFERENCES users (id),
-            FOREIGN KEY (users_type_id) REFERENCES users_type (id) );
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 /* CREATE TABLE - Users Payments */
@@ -93,7 +74,8 @@ CREATE TABLE events (
     name VARCHAR(250),
     description VARCHAR(500),
     cover VARCHAR(250),
-    d_day DATETIME,
+    start_date DATETIME,
+    end_date DATETIME,
     capacity INT,
     address_line1 VARCHAR(250),
     address_line2 VARCHAR(250),

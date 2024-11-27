@@ -11,8 +11,6 @@ const ticketsTypeRouter = require('./r_TicketsType');
 const usersRouter = require('./r_Users');
 const usersAddressRouter = require('./r_UsersAddress');
 const usersPaymentsRouter = require('./r_UsersPayments');
-const usersTypeRouter = require('./r_UsersType');
-// const usersTypeUsersRouter = require('./r_UsersTypeUsers');
 
 router.use('/events', eventsRouter);
 router.use('/eventsCategory', eventsCategoryRouter);
@@ -24,7 +22,5 @@ router.use('/ticketsType', ticketsTypeRouter);
 router.use('/users', usersRouter);
 router.use('/usersAddress', usersAddressRouter);
 router.use('/usersPayments', usersPaymentsRouter);
-router.use('/usersType', usersTypeRouter);
-// router.use('/usersTypeUsers', usersTypeUsersRouter);
 
 module.exports = router;

@@ -18,7 +18,6 @@ exports.getAll = async (req, res) =>
             include: 
             {
                 address: true,   // Include related UsersAddress
-                usersType: true, // Include related UsersType
             } 
         });
 
@@ -52,7 +51,6 @@ exports.getById = async (req, res) =>
             include: 
             {   
                 address: true,   // Include related UsersAddress
-                usersType: true, // Include related UsersType
             },
         });
 
@@ -154,6 +152,49 @@ exports.update = async (req, res) =>
     catch (error) 
     {
         res.status(400).json({ error: 'Failed to Update Users.', details: error.message });
+    }
+};
+
+// Update User Type by ID
+// Valid Types
+const validTypes = ['UserClient', 'UserAdmin', 'UserSuperAdmin'];
+
+exports.updateType = async (req, res) => 
+{
+    const 
+    { 
+        id, 
+        usersType,
+
+    } = req.body;
+
+    // Validate Type
+    if (!validTypes.includes(usersType)) 
+    {
+        return res.status(400).json({ error: `Invalid Type. Allowed Types are: ${validTypes.join(', ')}` });
+    }
+
+    try 
+    {
+        const updatedUsers = await prisma.users.update({
+
+            where: 
+            {
+                id: id,
+            },
+
+            data: 
+            {
+                usersType: usersType, // Update the User Type Field
+            },
+        });
+
+        res.status(200).json({ message: 'User Type Updated Successfully: ', updatedUsers });
+    } 
+
+    catch (error) 
+    {
+        res.status(400).json({ error: 'Failed to Update User Type.', details: error.message });
     }
 };
 
