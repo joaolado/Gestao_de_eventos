@@ -3,7 +3,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const bcrypt = require('bcryptjs');
 
-// Updates Users by ID (Respective Authenticated User Only)
+// Updates Users by ID (Respective Authenticated User Only) (editProfile)
 exports.profile = async (req, res) => 
 {
     const 
@@ -27,10 +27,13 @@ exports.profile = async (req, res) =>
     try 
     {
         // Get User ID from Token Payload (req.users is set by authenticateToken Middleware)
-        const userId = req.users.usersId;
+        const userId = req.users.id;
 
         // Hash the New Password if Provided
         const hashedPassword = userPassword ? await bcrypt.hash(userPassword, 10) : undefined;
+
+        // Check if a File is Uploaded
+        const profilePic = req.file ? req.file.path : null;
 
         // Update the User profile
         const updatedUsers = await prisma.users.update({
@@ -41,13 +44,14 @@ exports.profile = async (req, res) =>
             }, 
 
             data: 
-            {
-                userName,
+            {   
+                profilePic: profilePic,
+                userName: userName,
                 userPassword: hashedPassword || undefined, // Update only if Password is Provided
-                firstName,
-                lastName,
-                phone,
-                email,
+                firstName: firstName,
+                lastName: lastName,
+                phone: phone,
+                email: email,
 
                 // Create or Update the Address
                 address: {
@@ -55,22 +59,22 @@ exports.profile = async (req, res) =>
                     { 
                         create: 
                         {
-                            addressLine1,
-                            addressLine2,
-                            postalCode,
-                            city,
-                            region,
-                            country,
+                            addressLine1: addressLine1,
+                            addressLine2: addressLine2,
+                            postalCode: postalCode,
+                            city: city,
+                            region: region,
+                            country: country,
                         },
 
                         update: 
                         {
-                            addressLine1,
-                            addressLine2,
-                            postalCode,
-                            city,
-                            region,
-                            country,
+                            addressLine1: addressLine1,
+                            addressLine2: addressLine2,
+                            postalCode: postalCode,
+                            city: city,
+                            region: region,
+                            country: country,
                         },
                     },
                 },
