@@ -489,3 +489,33 @@ exports.restore = async (req, res) =>
         res.status(400).json({ error: 'Failed to Restore Event.', details: error.message });
     }
 };
+
+// Get Users Linked to an Event by Event ID
+exports.getUsersByEvent = async (req, res) => {
+    const { eventId } = req.params; // Extract event ID from request parameters
+
+    try {
+        // Fetch users linked to the given event ID
+        const users = await prisma.usersEvents.findMany({
+            where: { eventId: parseInt(eventId) },
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        userName: true,
+                        email: true,
+                        firstName: true,
+                        lastName: true,
+                    },
+                },
+            },
+        });
+
+        // Format response to simplify structure
+        const formattedUsers = users.map(userEvent => userEvent.user);
+
+        res.status(200).json({ message: 'Users linked to event retrieved successfully.', users: formattedUsers });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve users linked to event.', details: error.message });
+    }
+};

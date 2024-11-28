@@ -91,6 +91,7 @@ model Users {
   deleted      DateTime?
   payments     UsersPayments[]
   orders       OrderDetails[]
+  addEvents    UsersEvents[]
 }
 
 model UsersPayments {
@@ -135,6 +136,7 @@ model Events {
   deleted      DateTime?
   category     EventsCategory? @relation(fields: [categoryId], references: [id])
   tickets      TicketsInfo[]
+  addEvents    UsersEvents[]
 }
 
 model TicketsType {
@@ -198,4 +200,13 @@ model PaymentDetails {
   status         StatusPaymentDetails @default(Paid)
   order          OrderDetails         @relation(fields: [orderId], references: [id])
   usersPayments  UsersPayments        @relation(fields: [usersPaymentsId], references: [id])
+}
+
+model UsersEvents {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  eventId   Int
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     Events   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  created   DateTime @default(now())
 }

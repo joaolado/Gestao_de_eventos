@@ -38,6 +38,8 @@ exports.getAll = async (req, res) =>
                         country: true,
                     }, 
                 },
+
+                addEvents: { select:{ event: { select: { name: true } }, }, },
             } 
         });
 
@@ -347,3 +349,27 @@ exports.restore = async (req, res) =>
         res.status(400).json({ error: 'Failed to Restore User.', details: error.message });
     }
 };
+
+// Add Event to User's Profile
+exports.addEventToUser = async (req, res) => 
+    {
+        const { userId, eventId } = req.body;
+    
+        try 
+        {
+            // Link User to Event
+            const userEvent = await prisma.usersEvents.create({
+                data: {
+                    userId: userId,
+                    eventId: eventId,
+                },
+            });
+    
+            res.status(200).json({ message: 'Event added to User successfully', userEvent });
+        } 
+        catch (error) 
+        {
+            res.status(400).json({ error: 'Failed to add Event to User.', details: error.message });
+        }
+    };
+    
