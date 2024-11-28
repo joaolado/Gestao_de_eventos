@@ -229,7 +229,6 @@ exports.create = async (req, res) =>
     { 
         name,
         description,
-        cover,
         startDate,
         endDate,
         capacity,
@@ -245,6 +244,9 @@ exports.create = async (req, res) =>
 
     try 
     {   
+        // Check if a File is Uploaded
+        const cover = req.file ? req.file.path : null;
+
         // Find the category ID based on the categoryName
         const category = await prisma.eventsCategory.findUnique({
 
@@ -298,7 +300,6 @@ exports.update = async (req, res) =>
         id,
         name,
         description,
-        cover,
         startDate,
         endDate,
         capacity,
@@ -314,6 +315,17 @@ exports.update = async (req, res) =>
 
     try 
     {   
+        // Parsed Used to put Int on Form-Data
+        const parsedId = parseInt(id, 10);
+
+        // Validate the parsed ID
+        if (isNaN(parsedId)) {
+            return res.status(400).json({ error: 'Invalid value for ID. Expected an integer.' });
+        }
+
+        // Check if a File is Uploaded
+        const cover = req.file ? req.file.path : null;
+
         // If categoryName is provided, find the categoryId
         let categoryId = undefined;
 
@@ -340,7 +352,7 @@ exports.update = async (req, res) =>
 
             where: 
             { 
-                id: id, 
+                id: parsedId, 
             },
 
             data: 
@@ -349,7 +361,7 @@ exports.update = async (req, res) =>
                 description: description,
                 cover: cover,
                 startDate: startDate ? new Date(startDate) : undefined, // Only Update if Provided
-                endDate: endDate ? new Date(endDate) : undefined, // Only Update if Provided
+                endDate: endDate ? new Date(endDate) : undefined,       // Only Update if Provided
                 capacity: capacity,
                 categoryId: categoryId !== undefined ? categoryId : undefined,
                 addressLine1: addressLine1,
