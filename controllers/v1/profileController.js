@@ -3,7 +3,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const bcrypt = require('bcryptjs');
 
-// Updates Users by ID (Respective Authenticated User Only)
+// Updates Users by ID (Respective Authenticated User Only) (editProfile)
 exports.profile = async (req, res) => 
 {
     const 
