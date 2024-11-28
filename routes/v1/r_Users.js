@@ -24,6 +24,10 @@ usersRouter.post('/add-event', authenticateToken, controller.addEventToUser);
 // Remove Event from User
 usersRouter.delete('/remove-event', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.removeEventFromUser);
 
+usersRouter.post('/share-event', authenticateToken, controller.shareEvent); // Share an event
+usersRouter.get('/:userId/shared-events', authenticateToken, controller.getSharedEvents); // Get shared events
+
+
 
 
 module.exports = usersRouter;
