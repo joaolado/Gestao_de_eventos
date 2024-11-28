@@ -76,6 +76,7 @@ model UsersAddress {
 
 model Users {
   id           Int             @id @default(autoincrement())
+  profilePic   String?         @map("profile_pic")
   userName     String?         @unique @map("user_name")      // @unique Can't Repeat same User Name
   userPassword String          @map("user_password")
   usersType    UsersType       @default(UserClient)

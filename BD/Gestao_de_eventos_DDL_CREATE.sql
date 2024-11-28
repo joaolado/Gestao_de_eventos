@@ -23,6 +23,7 @@ CREATE TYPE user_type AS ENUM0 ('UserClient', 'UserAdmin', 'UserSuperAdmin');
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
+    profile_pic VARCHAR(250),
     user_name VARCHAR(100) NOT NULL,
     user_password VARCHAR(250) NOT NULL,
     status user_type DEFAULT 'UserClient',
