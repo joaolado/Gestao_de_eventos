@@ -18,7 +18,12 @@ usersRouter.delete('/delete/:id', authenticateToken, authorizeRole(['UserSuperAd
 usersRouter.patch('/restore/:id', authenticateToken, authorizeRole(['UserSuperAdmin']), controller.restore);        // Restore Users by ID
 usersRouter.patch('/update-type', authenticateToken, authorizeRole(['UserSuperAdmin']), controller.updateType);     // Update User Type by ID
 
+// Add Event to User
 usersRouter.post('/add-event', authenticateToken, controller.addEventToUser);
+
+// Remove Event from User
+usersRouter.delete('/remove-event', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.removeEventFromUser);
+
 
 
 module.exports = usersRouter;

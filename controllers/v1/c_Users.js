@@ -43,6 +43,7 @@ exports.getAll = async (req, res) =>
             } 
         });
 
+
         // Return All Users that are Not-Deleted
         res.status(200).json(response);
     }
@@ -93,6 +94,8 @@ exports.getById = async (req, res) =>
                         country: true,
                     }, 
                 },
+                
+                addEvents: { select:{ event: { select: { name: true } }, }, },
             } 
         });
 
@@ -370,6 +373,36 @@ exports.addEventToUser = async (req, res) =>
         catch (error) 
         {
             res.status(400).json({ error: 'Failed to add Event to User.', details: error.message });
+        }
+    };
+
+    // Remove Event from User's Profile
+    exports.removeEventFromUser = async (req, res) => {
+        const { userId, eventId } = req.body;
+    
+        try {
+            // Check if the relationship exists
+            const userEvent = await prisma.usersEvents.findFirst({
+                where: {
+                    userId: userId,
+                    eventId: eventId,
+                },
+            });
+    
+            if (!userEvent) {
+                return res.status(404).json({ error: 'The event is not associated with the user.' });
+            }
+    
+            // Delete the relationship
+            await prisma.usersEvents.delete({
+                where: {
+                    id: userEvent.id,
+                },
+            });
+    
+            res.status(200).json({ message: 'Event removed from user successfully.' });
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to remove event from user.', details: error.message });
         }
     };
     
