@@ -220,7 +220,8 @@ model SharedEvents {
   receiverId  Int
   eventId     Int
   message     String?  // Optional Custom Message
-  createdAt   DateTime @default(now())
+  created     DateTime @default(now())
+  deleted     DateTime?
   sender      Users    @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
   receiver    Users    @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
   event       Events   @relation(fields: [eventId], references: [id], onDelete: Cascade)

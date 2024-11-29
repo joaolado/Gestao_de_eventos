@@ -184,3 +184,22 @@ CREATE TABLE payment_details (
 		    FOREIGN KEY (users_payments_id) REFERENCES users_payments (id) );
 
 /* ----------------------------------------------------------------------------------------------------------------- */
+/* CREATE TABLE - Shared Events */
+
+CREATE TABLE shared_events (
+    id SERIAL PRIMARY KEY,
+    sender_id INT,
+    receiver_id INT,
+    event_id INT,
+    message VARCHAR(250),
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT sender_fk1
+		    FOREIGN KEY (sender_id) REFERENCES users (id),
+    CONSTRAINT receiver_fk2
+		    FOREIGN KEY (receiver_id) REFERENCES users (id),
+    CONSTRAINT event_fk3
+		    FOREIGN KEY (event_id) REFERENCES events (id) );
+
+/* ----------------------------------------------------------------------------------------------------------------- */
