@@ -40,6 +40,8 @@ exports.getAll = async (req, res) =>
                 },
 
                 addEvents: { select:{ event: { select: { name: true } }, }, },
+                sender: { select:{ event: { select: { name: true } }, }, },
+                receiver: { select:{ event: { select: { name: true } }, }, },
             } 
         });
 
@@ -96,6 +98,8 @@ exports.getById = async (req, res) =>
                 },
                 
                 addEvents: { select:{ event: { select: { name: true } }, }, },
+                sender: { select:{ event: { select: { name: true } }, }, },
+                receiver: { select:{ event: { select: { name: true } }, }, },
             } 
         });
 
@@ -403,6 +407,78 @@ exports.addEventToUser = async (req, res) =>
             res.status(200).json({ message: 'Event removed from user successfully.' });
         } catch (error) {
             res.status(500).json({ error: 'Failed to remove event from user.', details: error.message });
+        }
+    };
+
+    //
+    exports.shareEvent = async (req, res) => {
+        const { senderId, receiverId, eventId, message } = req.body;
+    
+        try {
+            // Check if sender exists
+            const senderExists = await prisma.users.findUnique({ where: { id: senderId } });
+            if (!senderExists) {
+                return res.status(404).json({ error: 'Sender not found.' });
+            }
+    
+            // Check if receiver exists
+            const receiverExists = await prisma.users.findUnique({ where: { id: receiverId } });
+            if (!receiverExists) {
+                return res.status(404).json({ error: 'Receiver not found.' });
+            }
+    
+            // Check if event exists
+            const eventExists = await prisma.events.findUnique({ where: { id: eventId } });
+            if (!eventExists) {
+                return res.status(404).json({ error: 'Event not found.' });
+            }
+    
+            // Create a shared event record
+            const sharedEvent = await prisma.sharedEvents.create({
+                data: {
+                    senderId,
+                    receiverId,
+                    eventId,
+                    message,
+                },
+            });
+    
+            res.status(200).json({ message: 'Event shared successfully.', sharedEvent });
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to share event.', details: error.message });
+        }
+    };
+    
+    // Get shared events
+    exports.getSharedEvents = async (req, res) => {
+        const { userId } = req.params;
+    
+        try {
+            const sharedEvents = await prisma.sharedEvents.findMany({
+                where: { receiverId: parseInt(userId) },
+                include: {
+                    event: {
+                        select: {
+                            id: true,
+                            name: true,
+                            description: true,
+                            startDate: true,
+                            endDate: true,
+                        },
+                    },
+                    sender: {
+                        select: {
+                            id: true,
+                            userName: true,
+                            email: true,
+                        },
+                    },
+                },
+            });
+    
+            res.status(200).json({ message: 'Shared events retrieved successfully.', sharedEvents });
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to retrieve shared events.', details: error.message });
         }
     };
     
