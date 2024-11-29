@@ -359,126 +359,182 @@ exports.restore = async (req, res) =>
 
 // Add Event to User's Profile
 exports.addEventToUser = async (req, res) => 
+{
+    const 
+    { 
+        userId, 
+        eventId,
+    
+    } = req.body;
+
+    try 
     {
-        const { userId, eventId } = req.body;
-    
-        try 
-        {
-            // Link User to Event
-            const userEvent = await prisma.usersEvents.create({
-                data: {
-                    userId: userId,
-                    eventId: eventId,
-                },
-            });
-    
-            res.status(200).json({ message: 'Event added to User successfully', userEvent });
-        } 
-        catch (error) 
-        {
-            res.status(400).json({ error: 'Failed to add Event to User.', details: error.message });
-        }
-    };
+        // Link User to Event
+        const userEvent = await prisma.usersEvents.create({
+            
+            data: 
+            {
+                userId: userId,
+                eventId: eventId,
+            },
+        });
 
-    // Remove Event from User's Profile
-    exports.removeEventFromUser = async (req, res) => {
-        const { userId, eventId } = req.body;
-    
-        try {
-            // Check if the relationship exists
-            const userEvent = await prisma.usersEvents.findFirst({
-                where: {
-                    userId: userId,
-                    eventId: eventId,
-                },
-            });
-    
-            if (!userEvent) {
-                return res.status(404).json({ error: 'The event is not associated with the user.' });
-            }
-    
-            // Delete the relationship
-            await prisma.usersEvents.delete({
-                where: {
-                    id: userEvent.id,
-                },
-            });
-    
-            res.status(200).json({ message: 'Event removed from user successfully.' });
-        } catch (error) {
-            res.status(500).json({ error: 'Failed to remove event from user.', details: error.message });
-        }
-    };
+        res.status(200).json({ message: 'Event Added to User successfully', userEvent });
+    } 
 
-    //
-    exports.shareEvent = async (req, res) => {
-        const { senderId, receiverId, eventId, message } = req.body;
-    
-        try {
-            // Check if sender exists
-            const senderExists = await prisma.users.findUnique({ where: { id: senderId } });
-            if (!senderExists) {
-                return res.status(404).json({ error: 'Sender not found.' });
-            }
-    
-            // Check if receiver exists
-            const receiverExists = await prisma.users.findUnique({ where: { id: receiverId } });
-            if (!receiverExists) {
-                return res.status(404).json({ error: 'Receiver not found.' });
-            }
-    
-            // Check if event exists
-            const eventExists = await prisma.events.findUnique({ where: { id: eventId } });
-            if (!eventExists) {
-                return res.status(404).json({ error: 'Event not found.' });
-            }
-    
-            // Create a shared event record
-            const sharedEvent = await prisma.sharedEvents.create({
-                data: {
-                    senderId,
-                    receiverId,
-                    eventId,
-                    message,
-                },
-            });
-    
-            res.status(200).json({ message: 'Event shared successfully.', sharedEvent });
-        } catch (error) {
-            res.status(500).json({ error: 'Failed to share event.', details: error.message });
+    catch (error) 
+    {
+        res.status(400).json({ error: 'Failed to Add Event to User.', details: error.message });
+    }
+};
+
+// Remove Event from User's Profile
+exports.removeEventFromUser = async (req, res) =>
+{
+    const 
+    { 
+        userId, 
+        eventId,
+
+    } = req.body;
+
+    try 
+    {
+        // Check if the Relationship Exists
+        const userEvent = await prisma.usersEvents.findFirst({
+
+            where: 
+            {
+                userId: userId,
+                eventId: eventId,
+            },
+        });
+
+        if (!userEvent) 
+        {
+            return res.status(404).json({ error: 'The Event is not Associated with the User.' });
         }
-    };
-    
-    // Get shared events
-    exports.getSharedEvents = async (req, res) => {
-        const { userId } = req.params;
-    
-        try {
-            const sharedEvents = await prisma.sharedEvents.findMany({
-                where: { receiverId: parseInt(userId) },
-                include: {
-                    event: {
-                        select: {
-                            id: true,
-                            name: true,
-                            description: true,
-                            startDate: true,
-                            endDate: true,
-                        },
-                    },
-                    sender: {
-                        select: {
-                            id: true,
-                            userName: true,
-                            email: true,
-                        },
+
+        // Delete the relationship
+        await prisma.usersEvents.delete({
+
+            where: 
+            {
+                id: userEvent.id,
+            },
+        });
+
+        res.status(200).json({ message: 'Event Removed from User successfully.' });
+    } 
+
+    catch (error) 
+    {
+        res.status(500).json({ error: 'Failed to Remove Event from User.', details: error.message });
+    }
+};
+
+// Share Event
+exports.shareEvent = async (req, res) => 
+{
+    const 
+    { 
+        senderId, 
+        receiverId, 
+        eventId, 
+        message, 
+
+    } = req.body;
+
+    try 
+    {
+        // Check if Sender Exists
+        const senderExists = await prisma.users.findUnique({ where: { id: senderId } });
+        if (!senderExists) {
+            return res.status(404).json({ error: 'Sender not found.' });
+        }
+
+        // Check if Receiver Exists
+        const receiverExists = await prisma.users.findUnique({ where: { id: receiverId } });
+        if (!receiverExists) {
+            return res.status(404).json({ error: 'Receiver not found.' });
+        }
+
+        // Check if Event Exists
+        const eventExists = await prisma.events.findUnique({ where: { id: eventId } });
+        if (!eventExists) {
+            return res.status(404).json({ error: 'Event not found.' });
+        }
+
+        // Create a Shared Event Record
+        const sharedEvent = await prisma.sharedEvents.create({
+
+            data: 
+            {
+                senderId,
+                receiverId,
+                eventId,
+                message,
+            },
+        });
+
+        res.status(200).json({ message: 'Event Shared Successfully.', sharedEvent });
+    } 
+
+    catch (error) 
+    {
+        res.status(500).json({ error: 'Failed to Share Event.', details: error.message });
+    }
+};
+
+// Get Shared Events
+exports.getSharedEvents = async (req, res) => 
+{
+    const 
+    { 
+        userId, 
+
+    } = req.params;
+
+    try 
+    {
+        const sharedEvents = await prisma.sharedEvents.findMany({
+
+            where: 
+            { 
+                receiverId: parseInt(userId) 
+            },
+
+            include: 
+            {
+                event: 
+                {
+                    select: 
+                    {
+                        id: true,
+                        name: true,
+                        description: true,
+                        startDate: true,
+                        endDate: true,
                     },
                 },
-            });
-    
-            res.status(200).json({ message: 'Shared events retrieved successfully.', sharedEvents });
-        } catch (error) {
-            res.status(500).json({ error: 'Failed to retrieve shared events.', details: error.message });
-        }
-    };
-    
+
+                sender: 
+                {
+                    select: 
+                    {
+                        id: true,
+                        userName: true,
+                        email: true,
+                    },
+                },
+            },
+        });
+
+        res.status(200).json({ message: 'Shared Events Retrieved Successfully.', sharedEvents });
+    } 
+
+    catch (error) 
+    {
+        res.status(500).json({ error: 'Failed to Retrieve Shared Events.', details: error.message });
+    }
+};

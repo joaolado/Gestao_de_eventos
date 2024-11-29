@@ -22,12 +22,12 @@ usersRouter.patch('/update-type', authenticateToken, authorizeRole(['UserSuperAd
 usersRouter.post('/add-event', authenticateToken, controller.addEventToUser);
 
 // Remove Event from User
-usersRouter.delete('/remove-event', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.removeEventFromUser);
+usersRouter.delete('/remove-event', authenticateToken, controller.removeEventFromUser);
 
-usersRouter.post('/share-event', authenticateToken, controller.shareEvent); // Share an event
-usersRouter.get('/:userId/shared-events', authenticateToken, controller.getSharedEvents); // Get shared events
+// Share an Event
+usersRouter.post('/share-event', authenticateToken, controller.shareEvent);   
 
-
-
+// Get Shared Events
+usersRouter.get('/:userId/shared-events', authenticateToken, controller.getSharedEvents); 
 
 module.exports = usersRouter;
