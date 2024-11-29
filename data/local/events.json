@@ -1,0 +1,91 @@
+
+{
+
+   "EVENT1-Music":
+   {
+      "name": "Music Festival 2024",
+      "description": "End of Year Festival",
+      "cover": "",
+      "startDate": "2024-12-31T23:30:00+00:00",
+      "endDate": "2025-01-01T04:00:00+00:00",
+      "capacity": 10000,
+      "categoryName": "Music",
+      "addressLine1": "Av. Dr. Antonio Macedo",
+      "addressLine2": "Leca da Palmeira",
+      "postalCode": "4454-515",
+      "city": "Porto",
+      "region": "Matosinhos",
+      "country": "Portugal"
+   },
+
+
+   "EVENT2-Music":
+   {
+      "name": "Summer Music Festival 2025",
+      "description": "Summer Music Festival 2025 - 3 Day Event",
+      "cover": "",
+      "startDate": "2025-08-08T14:30:00.000Z",
+      "endDate": "2025-08-10T23:30:00.000Z",
+      "capacity": 20000,
+      "categoryName": "Music",
+      "addressLine1": "Rossio dos Olivais",
+      "postalCode": "1990-231",
+      "city": "Lisbon",
+      "region": "Lisbon",
+      "country": "Portugal"
+   },
+
+
+   "EVENT3-Comedy":
+   {
+      "name": "Fernando Rocha World Tour",
+      "description": "World Tour 2025 - Day 1 of 3",
+      "cover": "",
+      "startDate": "2025-08-08T14:30:00.000Z",
+      "endDate": "2025-08-10T23:30:00.000Z",
+      "capacity": 1000,
+      "categoryName": "Comedy",
+      "addressLine1": "Praça Marques Junior",
+      "addressLine2": "R. Manuel Espregueira 269",
+      "postalCode": "4900-344",
+      "city": "Viana",
+      "region": "Viana",
+      "country": "Portugal"
+   },
+
+
+   "EVENT4-Workshop":
+   {
+      "name": "Web Development and Multimedia 2025",
+      "description": "Workshop 2025 - 2 Day Event",
+      "cover": "",
+      "startDate": "2025-03-07T14:30:00.000Z",
+      "endDate": "2025-03-08T19:30:00.000Z",
+      "capacity": 1000,
+      "categoryName": "Workshop",
+      "addressLine1": "Praça Marques Junior",
+      "addressLine2": "R. Manuel Espregueira 269",
+      "postalCode": "4900-344",
+      "city": "Viana",
+      "region": "Viana",
+      "country": "Portugal"
+   },
+
+
+   "EVENT5-Charity":
+   {
+      "name": "Charity UNICEF 2026",
+      "description": "Charity UNICEF 2025",
+      "cover": "",
+      "startDate": "2026-06-08T11:30:00.000Z",
+      "endDate": "2026-06-08T23:30:00.000Z",
+      "capacity": 20000,
+      "categoryName": "Charity",
+      "addressLine1": "Av. Dr. Francisco Pires Goncalves",
+      "postalCode": "4715-558",
+      "city": "Braga",
+      "region": "Braga",
+      "country": "Portugal"
+   }
+
+}

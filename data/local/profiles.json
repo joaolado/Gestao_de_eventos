@@ -1,0 +1,39 @@
+
+{
+
+   "USER1-userSuperAdmin":
+   {
+      "email": "marciopinheiro@ipvc.pt",
+      "userPassword": "ABC123"
+   },
+
+
+   "USER2-userSuperAdmin":
+   {
+      "email": "joaocarmo@ipvc.pt",
+      "userPassword": "ABC123"
+   },
+
+
+   "USER3-userAdmin":
+   {
+      "email": "tomtom@outlook.com",
+      "userPassword": "upaupa123"
+   },
+
+   
+   "USER4-userClient":
+   {
+      "email": "rut.es.so@outlook.com",
+      "userPassword": "solta666"
+
+   },
+
+
+   "USER5-userClient":
+   {
+      "email": "alfa.1@outlook.com",
+      "userPassword": "superAlfa1"
+   }
+
+}

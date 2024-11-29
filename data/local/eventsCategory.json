@@ -1,0 +1,38 @@
+
+{
+
+   "EVENTCATEGORY1-Music":
+   {
+      "name": "Music",
+      "description": "All Genres of Music."
+   },
+
+
+   "EVENTCATEGORY2-Comedy":
+   {
+      "name": "Comedy",
+      "description": "AhAhAhAh."
+   },
+
+
+   "EVENTCATEGORY3-Workshop":
+   {
+      "name": "Workshop",
+      "description": "Learn Everything You Want."
+   },
+
+
+   "EVENTCATEGORY4-Theatre":
+   {
+      "name": "Theatre",
+      "description": "Live Representation."
+   },
+
+   
+   "EVENTCATEGORY5-Charity":
+   {
+      "name": "Charity",
+      "description": "Be Kind."
+   }
+
+}

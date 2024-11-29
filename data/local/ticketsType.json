@@ -1,0 +1,24 @@
+
+{
+
+   "TICKETTYPE1-Standard":
+   {
+      "name": "Standard",
+      "description": "Base Ticket."
+   },
+
+
+   "TICKETTYPE2-Premium":
+   {
+      "name": "Premium",
+      "description": "Front Line."
+   },
+
+
+   "TICKETTYPE3-VIP":
+   {
+      "name": "VIP",
+      "description": "Access Backstage."
+   }
+
+}

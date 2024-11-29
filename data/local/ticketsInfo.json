@@ -1,0 +1,99 @@
+
+{
+
+   "TICKETINFO1-Standard":
+   {
+      "SKU": "EV000001-STA-000001",
+      "price": 25,
+      "quantity": 8000,
+      "ticketType": "Standard",
+      "eventsId": 1 
+   },
+   
+
+   "TICKETINFO1-Premium":
+   {
+      "SKU": "EV000001-PRE-000001",
+      "price": 80,
+      "quantity": 1500,
+      "ticketType": "Premium",
+      "eventsId": 1 
+   },
+
+
+   "TICKETINFO1-VIP":
+   {
+      "SKU": "EV000001-VIP-000001",
+      "price": 160,
+      "quantity": 500,
+      "ticketType": "VIP",
+      "eventsId": 1 
+   },
+
+
+
+
+
+   "TICKETINFO2-Standard":
+   {
+      "SKU": "EV000002-STA-000001",
+      "price": 25,
+      "quantity": 14000,
+      "ticketType": "Standard",
+      "eventsId": 2
+   },
+   
+
+   "TICKETINFO2-Premium":
+   {
+      "SKU": "EV000002-PRE-000001",
+      "price": 80,
+      "quantity": 5300,
+      "ticketType": "Premium",
+      "eventsId": 2
+   },
+
+   
+   "TICKETINFO2-VIP":
+   {
+      "SKU": "EV000002-VIP-000001",
+      "price": 160,
+      "quantity": 700,
+      "ticketType": "VIP",
+      "eventsId": 2
+   },
+
+
+
+
+
+   "TICKETINFO3-Standard":
+   {
+      "SKU": "EV000003-STA-000001",
+      "price": 15,
+      "quantity": 900,
+      "ticketType": "Standard",
+      "eventsId": 3
+   },
+   
+
+   "TICKETINFO3-Premium":
+   {
+      "SKU": "EV000003-PRE-000001",
+      "price": 40,
+      "quantity": 90,
+      "ticketType": "Premium",
+      "eventsId": 3
+   },
+
+   
+   "TICKETINFO3-VIP":
+   {
+      "SKU": "EV000003-VIP-000001",
+      "price": 80,
+      "quantity": 10,
+      "ticketType": "VIP",
+      "eventsId": 3
+   }
+
+}
