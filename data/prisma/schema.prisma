@@ -92,9 +92,8 @@ model Users {
   payments     UsersPayments[]
   orders       OrderDetails[]
   addEvents    UsersEvents[]
-
-  sender SharedEvents[] @relation("Sender")
-  receiver SharedEvents[] @relation("Receiver")
+  sender       SharedEvents[] @relation("Sender")
+  receiver     SharedEvents[] @relation("Receiver")
 }
 
 model UsersPayments {
@@ -140,7 +139,6 @@ model Events {
   category     EventsCategory? @relation(fields: [categoryId], references: [id])
   tickets      TicketsInfo[]
   addEvents    UsersEvents[]
-
   sharedEvents SharedEvents[]
 }
 
@@ -221,9 +219,9 @@ model SharedEvents {
   senderId    Int
   receiverId  Int
   eventId     Int
-  message     String?  // Optional custom message
-  createdAt   DateTime @default(now())
-
+  message     String?  // Optional Custom Message
+  created     DateTime @default(now())
+  deleted     DateTime?
   sender      Users    @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
   receiver    Users    @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
   event       Events   @relation(fields: [eventId], references: [id], onDelete: Cascade)

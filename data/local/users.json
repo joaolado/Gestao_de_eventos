@@ -1,0 +1,88 @@
+
+{
+
+   "USER1-userSuperAdmin":
+   {
+      "userName": "MPP",
+      "userPassword": "ABC123",
+      "firstName": "Marcio",
+      "lastName": "Pinheiro",
+      "phone": "961234123",
+      "email": "marciopinheiro@ipvc.pt",
+      "addressLine1": "Rua do Sião",
+      "addressLine2": "n112",
+      "postalCode": "4095-123",
+      "city": "Viana",
+      "region": "Barroselas",
+      "country": "Portugal"
+   },
+
+
+   "USER2-userSuperAdmin":
+   {
+      "userName": "JC",
+      "userPassword": "ABC123",
+      "firstName": "Joao",
+      "lastName": "Carmo",
+      "phone": "960987098",
+      "email": "joaocarmo@ipvc.pt",
+      "addressLine1": "Rua da Praça",
+      "addressLine2": "n369",
+      "postalCode": "4095-321",
+      "city": "Viana",
+      "region": "Barroselas",
+      "country": "Portugal"
+   },
+
+
+   "USER3-userAdmin":
+   {
+      "userName": "TomTom",
+      "userPassword": "upaupa123",
+      "firstName": "Tomas",
+      "lastName": "Alves",
+      "phone": "987654321",
+      "email": "tomtom@outlook.com",
+      "addressLine1": "Rua de Passagem",
+      "addressLine2": "n456",
+      "postalCode": "4000-123",
+      "city": "Braga",
+      "region": "Braga",
+      "country": "Portugal"
+   },
+
+   
+   "USER4-userClient":
+   {
+      "userName": "RuteEstacaSolta",
+      "userPassword": "solta666",
+      "firstName": "Rute",
+      "lastName": "Marrote",
+      "phone": "987654321",
+      "email": "rut.es.so@outlook.com",
+      "addressLine1": "Rua de Ali",
+      "addressLine2": "n487",
+      "postalCode": "4009-123",
+      "city": "Lisboa",
+      "region": "Benfica",
+      "country": "Portugal"
+   },
+
+
+   "USER5-userClient":
+   {
+      "userName": "AlfaMale",
+      "userPassword": "superAlfa1",
+      "firstName": "Alfredo",
+      "lastName": "Gregorio",
+      "phone": "912345678",
+      "email": "alfa.1@outlook.com",
+      "addressLine1": "Rua do Maior",
+      "addressLine2": "n456",
+      "postalCode": "4021-123",
+      "city": "Porto",
+      "region": "Sao Joao",
+      "country": "Portugal"
+   }
+
+}

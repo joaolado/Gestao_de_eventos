@@ -491,16 +491,26 @@ exports.restore = async (req, res) =>
 };
 
 // Get Users Linked to an Event by Event ID
-exports.getUsersByEvent = async (req, res) => {
-    const { eventId } = req.params; // Extract event ID from request parameters
+exports.getUsersByEvent = async (req, res) => 
+{
+    const { eventId } = req.params; // Extract Event ID from Request Parameters
 
-    try {
-        // Fetch users linked to the given event ID
+    try 
+    {
+        // Fetch Users Linked to the Given Event ID
         const users = await prisma.usersEvents.findMany({
-            where: { eventId: parseInt(eventId) },
-            include: {
-                user: {
-                    select: {
+
+            where: 
+            { 
+                eventId: parseInt(eventId)
+            },
+            
+            include: 
+            {
+                user: 
+                {
+                    select: 
+                    {
                         id: true,
                         userName: true,
                         email: true,
@@ -511,11 +521,14 @@ exports.getUsersByEvent = async (req, res) => {
             },
         });
 
-        // Format response to simplify structure
+        // Format Response to Simplify
         const formattedUsers = users.map(userEvent => userEvent.user);
 
-        res.status(200).json({ message: 'Users linked to event retrieved successfully.', users: formattedUsers });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve users linked to event.', details: error.message });
+        res.status(200).json({ message: 'Users Linked to Event Retrieved Successfully.', users: formattedUsers });
+    } 
+
+    catch (error) 
+    {
+        res.status(500).json({ error: 'Failed to Retrieve Users Linked to Event.', details: error.message });
     }
 };
