@@ -39,9 +39,48 @@ exports.getAll = async (req, res) =>
                     }, 
                 },
 
-                addEvents: { select:{ event: { select: { name: true } }, }, },
-                sender: { select:{ event: { select: { name: true } }, }, },
-                receiver: { select:{ event: { select: { name: true } }, }, },
+                addEvents: 
+                { 
+                    select:
+                    { 
+                        event: 
+                        { 
+                            select: 
+                            { 
+                                id: true,
+                                name: true,
+                            }       
+                        },
+                    },          
+                },
+
+                sender: 
+                { 
+                    select:
+                    { event: 
+                        { 
+                            select: 
+                            { 
+                                id: true,
+                                name: true 
+                            } 
+                        }, 
+                    }, 
+                },
+
+                receiver: 
+                { 
+                    select:
+                    { 
+                        event: 
+                        { select: 
+                            { 
+                                id: true,
+                                name: true 
+                            } 
+                        }, 
+                    }, 
+                },
             } 
         });
 
@@ -97,9 +136,48 @@ exports.getById = async (req, res) =>
                     }, 
                 },
                 
-                addEvents: { select:{ event: { select: { name: true } }, }, },
-                sender: { select:{ event: { select: { name: true } }, }, },
-                receiver: { select:{ event: { select: { name: true } }, }, },
+                addEvents: 
+                { 
+                    select:
+                    { 
+                        event: 
+                        { 
+                            select: 
+                            { 
+                                id: true,
+                                name: true,
+                            }       
+                        },
+                    },          
+                },
+
+                sender: 
+                { 
+                    select:
+                    { event: 
+                        { 
+                            select: 
+                            { 
+                                id: true,
+                                name: true 
+                            } 
+                        }, 
+                    }, 
+                },
+
+                receiver: 
+                { 
+                    select:
+                    { 
+                        event: 
+                        { select: 
+                            { 
+                                id: true,
+                                name: true 
+                            } 
+                        }, 
+                    }, 
+                },
             } 
         });
 
