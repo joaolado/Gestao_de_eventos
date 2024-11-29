@@ -1,15 +1,18 @@
 # Gestao_de_eventos
 
 # npm start
+//inicializar o servidor
 
 # prisma db push
+//dar push para a base de dados
 
 # npx prisma studio
+//para iniciar a dashboard do prisma no browser
 
 # npm install express bcryptjs jsonwebtoken prisma
+// bcryptjs encriptar passes
+// jsonwebtoken gerar tokens
 
 # npm install multer
+// multer permite fazer upload de imagens
 
-# EXEMPLE http://localhost:4000/uploads/1678901234-event-cover.jpg
-
-# Tokken joaoladocompras@gmail.com = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMjcyNzM2MSwiZXhwIjoxNzMyNzMwOTYxfQ.C8SWHh4T7gwqCzPR3KomHMfAza6ISEUeqlTnJ_v-UWM.
