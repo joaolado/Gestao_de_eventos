@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -8,99 +7,98 @@ import '../navbar/Navbar.css';
 // Components
 import { Button } from '../button/Button';
 
-function Navbar() 
-{
+function Navbar({ isLoggedIn, handleLogout }) {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
 
-  const showButton = () => 
-  {
-    if (window.innerWidth <= 960) 
-    {
+  const showButton = () => {
+    if (window.innerWidth <= 960) {
       setButton(false);
-    } 
-    
-    else 
-    {
+    } else {
       setButton(true);
     }
   };
 
-  useEffect(() => { showButton(); }, []);
+  useEffect(() => {
+    showButton();
+  }, []);
 
   window.addEventListener('resize', showButton);
 
   return (
     <>
-      <nav className='navbar'>
-        <div className='navbar-container'>
-
-          <Link 
-            to='/' 
-            className='navbar-logo' 
-            onClick={closeMobileMenu}>
+      <nav className="navbar">
+        <div className="navbar-container">
+          <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
             EventFlow
-            <i class='fab fa-typo3' />
+            <img src="/images/logo-w.png" alt="EventFlow Logo" />
           </Link>
 
-          <div className='menu-icon' onClick={handleClick}>
-
+          <div className="menu-icon" onClick={handleClick}>
             <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
-
           </div>
 
           <ul className={click ? 'nav-menu active' : 'nav-menu'}>
-            <li className='nav-item'>
-              
-              <Link 
-                to='/' 
-                className='nav-links' 
-                onClick={closeMobileMenu}>
+            <li className="nav-item">
+              <Link to="/" className="nav-links" onClick={closeMobileMenu}>
                 Home
               </Link>
-
             </li>
 
-            <li className='nav-item'>
-
+            <li className="nav-item">
               <Link
-                to='/explore'
-                className='nav-links'
-                onClick={closeMobileMenu}>
+                to="/explore"
+                className="nav-links"
+                onClick={closeMobileMenu}
+              >
                 Explore
               </Link>
-
             </li>
 
-            <li className='nav-item'>
-
+            <li className="nav-item">
               <Link
-                to='/dashboard'
-                className='nav-links'
-                onClick={closeMobileMenu}>
+                to="/dashboard"
+                className="nav-links"
+                onClick={closeMobileMenu}
+              >
                 Dashboard
               </Link>
-
             </li>
 
             <li>
-
-              <Link
-                to='/login'
-                className='nav-links-mobile'
-                onClick={closeMobileMenu}>
-                LOGIN / REGISTER
-              </Link>
-
+              {isLoggedIn ? (
+                <button
+                  className="nav-links-mobile"
+                  onClick={() => {
+                    handleLogout();
+                    closeMobileMenu();
+                  }}
+                >
+                  LOGOUT
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className="nav-links-mobile"
+                  onClick={closeMobileMenu}
+                >
+                  LOGIN / REGISTER
+                </Link>
+              )}
             </li>
-
           </ul>
 
-          {button && <Button buttonStyle='btn--outline'>LOGIN / REGISTER</Button>}
-          
+          {button && (
+            <Button
+              buttonStyle="btn--outline"
+              onClick={isLoggedIn ? handleLogout : null}
+            >
+              {isLoggedIn ? 'LOGOUT' : 'LOGIN / REGISTER'}
+            </Button>
+          )}
         </div>
       </nav>
     </>
