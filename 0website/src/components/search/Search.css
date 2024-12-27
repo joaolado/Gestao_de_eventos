@@ -1,0 +1,127 @@
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px auto;
+  max-width: 1200px;
+  width: 100%;
+  padding: 10px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.category-dropdown {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+.category-dropdown:focus, 
+.category-dropdown:active, 
+.category-dropdown:hover, 
+.search-bar:hover { 
+  box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 1) !important;
+}
+
+.category-dropdown option:checked { 
+  background-color: #000000 !important; 
+  color: #fff !important;
+}
+
+.search-bar {
+  flex: 1; /* Take remaining space */
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.date-picker {
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.date-picker:focus, 
+.date-picker:active, 
+.date-picker:checked, 
+.date-picker.selected, 
+.date-picker:hover { 
+  border: #000000 !important;
+  box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 1) !important;
+}
+
+.ant-picker:focus, 
+.ant-picker:active, 
+.ant-picker:checked, 
+.ant-picker.selected, 
+.ant-picker:hover { 
+  border: #000000 !important;
+  box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 1) !important;
+}
+
+/* Additional styles to ensure calendar dropdown is below the search container and remove the arrow pointers */ 
+.ant-picker-dropdown {
+  position: fixed; /* Position fixed to ensure it's centered on screen */
+  top: 57% !important; /* Center vertically */
+  left: 50% !important; /* Center horizontally */
+  transform: translate(-50%, -50%) !important; /* Adjust to align center */
+  z-index: 1000; /* Ensure it appears above other elements */
+}
+
+.ant-picker-dropdown .ant-picker-range-arrow { display: none !important; /* Hide the arrow pointers */ }
+
+/* ----------------------------------------------------------------------- */
+
+@media screen and (max-width: 960px) 
+{
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+    padding: 20px;
+  }
+
+  .category-dropdown,
+  .search-bar,
+  .date-picker {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .search-bar {
+    padding: 15px;
+  }
+
+  .ant-picker-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100% !important;
+  }
+  
+  .ant-picker-panels {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .ant-picker-calendar {
+    margin: 10px 0;
+  }
+
+  .ant-picker-dropdown {
+    position: fixed; /* Position fixed to ensure it's centered on screen */
+    top: 50% !important; /* Center vertically */
+    left: 50% !important; /* Center horizontally */
+    transform: translate(-50%, -50%) !important; /* Adjust to align center */
+    z-index: 1000; /* Ensure it appears above other elements */
+  }
+}
