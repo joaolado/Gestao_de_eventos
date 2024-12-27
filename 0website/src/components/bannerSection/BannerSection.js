@@ -16,7 +16,7 @@ function BannerSection()
       <div className='banner-container'>
         
         <video src='/videos/video-1.mp4' autoPlay loop muted />
-        <p>What are you waiting for?</p>
+        <h1>What Are You Waiting For?</h1>
 
         <div>
           <Search />

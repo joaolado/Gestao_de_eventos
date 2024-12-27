@@ -1,56 +1,75 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
-import { toast } from 'react-toastify'; // Import toast
+import { toast } from 'react-toastify';         // Import toast
 import 'react-toastify/dist/ReactToastify.css'; // Import the toast CSS
 
+// API
 import fetchAPI from '../../fetchAPI';
 
 // CSS
 import '../../App.css';
 import './Register.css';
 
-function Register() {
+function Register() 
+{
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const navigate = useNavigate(); // Initialize navigate
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = () => 
+  {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => 
+  {
     e.preventDefault();
 
-    try {
-      const data = await fetchAPI('/auth/register', {
+    try 
+    {
+      const data = await fetchAPI('/auth/register', 
+      {
         method: 'POST',
-        body: JSON.stringify({
+
+        body: JSON.stringify
+        ({
           email,
           userPassword: password,
         }),
       });
 
-      toast.success('Registration successful!'); // Success toast
-      navigate('/login'); // Redirect to login page after successful registration
-    } catch (error) {
-      console.error('Registration failed:', error.message);
-      toast.error('Registration failed. Please try again.'); // Error toast
+      toast.success('Registration Successful! Here is Your Profile.');
+
+      // Redirect to Login Page after Successful Registration
+      navigate('/login'); 
+    } 
+    
+    catch (error) 
+    {
+      console.error('Registration Failed:', error.message);
+      toast.error('Registration Failed. Please Try Again.');
     }
   };
 
   return (
     <div className="register-page">
       <div className="left-section">
+
         <div className="logo">
           EventFlow
           <img src="/images/logo-b.png" alt="EventFlow Logo" />
         </div>
-        <h2>Create an Account</h2>
+
+        <h2>Create an Account.</h2>
+
         <form onSubmit={handleSubmit}>
           <div className="input-group">
+
             <label htmlFor="email">Email</label>
+
             <input
               type="email"
               id="email"
@@ -60,19 +79,25 @@ function Register() {
               required
             />
           </div>
+
           <div className="input-group">
+
             <label htmlFor="password">Password</label>
+
             <div className="password-container">
               <input
                 type={passwordVisible ? 'text' : 'password'}
                 id="password"
-                placeholder="Please pick a strong password"
+                placeholder="Please Pick a Strong Password..."
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+
               <span className="toggle-password" onClick={togglePasswordVisibility}>
-                {passwordVisible ? (
+
+                {passwordVisible ? 
+                (
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                     <g fill="none" stroke="#000000" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
                       <path d="M2.899 12.735a1.87 1.87 0 0 1 0-1.47c.808-1.92 2.1-3.535 3.716-4.647S10.103 4.945 
@@ -82,7 +107,9 @@ function Register() {
                       <path d="M12 15.5a3.5 3.5 0 1 0 0-7a3.5 3.5 0 0 0 0 7" />
                     </g>
                   </svg>
+
                 ) : (
+
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                     <g fill="none" stroke="#000000" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
                       <path d="M5.45 16.92a10.8 10.8 0 0 1-2.55-3.71a1.85 1.85 0 0 1 0-1.46A10.6 10.6 0 0 1 6.62 
@@ -96,16 +123,22 @@ function Register() {
               </span>
             </div>
           </div>
+
           <button type="submit" className="sign-in-button">
             REGISTER
           </button>
+
           <p>
-            Already Have an Account? Login <a href="/login"><u>Here</u></a>
+            Already Have an Account? Login <a href="/login"><u>Here</u>.</a>
           </p>
+
         </form>
       </div>
+      
       <div className="right-section">
+
         <div className="background"></div>
+
       </div>
     </div>
   );

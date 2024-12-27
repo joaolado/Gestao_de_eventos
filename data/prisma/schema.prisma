@@ -91,7 +91,7 @@ model Users {
   deleted      DateTime?
   payments     UsersPayments[]
   orders       OrderDetails[]
-  addEvents    UsersEvents[]
+  wishlist     UsersWishlist[]
   sender       SharedEvents[] @relation("Sender")
   receiver     SharedEvents[] @relation("Receiver")
 }
@@ -138,7 +138,7 @@ model Events {
   deleted      DateTime?
   category     EventsCategory? @relation(fields: [categoryId], references: [id])
   tickets      TicketsInfo[]
-  addEvents    UsersEvents[]
+  wishlist     UsersWishlist[]
   sharedEvents SharedEvents[]
 }
 
@@ -205,13 +205,14 @@ model PaymentDetails {
   usersPayments  UsersPayments        @relation(fields: [usersPaymentsId], references: [id])
 }
 
-model UsersEvents {
+model UsersWishlist {
   id        Int      @id @default(autoincrement())
   userId    Int
   eventId   Int
   user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
   event     Events   @relation(fields: [eventId], references: [id], onDelete: Cascade)
   created   DateTime @default(now())
+  deleted   DateTime?
 }
 
 model SharedEvents {

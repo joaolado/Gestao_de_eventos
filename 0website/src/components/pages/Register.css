@@ -110,7 +110,7 @@ input[type="text"] {
   width: 100%;
   height: 100%;
   background: url('/public/images/img-2.jpg') center center/cover no-repeat;
-  position: relative; /* Make it the parent for the pseudo-element */
+  position: relative;
 }
 
 .register-page .background::before {
@@ -120,8 +120,8 @@ input[type="text"] {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2); /* Overlay color */
-  z-index: 1; /* Ensure it is on top of the image */
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -158,7 +158,7 @@ input[type="text"] {
   }
 
   .register-page p {
-    margin: 20px 20px;
+    margin: 20px 50px;
   }
 
   .input-group {

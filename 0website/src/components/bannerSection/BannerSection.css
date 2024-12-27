@@ -29,28 +29,8 @@ video {
 
 .banner-container > h1 {
   color: #fff;
-  font-size: 100px;
-  margin-top: -80px;
-}
-
-.banner-container > p {
-  color: #fff;
-  font-size: 32px;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
-    'Lucida Sans', Arial, sans-serif;
-  margin-top: -80px;
-}
-
-.banner-btns {
-  margin-top: 32px;
-}
-
-.banner-btns .btn {
-  margin: 6px;
-}
-
-.fa-play-circle {
-  margin-left: 4px;
+  font-size: 80px;
+  margin: -80px 20px 20px 20px;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -58,8 +38,8 @@ video {
 @media screen and (max-width: 960px) 
 {
   .banner-container > h1 {
-    font-size: 70px;
-    margin-top: -150px;
+    font-size: 60px;
+    margin: -60px 20px 20px 20px;
   }
 }
 
@@ -67,19 +47,6 @@ video {
 {  
   .banner-container > h1 {
     font-size: 50px;
-    margin-top: -100px;
-  }
-
-  .banner-container > p {
-    font-size: 30px;
-  }
-
-  .btn-mobile {
-    display: block;
-    text-decoration: none;
-  }
-
-  .btn {
-    width: 100%;
+    margin: -60px 20px 20px 20px;
   }
 }

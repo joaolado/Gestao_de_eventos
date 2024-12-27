@@ -7,6 +7,12 @@ const controller = require('../../controllers/v1/profileController');
 
 
 // User Profile CRUD (Authentication Required - Respective Token)
-profileRouter.put('/', authenticateToken, authorizeRole(['UserClient', 'UserAdmin', 'UserSuperAdmin']), upload.single('profilePic'), controller.profile); // Update User Profile
+profileRouter.get('/get-profile', authenticateToken, authorizeRole(['UserClient', 'UserAdmin', 'UserSuperAdmin']), controller.getProfile);                      // Get User Profile
+profileRouter.put('/update', authenticateToken, authorizeRole(['UserClient', 'UserAdmin', 'UserSuperAdmin']), upload.single('profilePic'), controller.profile); // Update User Profile
+
+// Wishlist Routes (Authentication Required - Respective Token)
+profileRouter.get('/get-wishlist', authenticateToken, authorizeRole(['UserClient', 'UserAdmin', 'UserSuperAdmin']), controller.getWishlist);                    // Get User Wishlist
+profileRouter.post('/add-to-wishlist', authenticateToken, authorizeRole(['UserClient', 'UserAdmin', 'UserSuperAdmin']), controller.addToWishlist);              // Add To User Wishlist
+profileRouter.delete('/remove-from-wishlist', authenticateToken, authorizeRole(['UserClient', 'UserAdmin', 'UserSuperAdmin']), controller.removeFromWishlist);  // Remove From User Wishlist
 
 module.exports = profileRouter;

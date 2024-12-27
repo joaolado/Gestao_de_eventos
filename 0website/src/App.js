@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify'; // Import ToastContainer
+import { ToastContainer } from 'react-toastify';
 
 // CSS
 import './App.css';
@@ -16,36 +17,43 @@ import Register  from './components/pages/Register';
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 
-function App() {
+function App() 
+{
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => 
+  {
     // Check if the user is logged in by checking the token
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('token')) 
+    {
       setIsLoggedIn(true);
     }
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = () => 
+  {
     localStorage.removeItem('token'); // Remove token on logout
-    setIsLoggedIn(false); // Set login state to false
+    setIsLoggedIn(false);             // Set login state to false
   };
 
   return (
+
     <Router>
+
       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/explore' element={<Explore />} />
+        <Route path='/'          element={<Home />} />
+        <Route path='/explore'   element={<Explore />} />
         <Route path='/dashboard' element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-        <Route path='/register' element={<Register />} />
+        <Route path='/login'     element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path='/register'  element={<Register />} />
       </Routes>
 
       <ToastContainer />
       
       <Footer />
+
     </Router>
   );
 }

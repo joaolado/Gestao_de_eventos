@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -7,22 +8,29 @@ import '../navbar/Navbar.css';
 // Components
 import { Button } from '../button/Button';
 
-function Navbar({ isLoggedIn, handleLogout }) {
+function Navbar({ isLoggedIn, handleLogout }) 
+{
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
 
-  const showButton = () => {
-    if (window.innerWidth <= 960) {
+  const showButton = () => 
+  {
+    if (window.innerWidth <= 960) 
+    {
       setButton(false);
-    } else {
+    } 
+    
+    else 
+    {
       setButton(true);
     }
   };
 
-  useEffect(() => {
+  useEffect(() => 
+  {
     showButton();
   }, []);
 
@@ -32,19 +40,28 @@ function Navbar({ isLoggedIn, handleLogout }) {
     <>
       <nav className="navbar">
         <div className="navbar-container">
-          <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-            EventFlow
+
+          <Link 
+            to="/" 
+            className="navbar-logo" 
+            onClick={closeMobileMenu}
+            >EventFlow
             <img src="/images/logo-w.png" alt="EventFlow Logo" />
           </Link>
 
           <div className="menu-icon" onClick={handleClick}>
+
             <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
+
           </div>
 
           <ul className={click ? 'nav-menu active' : 'nav-menu'}>
             <li className="nav-item">
-              <Link to="/" className="nav-links" onClick={closeMobileMenu}>
-                Home
+              <Link 
+                to="/" 
+                className="nav-links" 
+                onClick={closeMobileMenu}
+                >Home
               </Link>
             </li>
 
@@ -53,8 +70,7 @@ function Navbar({ isLoggedIn, handleLogout }) {
                 to="/explore"
                 className="nav-links"
                 onClick={closeMobileMenu}
-              >
-                Explore
+                >Explore
               </Link>
             </li>
 
@@ -63,40 +79,41 @@ function Navbar({ isLoggedIn, handleLogout }) {
                 to="/dashboard"
                 className="nav-links"
                 onClick={closeMobileMenu}
-              >
-                Dashboard
+                >Dashboard
               </Link>
             </li>
 
             <li>
               {isLoggedIn ? (
+
                 <button
                   className="nav-links-mobile"
-                  onClick={() => {
+                  onClick={() => 
+                  {
                     handleLogout();
                     closeMobileMenu();
                   }}
-                >
-                  LOGOUT
+                  >LOGOUT
                 </button>
+
               ) : (
+
                 <Link
                   to="/login"
                   className="nav-links-mobile"
                   onClick={closeMobileMenu}
-                >
-                  LOGIN / REGISTER
+                  >LOGIN / REGISTER
                 </Link>
               )}
             </li>
           </ul>
 
-          {button && (
+          {button && 
+          (
             <Button
               buttonStyle="btn--outline"
               onClick={isLoggedIn ? handleLogout : null}
-            >
-              {isLoggedIn ? 'LOGOUT' : 'LOGIN / REGISTER'}
+              >{isLoggedIn ? 'LOGOUT' : 'LOGIN / REGISTER'}
             </Button>
           )}
         </div>

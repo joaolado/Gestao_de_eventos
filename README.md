@@ -1,17 +1,18 @@
+
 # Gestao_de_eventos
 
 # npm start
-//inicializar o servidor
+// Start Server
 
 # prisma db push
-//dar push para a base de dados
+// Push Data Base
 
 # npx prisma studio
-//para iniciar a dashboard do prisma no browser
+// Start Dashboard Prisma on Browser
 
 # npm install express bcryptjs jsonwebtoken prisma
-// bcryptjs encriptar passes
-// jsonwebtoken gerar tokens
+// bcryptjs Encrypt Password
+// jsonwebtoken Generate Tokens
 
 # npm install multer
-// multer permite fazer upload de imagens
+// Multer Allow Upload de IMGs
