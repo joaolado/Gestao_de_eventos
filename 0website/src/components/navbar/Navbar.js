@@ -92,7 +92,7 @@ function Navbar()
                 to='/login'
                 className='nav-links-mobile'
                 onClick={closeMobileMenu}>
-                LOGIN
+                LOGIN / REGISTER
               </Link>
 
             </li>
