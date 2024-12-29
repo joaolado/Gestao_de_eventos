@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
 
     destination: (req, file, cb) => 
     {
-        cb(null, 'uploads/profilePic'); // Save Directory
+        cb(null, '0website/public/uploads/profilePic'); // Save Directory
     },
 
     filename: async (req, file, cb) =>
@@ -19,6 +19,9 @@ const storage = multer.diskStorage({
         {
             // Get User ID from Token
             const userId = req.users.id;
+
+            // Generate a Unique File Name With User ID and Timestamp
+            const fileName = `${userId}-${Date.now()}-${file.originalname}`;
 
             // Get User Details
             const user = await prisma.users.findUnique({
@@ -39,19 +42,13 @@ const storage = multer.diskStorage({
                 return cb(new Error('User Not Found.')); // If Not Found, Use 'default'
             }
 
-            // Generate a Unique File Name With User ID and Timestamp
-            const fileName = `${userId}-${Date.now()}-${file.originalname}`;
-
-            // Check for Old profilePic and Delete it (Windows Remove Read-Only - Folder Properties)
+            // Check for Old profilePic and Delete it
             if (user.profilePic) 
             {   
                 // Construct the Full Path
-                const oldProfilePicPath  = path.join(__dirname, '..', user.profilePic); 
+                const oldProfilePicPath  = path.join(__dirname, '../0website/public/uploads/profilePic', user.profilePic);     
 
-                // Normalize the Path for Cross-Platform Compatibility
-                const normalizedOldProfilePicPath  = path.normalize(oldProfilePicPath);     
-
-                fs.unlink(normalizedOldProfilePicPath , (err) => 
+                fs.unlink(oldProfilePicPath , (err) => 
                 {
                     if (err) 
                     {
@@ -64,6 +61,12 @@ const storage = multer.diskStorage({
                     }
                 });
             }
+
+            // Update User's Profile Picture in the Database (Only the filename)
+            await prisma.users.update({
+                where: { id: userId },
+                data: { profilePic: fileName }, // Save only the filename
+            });
 
             // Save File with the Generated Name
             cb(null, fileName);

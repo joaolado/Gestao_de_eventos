@@ -85,7 +85,34 @@ exports.profile = async (req, res) =>
         const hashedPassword = userPassword ? await bcrypt.hash(userPassword, 10) : undefined;
 
         // Check if a File is Uploaded
-        const profilePic = req.file ? req.file.path : undefined;
+        const profilePic = req.file ? req.file.filename : null;
+
+        // Check if address already exists for the user
+        const user = await prisma.users.findUnique({
+            where: { id: userId },
+            include: { address: true },
+        });
+
+        // If address exists, update it; otherwise, create a new one
+        const addressData = user.address ? {
+            update: {
+                addressLine1,
+                addressLine2,
+                postalCode,
+                city,
+                region,
+                country,
+            },
+        } : {
+            create: {
+                addressLine1,
+                addressLine2,
+                postalCode,
+                city,
+                region,
+                country,
+            },
+        };
 
         // Update the User profile
         const updatedUsers = await prisma.users.update({
@@ -106,30 +133,7 @@ exports.profile = async (req, res) =>
                 email: email,
 
                 // Create or Update the Address
-                address: {
-                    upsert: 
-                    { 
-                        create: 
-                        {
-                            addressLine1: addressLine1,
-                            addressLine2: addressLine2,
-                            postalCode: postalCode,
-                            city: city,
-                            region: region,
-                            country: country,
-                        },
-
-                        update: 
-                        {
-                            addressLine1: addressLine1,
-                            addressLine2: addressLine2,
-                            postalCode: postalCode,
-                            city: city,
-                            region: region,
-                            country: country,
-                        },
-                    },
-                },
+                address: addressData,
             },
 
             include: 
@@ -139,13 +143,13 @@ exports.profile = async (req, res) =>
         });
 
         // Return the Updated User Profile
-        res.status(200).json({message: 'User Profile Updated Successfully: ', updatedUsers });
+        res.status(200).json({ success: true, message: 'User Profile Updated Successfully: ', updatedUsers });
 
     } 
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Update Profile.', details: error.message });
+        res.status(400).json({ success: false, error: 'Failed to Update Profile.', details: error.message });
     }
 };
 

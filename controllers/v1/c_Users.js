@@ -39,7 +39,7 @@ exports.getAll = async (req, res) =>
                     }, 
                 },
 
-                addEvents: 
+                wishlist: 
                 { 
                     select:
                     { 
@@ -136,7 +136,7 @@ exports.getById = async (req, res) =>
                     }, 
                 },
                 
-                addEvents: 
+                wishlist: 
                 { 
                     select:
                     { 
