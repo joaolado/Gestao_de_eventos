@@ -65,6 +65,14 @@ input[type="text"] {
   position: relative;
 }
 
+.register-page .password-container .eye-close {
+  margin-bottom: 5px;
+}
+
+.register-page .password-container .eye-open {
+  margin-bottom: 4px;
+}
+
 .toggle-password {
   position: absolute;
   right: 10px;
@@ -77,7 +85,7 @@ input[type="text"] {
   justify-content: center;
 }
 
-.sign-in-button {
+.register-button {
   width: 100%;
   padding: 10px;
   background-color: #000;
@@ -89,7 +97,7 @@ input[type="text"] {
   margin-top: 10px;
 }
 
-.sign-in-button:hover {
+.register-button:hover {
   background-color: #444;
 }
 

@@ -23,7 +23,7 @@ function App()
 
   useEffect(() => 
   {
-    // Check if the user is logged in by checking the token
+    // Check if the User is Logged in by Checking the Token
     if (localStorage.getItem('token')) 
     {
       setIsLoggedIn(true);
@@ -32,8 +32,8 @@ function App()
 
   const handleLogout = () => 
   {
-    localStorage.removeItem('token'); // Remove token on logout
-    setIsLoggedIn(false);             // Set login state to false
+    localStorage.removeItem('token'); // Remove Token on Logout
+    setIsLoggedIn(false);             // Set Login State to False
   };
 
   return (

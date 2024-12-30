@@ -64,11 +64,13 @@ const storage = multer.diskStorage({
 
             // Update User's Profile Picture in the Database (Only the filename)
             await prisma.users.update({
+
                 where: { id: userId },
-                data: { profilePic: fileName }, // Save only the filename
+                data: { profilePic: fileName }, // Save Only the filename
+
             });
 
-            // Save File with the Generated Name
+            // Save File With the Generated Name
             cb(null, fileName);
         } 
         

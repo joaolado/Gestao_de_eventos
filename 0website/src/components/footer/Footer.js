@@ -15,7 +15,7 @@ function Footer()
 
       <section className='footer-subscription'>
         <p className='footer-subscription-heading'>
-          Join the Adventure newsletter to receive our best vacation deals
+          Subscribe to the EventFlow Newsletter and be the First to Know About Upcoming Events!
         </p>
 
         <p className='footer-subscription-text'>
@@ -28,7 +28,7 @@ function Footer()
               className='footer-input'
               name='email'
               type='email'
-              placeholder='Your Email'
+              placeholder='Your email please...'
             />
 
             <Button buttonStyle='btn--outline'>Subscribe</Button>
@@ -43,7 +43,6 @@ function Footer()
             <h2>About Us</h2>
             <Link to='/login'>How it works</Link>
             <Link to='/'>Testimonials</Link>
-            <Link to='/'>Careers</Link>
             <Link to='/'>Terms of Service</Link>
           </div>
 
@@ -62,16 +61,15 @@ function Footer()
             <h2>Videos</h2>
             <Link to='/'>Submit Video</Link>
             <Link to='/'>Ambassadors</Link>
-            <Link to='/'>Agency</Link>
             <Link to='/'>Influencer</Link>
           </div>
 
           <div class='footer-link-items'>
             <h2>Social Media</h2>
-            <Link to='/'>Instagram</Link>
             <Link to='/'>Facebook</Link>
+            <Link to='/'>Instagram</Link>
             <Link to='/'>Youtube</Link>
-            <Link to='/'>Twitter</Link>
+            <Link to='/'>Tiktok</Link>
           </div>
         </div>
       </div>
@@ -82,12 +80,12 @@ function Footer()
 
             <Link to='/' className='social-logo'>
               EventFlow
-              <i class='fab fa-typo3' />
+              <i class='fab fa-odnoklassniki' />
             </Link>
 
           </div>
 
-          <small class='website-rights'>EventFlow © 2024  | All rights reserved</small>
+          <small class='website-rights'>EventFlow © 2024  | All Rights Reserved.</small>
 
           <div class='social-icons'>
             <Link
@@ -118,21 +116,12 @@ function Footer()
             </Link>
 
             <Link
-              class='social-icon-link twitter'
+              class='social-icon-link tiktok'
               to='/'
               target='_blank'
-              aria-label='Twitter'
+              aria-label='Tiktok'
             >
-              <i class='fab fa-twitter' />
-            </Link>
-
-            <Link
-              class='social-icon-link twitter'
-              to='/'
-              target='_blank'
-              aria-label='LinkedIn'
-            >
-              <i class='fab fa-linkedin' />
+              <i class="fab fa-tiktok"></i>
             </Link>
           </div>
         </div>

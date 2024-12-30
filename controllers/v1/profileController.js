@@ -85,36 +85,56 @@ exports.profile = async (req, res) =>
         const hashedPassword = userPassword ? await bcrypt.hash(userPassword, 10) : undefined;
 
         // Check if a File is Uploaded
-        const profilePic = req.file ? req.file.filename : null;
+        const profilePic = req.file ? req.file.filename : undefined;
 
-        // Check if address already exists for the user
+        // Check if Address Already Exists for the User
         const user = await prisma.users.findUnique({
+
             where: { id: userId },
             include: { address: true },
+
         });
 
-        // If address exists, update it; otherwise, create a new one
-        const addressData = user.address ? {
-            update: {
-                addressLine1,
-                addressLine2,
-                postalCode,
-                city,
-                region,
-                country,
-            },
-        } : {
-            create: {
-                addressLine1,
-                addressLine2,
-                postalCode,
-                city,
-                region,
-                country,
-            },
+        // If Address Exists, Update it; Otherwise, Create a New One
+        const addressData = {
+            addressLine1,
+            addressLine2,
+            postalCode,
+            city,
+            region,
+            country,
         };
 
-        // Update the User profile
+        if (user.addressId) 
+        {
+            // If User Already has an Address, Update it
+            await prisma.usersAddress.update({
+
+                where: { id: user.addressId }, // Find the Address by ID
+                data: addressData,             // Update Address With New Data
+
+            });
+        } 
+        
+        else 
+        {
+            // Create a New Address and Add to User
+            const newAddress = await prisma.usersAddress.create({
+
+                data: addressData,
+
+            });
+    
+            // Update the User With the New addressId
+            await prisma.users.update({
+
+                where: { id: userId },
+                data: { addressId: newAddress.id },
+
+            });
+        }
+
+        // Update the User Profile
         const updatedUsers = await prisma.users.update({
 
             where: 
@@ -131,9 +151,6 @@ exports.profile = async (req, res) =>
                 lastName: lastName,
                 phone: phone,
                 email: email,
-
-                // Create or Update the Address
-                address: addressData,
             },
 
             include: 

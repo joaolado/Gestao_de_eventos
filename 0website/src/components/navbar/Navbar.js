@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // CSS
 import '../navbar/Navbar.css';
@@ -12,6 +12,10 @@ function Navbar({ isLoggedIn, handleLogout })
 {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
+
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -56,7 +60,7 @@ function Navbar({ isLoggedIn, handleLogout })
           </div>
 
           <ul className={click ? 'nav-menu active' : 'nav-menu'}>
-            <li className="nav-item">
+            <li className={`nav-item ${isActive('/') ? 'active' : ''}`}>
               <Link 
                 to="/" 
                 className="nav-links" 
@@ -65,7 +69,7 @@ function Navbar({ isLoggedIn, handleLogout })
               </Link>
             </li>
 
-            <li className="nav-item">
+            <li className={`nav-item ${isActive('/explore') ? 'active' : ''}`}>
               <Link
                 to="/explore"
                 className="nav-links"
@@ -74,7 +78,7 @@ function Navbar({ isLoggedIn, handleLogout })
               </Link>
             </li>
 
-            <li className="nav-item">
+            <li className={`nav-item ${isActive('/dashboard') ? 'active' : ''}`}>
               <Link
                 to="/dashboard"
                 className="nav-links"

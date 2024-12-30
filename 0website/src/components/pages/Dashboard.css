@@ -21,26 +21,51 @@
 
 .profile-pic {
   text-align: center;
-  margin: 20px;
+  margin: 30px;
+  margin-top: 0px;
+  padding-top: 0px;
 }
 
 .profile-pic img {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
 }
 
 .profile-pic button {
   text-align: center;
-  margin: 0px 15px;
-  padding: 4px 6px;
+  margin: 1px 5px;
+  padding: 2px 6px;
   border: none;
   border-radius: 50%;
   background-color: #ffffff;
   cursor: pointer;
+  border: 1px solid #000000;
+}
+.profile-pic button:hover {
+  filter: invert(90%);
+  transition: ease-in-out 0.3s; 
 }
 
-.email {
+.profile-pic .edit-pic {
+  width: 22px;
+  height: 22px;
+  margin: 5px 2px 2px 2px;
+}
+
+.profile-pic .save-pic {
+  width: 22px;
+  height: 22px;
+  margin: 5px 2px 2px 2px;
+}
+
+.side-menu h4 {
+  font-size: 20px;
+  margin-top: -15px;
+  margin-bottom: 0px;
+}
+
+.side-menu .email {
   text-align: center;
   margin-bottom: 20px;
   font-size: 14px;
@@ -60,8 +85,14 @@
 }
 
 .side-menu li:hover {
+  color: #ffffff;
+  background-color: #444;
+}
+
+.side-menu li.active {
   color: #000000;
   background-color: #ffffff;
+  font-weight: bold;
 }
 
 .content {
@@ -98,7 +129,7 @@
 .section p,
 .section input {
   margin: 5px 0;
-  font-size: 14px;
+  font-size: 16px !important;
 }
 
 .form-row {
@@ -140,4 +171,124 @@ form button {
   cursor: pointer;
   font-size: 14px;
   align-self: center;
+}
+
+form button:hover {
+  background-color: #444;
+}
+
+/* ----------------------------------------------------------------------- */
+
+@media screen and (max-width: 960px) 
+{ 
+  .side-menu {
+    font-size: 1.2rem;
+    width: 180px;
+    padding: 15px 0;
+  }
+
+  .profile-pic {
+    margin: 40px 10px;
+    margin-top: 0px;
+    padding-top: 0px;
+  }
+
+  .profile-pic img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-pic .edit-pic {
+    width: 20px;
+    height: 20px;
+  }
+
+  .profile-pic .save-pic {
+    width: 20px;
+    height: 20px;
+  }
+
+  .side-menu h4 {
+    font-size: 18px;
+  }
+
+  .side-menu .email {
+    font-size: 12px;
+  }
+
+  .content {
+    padding: 0px 20px;
+  }
+
+  .section h2 {
+    font-size: 1.5rem;
+  }
+
+  .section p,
+  .section input {
+    margin: -5px 0;
+    font-size: 12px !important;
+    padding: 5px !important;
+  }
+
+  .form-col {
+    min-width: 200px;
+  }
+
+  .form-col label {
+    font-size: 12px;
+    margin-bottom: 5px !important;
+  }
+
+  form input {
+    width: 100%;
+  }
+
+  form button {
+    margin: 15px 0px -10px 0px !important;
+    min-width: 100%;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 1150px) and (min-width: 960px) 
+{
+  .side-menu {
+    font-size: 1.2rem;
+    width: 200px;
+    padding: 15px 0;
+  }
+
+  .profile-pic {
+    margin: 50px 10px;
+    margin-top: 0px;
+    padding-top: 0px;
+  }
+
+  .profile-pic img {
+    width: 140px;
+    height: 140px;
+  }
+
+  .profile-pic .edit-pic {
+    width: 20px;
+    height: 20px;
+  }
+
+  .profile-pic .save-pic {
+    width: 20px;
+    height: 20px;
+  }
+
+  .content {
+    padding: 0px 20px;
+  }
+
+  .form-col {
+    min-width: 300px;
+  }
+
+  form input {
+    width: 100%;
+  }
 }

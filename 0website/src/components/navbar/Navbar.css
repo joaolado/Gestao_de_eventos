@@ -69,6 +69,14 @@
   transition: all 0.2s ease-out;
 }
 
+.nav-item.active .nav-links {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  padding-top: 10px;
+  border-bottom: 4px solid #fff;
+}
+
 .fa-bars {
   color: #fff;
 }
@@ -120,6 +128,16 @@
     background-color: #fff;
     color: #242424;
     border-radius: 0;
+  }
+
+  .nav-item.active .nav-links {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #444;
+    color: #ffffff;
+    padding: 2rem;
+    border-radius: 0;
+    border-bottom: none;
   }
 
   .navbar-logo {

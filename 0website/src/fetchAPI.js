@@ -1,33 +1,40 @@
-const API_BASE_URL = 'http://localhost:4005'; // Replace with your backend's URL
 
-// Helper function to make API requests
-const fetchAPI = async (url, options = {}) => {
-  // Get the token from localStorage
+const API_BASE_URL = 'http://localhost:4005'; // Backend URL
+
+// Helper Function to Make API Requests
+const fetchAPI = async (url, options = {}) => 
+{
+  // Get the Token from localStorage
   const token = localStorage.getItem('token');
 
-  // Default headers (conditionally set Content-Type)
+  // Default Headers (Conditionally Set Content-Type)
   const headers = {
+
     ...(options.body && !(options.body instanceof FormData) && { 'Content-Type': 'application/json' }),
     ...options.headers, 
+
   };
   
-  // Attach Authorization header if a token is present
-  if (token) {
+  // Attach Authorization Header if a Token is Present
+  if (token) 
+  {
     headers.Authorization = `Bearer ${token}`;
   }
 
-  // Make the fetch request
-  const response = await fetch(`${API_BASE_URL}${url}`, {
+  // Make the Fetch Request
+  const response = await fetch(`${API_BASE_URL}${url}`, 
+  {
     ...options,
     headers,
   });
 
-  // Handle JSON response
+  // Handle JSON Response
   const data = await response.json();
 
-  // Throw an error for unsuccessful responses
-  if (!response.ok) {
-    throw new Error(data.error || 'API request failed');
+  // Error Responses
+  if (!response.ok) 
+  {
+    throw new Error(data.error || 'API Request Failed');
   }
 
   return data;
