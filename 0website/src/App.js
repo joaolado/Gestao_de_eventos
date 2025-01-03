@@ -9,6 +9,7 @@ import './App.css';
 // Pages
 import Home      from './components/pages/Home';
 import Explore   from './components/pages/Explore';
+import Event     from './components/pages/EditEvent';
 import Dashboard from './components/pages/Dashboard';
 import Login     from './components/pages/Login';
 import Register  from './components/pages/Register';
@@ -43,11 +44,12 @@ function App()
       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       
       <Routes>
-        <Route path='/'          element={<Home />} />
-        <Route path='/explore'   element={<Explore />} />
-        <Route path='/dashboard' element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path='/login'     element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-        <Route path='/register'  element={<Register />} />
+        <Route path='/'           element={<Home />} />
+        <Route path='/explore'    element={<Explore />} />
+        <Route path='/event/:id'  element={<Event />} />
+        <Route path='/dashboard'  element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
+        <Route path='/login'      element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path='/register'   element={<Register />} />
       </Routes>
 
       <ToastContainer />

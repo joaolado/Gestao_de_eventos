@@ -120,68 +120,103 @@ exports.getById = async (req, res) =>
 };
 
 // Creates TicketsInfo
-exports.create = async (req, res) => 
-{
-    // Get requested TicketsInfo properties
-    const 
-    { 
+exports.create = async (req, res) => {
+    const { 
         SKU,
         price,
         quantity, 
-
-        ticketType, // Return ticketsType instead of ticket Type ID
-
-        eventsId,   // Return associated Event info
-
+        ticketType, // Ticket type name or id
+        eventsId,   // Event id
+        name,       // Event name (optional, if a new event needs to be created)
+        description, // Event description (optional)
+        startDate,   // Event start date (optional)
+        endDate,     // Event end date (optional)
+        capacity,    // Event capacity (optional)
+        categoryName, // Event category (optional)
+        addressLine1, // Event address line 1 (optional)
+        addressLine2, // Event address line 2 (optional)
+        postalCode,   // Event postal code (optional)
+        city,         // Event city (optional)
+        region,       // Event region (optional)
+        country,      // Event country (optional)
     } = req.body;
 
-    try 
-    {
-        // Find the ticketsType ID based on the ticketsType
-        const type = await prisma.ticketsType.findUnique({
-
-            where: 
-            { 
-                name: ticketType,
-            }
-        });
-
-        if (!type)
-        {
-            return res.status(404).json({ error: 'Ticket Type Not Found.' });
+    try {
+        // Ensure ticketType is a valid string
+        if (!ticketType) {
+            return res.status(400).json({ error: 'Ticket type is required' });
         }
 
-        // Creates new TicketsInfo
+        // Check if the ticket type exists, if not create it
+        let type = await prisma.ticketsType.findUnique({
+            where: { name: ticketType }
+        });
+
+        if (!type) {
+            // Create a new ticket type if not found
+            type = await prisma.ticketsType.create({
+                data: { name: ticketType, description: `Ticket type for ${ticketType}` },
+            });
+        }
+
+        // If eventsId is provided, try to find the existing event
+        let event = null;
+        if (eventsId) {
+            event = await prisma.events.findUnique({
+                where: { id: eventsId },
+            });
+        }
+
+        // If the event doesn't exist, create a new one (optional, based on your use case)
+        if (!event && name && description) {
+            event = await prisma.events.create({
+                data: {
+                    name,
+                    description,
+                    startDate: new Date(startDate),
+                    endDate: new Date(endDate),
+                    capacity: capacity ? parseInt(capacity, 10) : null,
+                    category: { connect: { name: categoryName } },  // Ensure category is linked properly
+                    addressLine1,
+                    addressLine2: addressLine2 || '',
+                    postalCode,
+                    city,
+                    region: region || '',
+                    country,
+                },
+            });
+        }
+
+        // If the event is not found and no name or description is provided, return an error
+        if (!event) {
+            return res.status(400).json({ error: 'Event not found or event details missing for creation.' });
+        }
+
+        // Now create TicketsInfo and associate it with the existing or newly created event
         const newTicketsInfo = await prisma.ticketsInfo.create({
-
-            data: 
-            {
-                SKU: SKU,
-                price: price,
-                quantity: quantity,
-
-                // Connect to the existing Ticket Type
-                type: { connect: { id: type.id, }, },
-
-                // Connect to the Event
-                event: { connect: { id: eventsId, }, },
+            data: {
+                SKU,
+                price,
+                quantity,
+                type: { connect: { id: type.id } }, // Ensure connection to ticket type by ID
+                event: { connect: { id: event.id } },  // Use the event's id here
             },
-
-            include: 
-            {
-                event: true,
-            },
+            include: { event: true },
         });
 
         // Return TicketsInfo created
         res.status(201).json(newTicketsInfo);
-    }
-
-    catch (error) 
-    {
+    } catch (error) {
+        console.error('Failed to Create TicketsInfo:', error);
         res.status(400).json({ error: 'Failed to Create TicketsInfo.', details: error.message });
     }
 };
+
+
+
+
+
+
 
 // Updates TicketsInfo by ID
 exports.update = async (req, res) => 

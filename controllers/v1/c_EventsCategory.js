@@ -48,37 +48,46 @@ exports.getById = async (req, res) =>
 };
 
 // Creates EventsCategory
-exports.create = async (req, res) => 
-{
-    // Get requested EventsCategory properties
-    const 
-    { 
-        name, 
-        description, 
-
-    } = req.body;
-
-    try 
-    {
-        // Creates new EventsCategory
-        const newEventsCategory = await prisma.eventsCategory.create({
-
-            data: 
-            {
-                name: name,
-                description: description,
-            },
+exports.create = async (req, res) => {
+    const { name, description } = req.body;
+  
+    try {
+      // Check if the category already exists
+      let category = await prisma.eventsCategory.findUnique({
+        where: { name: name },
+      });
+  
+      // If category doesn't exist, create a new one
+      if (!category) {
+        category = await prisma.eventsCategory.create({
+          data: {
+            name: name,
+            description: description,
+          },
         });
-
-        // Return EventsCategory created
-        res.status(201).json(newEventsCategory);
+  
+        return res.status(201).json({
+          success: true,
+          message: 'Event Category Created',
+          categoryId: category.id,
+          categoryName: category.name,
+        });
+      }
+  
+      // If category exists, return a message
+      res.status(400).json({
+        success: false,
+        message: 'Event Category already exists',
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: 'Failed to Create EventsCategory.',
+        details: error.message,
+      });
     }
-
-    catch (error) 
-    {
-        res.status(400).json({ error: 'Failed to Create EventsCategory.', details: error.message });
-    }
-};
+  };
+  
 
 // Updates EventsCategory by ID
 exports.update = async (req, res) => 

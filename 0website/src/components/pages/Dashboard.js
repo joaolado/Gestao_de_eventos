@@ -33,10 +33,11 @@ const Dashboard = () =>
     },
 
     userPassword: ''
+
   });
 
   // State Hooks for Handling Loading, Sections, and Other States
-  const [isLoading, setIsLoading] = useState(true);                // Determines if Fata is Still Loading
+  const [isLoading, setIsLoading] = useState(true);                // Determines if Data is Still Loading
   const [wishlist, setWishlist] = useState([]);                    // Wishlist Data
   const [sharedEvents, setSharedEvents] = useState([]);            // Shared Events Fata
   const [activeSection, setActiveSection] = useState('profile');   // Active Section for UI
@@ -86,7 +87,6 @@ const Dashboard = () =>
           address: {
             ...prevProfile.address,
             ...data.address,
-
           },
         }));
 
@@ -461,7 +461,9 @@ const Dashboard = () =>
           <div className="section-box">
             <div className="section">
 
-              <h2>PROFILE</h2>
+              <div className="section-header">
+                <h2 className="section-title">PROFILE</h2>
+              </div>
 
               <form onSubmit={handleSubmit}>
                 <div className="form-row">
@@ -506,7 +508,7 @@ const Dashboard = () =>
                     />
                   </div>
 
-                  <div className="form-col">
+                  <div className="form-col phone">
                     <label>Phone</label>
                     <input 
                       type="tel" 
@@ -562,7 +564,9 @@ const Dashboard = () =>
           <div className="section-box">
             <div className="section">
 
-              <h2>ADDRESS</h2>
+              <div className="section-header">
+                <h2 className="section-title">ADDRESS</h2>
+              </div>
 
               <form onSubmit={handleSubmit}>
                 <div className="form-row">
@@ -654,7 +658,9 @@ const Dashboard = () =>
           <div className="section-box">
             <div className="section">
 
-              <h2>SECURITY</h2>
+              <div className="section-header">
+                <h2 className="section-title">SECURITY</h2>
+              </div>
 
               <form onSubmit={handleSubmit}>
                 <div className="form-row">
@@ -699,7 +705,9 @@ const Dashboard = () =>
           <div className="section-box">
             <div className="section">
 
-              <h2>WISHLIST</h2>
+              <div className="section-header">
+                <h2 className="section-title">WISHLIST</h2>
+              </div>
 
               <ul>
                 {wishlist.map(event => (
@@ -718,7 +726,9 @@ const Dashboard = () =>
           <div className="section-box">
             <div className="section">
 
-              <h2>SHARED EVENTS</h2>
+              <div className="section-header">
+                <h2 className="section-title">SHARED EVENTS</h2>
+              </div>
 
               <ul>
                 {sharedEvents.map(event => (

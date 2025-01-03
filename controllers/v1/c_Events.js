@@ -174,6 +174,7 @@ exports.getById = async (req, res) =>
                 startDate: true,
                 endDate: true,
                 capacity: true,
+                status: true,
                 category: { select: { name: true, }, }, // Only select the EventsCategory name
                 addressLine1: true,
                 addressLine2: true,
@@ -221,167 +222,230 @@ exports.getById = async (req, res) =>
     }
 };
 
-// Creates Events
-exports.create = async (req, res) => 
-{
-    // Get requested Events properties
-    const 
-    { 
-        name,
-        description,
-        startDate,
-        endDate,
-        capacity,
-        categoryName, // Return categoryName instead of categoryId 
-        addressLine1,
-        addressLine2,
-        postalCode,
-        city,
-        region,
-        country, 
-
+exports.create = async (req, res) => {
+    const {
+      name,
+      description,
+      startDate,
+      endDate,
+      capacity,
+      categoryName,
+      addressLine1,
+      addressLine2,
+      postalCode,
+      city,
+      region,
+      country,
     } = req.body;
 
-    try 
-    {   
-        // Check if a File is Uploaded
-        const cover = req.file ? req.file.path : null;
+    try {
+      const cover = req.file ? req.file.path : null;
 
-        // Find the category ID based on the categoryName
-        const category = await prisma.eventsCategory.findUnique({
+      // Check if category exists
+      const category = await prisma.eventsCategory.findUnique({
+        where: { name: categoryName },
+      });
 
-            where: 
-            { 
-                name: categoryName 
-            }
-        });
+      if (!category) {
+        return res.status(404).json({ error: 'Category Not Found.' });
+      }
 
-        if (!category)
-        {
-            return res.status(404).json({ error: 'Category Not Found.' });
+      // Create Event
+      const newEvent = await prisma.events.create({
+        data: {
+          name,
+          description,
+          cover,
+          startDate: new Date(startDate),
+          endDate: new Date(endDate),
+          capacity: capacity ? parseInt(capacity, 10) : null,
+          categoryId: category.id,
+          addressLine1,
+          addressLine2: addressLine2 || '',
+          postalCode,
+          city,
+          region: region || '',
+          country,
+        },
+      });
+
+      // Handle Tickets
+      if (req.body.tickets) {
+        try {
+          const tickets = JSON.parse(req.body.tickets);
+
+          if (!Array.isArray(tickets)) {
+            throw new Error('Tickets must be an array.');
+          }
+
+          // Create Tickets
+          for (const ticket of tickets) {
+            await prisma.ticketsInfo.create({
+              data: {
+                eventsId: newEvent.id,
+                typeId: ticket.typeId,  // Use typeId instead of type
+                price: parseFloat(ticket.price),
+                quantity: parseInt(ticket.quantity, 10),
+                status: ticket.status || 'Available',
+              },
+            });
+          }
+        } catch (error) {
+          console.error('Failed to parse or create tickets:', error);
+          return res.status(400).json({ success: false, message: 'Invalid tickets format.' });
         }
+      }
 
-        // Creates new Events
-        const newEvents = await prisma.events.create({
-
-            data: 
-            {
-                name: name,
-                description: description,
-                cover: cover,
-                startDate: new Date(startDate),
-                endDate: new Date(endDate),
-                capacity: capacity,
-                categoryId: category.id,
-                addressLine1: addressLine1,
-                addressLine2: addressLine2,
-                postalCode: postalCode,
-                city: city,
-                region: region,
-                country: country,
-            },
-        });
-
-        // Return Events created
-        res.status(201).json(newEvents);
-    }
-
-    catch (error) 
-    {
-        res.status(400).json({ error: 'Failed to Create Events.', details: error.message });
+      res.status(201).json({
+        success: true,
+        event: newEvent,
+      });
+    } catch (error) {
+      console.error('Error creating event:', error);
+      res.status(500).json({ error: 'Failed to create event' });
     }
 };
 
-// Updates Events by ID
-exports.update = async (req, res) => 
+
+
+
+
+  
+
+// Create/Edit Events by ID
+exports.editEvent = async (req, res) => 
 {
     const 
-    { 
+    {   
         id,
         name,
         description,
         startDate,
         endDate,
         capacity,
-        categoryName, // Return categoryName instead of categoryId 
-        addressLine1,
-        addressLine2,
-        postalCode,
-        city,
-        region,
+        categoryName, // Return categoryName instead of categoryId
+        addressLine1, 
+        addressLine2, 
+        postalCode, 
+        city, 
+        region, 
         country,
+        status,
+
+        price,
+        quantity,
 
     } = req.body;
 
     try 
     {   
-        // Parsed Used to put Int on Form-Data
-        const parsedId = parseInt(id, 10);
-
-        // Validate the parsed ID
-        if (isNaN(parsedId)) {
-            return res.status(400).json({ error: 'Invalid value for ID. Expected an integer.' });
-        }
-
         // Check if a File is Uploaded
-        const cover = req.file ? req.file.path : null;
+        const cover = req.file ? req.file.filename : undefined;
 
-        // If categoryName is provided, find the categoryId
-        let categoryId = undefined;
+        // Initialize categoryId as undefined
+        let categoryId;
 
-        if (categoryName) 
-        {
+        if (categoryName) {
+            // Check if the category exists
             const category = await prisma.eventsCategory.findUnique({
-                where: 
-                { 
-                    name: categoryName 
-                }
+                where: { name: categoryName },
             });
 
-            if (!category) 
-            {
-                return res.status(404).json({ error: 'Category Not Found.' });
+            if (category) {
+                // If categoryName is provided and exists, use its ID
+                categoryId = category.id;
+            } else {
+                console.warn(`Category "${categoryName}" not found. Proceeding without category.`);
+            }
+        }
+        
+        // If id exists, it's an update
+        if (id) {
+            // Update Event Logic (existing event with id)
+            const parsedId = parseInt(id, 10);
+            if (isNaN(parsedId)) {
+                return res.status(400).json({ error: 'Invalid value for ID. Expected an integer.' });
             }
 
-            // If EventsCategory is found, get the categoryId
-            categoryId = category.id;
+            // Finds Events to Update their Data
+            const updatedEvents = await prisma.events.update({
+
+                where: 
+                { 
+                    id: parsedId, 
+                },
+
+                data: 
+                {
+                    name: name,
+                    description: description,
+                    cover: cover,
+                    startDate: startDate ? new Date(startDate) : undefined, // Only Update if Provided
+                    endDate: endDate ? new Date(endDate) : undefined,       // Only Update if Provided
+                    capacity: capacity,
+                    categoryId: categoryId || null, // Allow null category
+                    addressLine1: addressLine1,
+                    addressLine2: addressLine2,
+                    postalCode: postalCode,
+                    city: city,
+                    region: region,
+                    country: country,
+                    status: status,
+                },
+
+                include: 
+                { 
+                    tickets: true 
+                },
+            });
+
+            return res.status(200).json({ success: true, message: 'Event Updated', updatedEvents });
         }
-
-        // Finds Events to Update their Data
-        const updatedEvents = await prisma.events.update({
-
-            where: 
-            { 
-                id: parsedId, 
-            },
-
-            data: 
-            {
+        
+        // Create a new event if no event is found
+        const createdEvent = await prisma.events.create({
+            data: {
                 name: name,
                 description: description,
                 cover: cover,
-                startDate: startDate ? new Date(startDate) : undefined, // Only Update if Provided
-                endDate: endDate ? new Date(endDate) : undefined,       // Only Update if Provided
+                startDate: startDate ? new Date(startDate) : undefined,
+                endDate: endDate ? new Date(endDate) : undefined,
                 capacity: capacity,
-                categoryId: categoryId !== undefined ? categoryId : undefined,
+                categoryId: categoryId || null, // Allow null category
                 addressLine1: addressLine1,
                 addressLine2: addressLine2,
                 postalCode: postalCode,
                 city: city,
                 region: region,
                 country: country,
+                status: status || 'Scheduled',
+                tickets: {
+                    create: [
+                        {
+                            price: price,
+                            quantity: quantity,
+                        }
+                    ]
+                }
             },
+            include: { tickets: true },
         });
 
-        // Return Events Updated
-        res.status(200).json(updatedEvents);
+        return res.status(201).json({ success: true, message: 'Event Created Successfully.', createdEvent });
     }
 
     catch (error) 
-    {
-        res.status(400).json({ error: 'Failed to Update Events.', details: error.message });
+    {   
+        console.error("Error:", error);  // Log error for debugging
+        res.status(400).json({ success: false, error: 'Failed to Update Events.', details: error.message });
     }
 };
+
+
+
+
+
+
 
 // Update Event Status by ID
 // Valid Status

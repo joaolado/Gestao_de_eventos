@@ -1,6 +1,5 @@
 
-.dashboard {
-    
+.dashboard {  
   display: flex;
   height: 90vh;
   flex-grow: 1;
@@ -13,7 +12,7 @@
   align-items: center;
   text-align: center;
   width: 250px;
-  background-color: #242424;
+  background: linear-gradient(360deg, #242424 50%, #1967d2 100%);
   padding: 20px 0;
   border-right: 1px solid #ddd;
   overflow-y: auto;
@@ -86,7 +85,7 @@
 
 .side-menu li:hover {
   color: #ffffff;
-  background-color: #444;
+  background-color: #1966d25b;
 }
 
 .side-menu li.active {
@@ -120,10 +119,18 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.section h2 {
-  margin-bottom: 20px;
-  font-size: 2rem;
+.section-header {
   text-align: center;
+  background: linear-gradient(45deg, #242424 20%, #1967d2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 2rem;
+  margin: 0;
 }
 
 .section p,
@@ -132,24 +139,30 @@
   font-size: 16px !important;
 }
 
-.form-row {
+.content .form-row {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
 
-.form-col {
+.content .form-col {
   flex: 1;
   min-width: 300px;
 }
 
-.form-col label {
+.content .form-col label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 5px !important;
   font-weight: bold;
 }
 
-form input {
+.content .phone label {
+  display: block;
+  margin-bottom: 5px !important;
+  font-weight: bold;
+}
+
+.content form input {
   display: block;
   width: 100%;
   padding: 10px;
@@ -159,22 +172,24 @@ form input {
   font-size: 14px;
 }
 
-form button {
+.content form button {
   display: inline-block;
   margin: 20px 10px 0px 0px;
   padding: 10px 40px;
   min-width: 200px;
   border: none;
   border-radius: 5px;
-  background-color: #000000;
+  background: linear-gradient(45deg, #242424, #1967d2);
   color: #fff;
   cursor: pointer;
   font-size: 14px;
   align-self: center;
 }
 
-form button:hover {
-  background-color: #444;
+.content form button:hover {
+  background: linear-gradient(45deg, #1967d2, #242424);
+  scale: 102%;
+  transition: ease-in-out 0.2s; 
 }
 
 /* ----------------------------------------------------------------------- */
@@ -220,7 +235,12 @@ form button:hover {
     padding: 0px 20px;
   }
 
-  .section h2 {
+  .section-header {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .section-title {
     font-size: 1.5rem;
   }
 
@@ -231,20 +251,27 @@ form button:hover {
     padding: 5px !important;
   }
 
-  .form-col {
+  .content .form-col {
     min-width: 200px;
   }
 
-  .form-col label {
+  .content .form-col label {
     font-size: 12px;
     margin-bottom: 5px !important;
   }
 
-  form input {
-    width: 100%;
+  .content .phone label {
+    display: block;
+    margin-bottom: 10px !important;
+    font-weight: bold;
   }
 
-  form button {
+  .content form input {
+    width: 100%;
+    margin-bottom: 0px;
+  }
+
+  .content form button {
     margin: 15px 0px -10px 0px !important;
     min-width: 100%;
     font-size: 12px;
@@ -280,15 +307,25 @@ form button:hover {
     height: 20px;
   }
 
+  .section-header {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+
   .content {
     padding: 0px 20px;
   }
 
-  .form-col {
+  .content .form-col {
     min-width: 300px;
   }
 
-  form input {
+  .content form input {
     width: 100%;
+    margin-bottom: 10px;
   }
 }
