@@ -383,7 +383,7 @@ exports.editEvent = async (req, res) =>
                     startDate: startDate ? new Date(startDate) : undefined, // Only Update if Provided
                     endDate: endDate ? new Date(endDate) : undefined,       // Only Update if Provided
                     capacity: capacity,
-                    categoryId: categoryId || null, // Allow null category
+                    categoryId: categoryId || undefined, // Allow null category
                     addressLine1: addressLine1,
                     addressLine2: addressLine2,
                     postalCode: postalCode,
@@ -411,7 +411,7 @@ exports.editEvent = async (req, res) =>
                 startDate: startDate ? new Date(startDate) : undefined,
                 endDate: endDate ? new Date(endDate) : undefined,
                 capacity: capacity,
-                categoryId: categoryId || null, // Allow null category
+                categoryId: categoryId || undefined, // Allow null category
                 addressLine1: addressLine1,
                 addressLine2: addressLine2,
                 postalCode: postalCode,

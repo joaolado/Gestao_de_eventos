@@ -68,6 +68,13 @@ const EditEvent = () =>
         // Fetch Event Data From the Server
         const data = await fetchAPI(`/api/v1/events/${id}`);
 
+        // Ensure data contains the id
+        if (!data.id) {
+          console.error("Event ID not found in API response");
+          setIsLoading(false);
+          return;
+        }
+
         // Format start and end dates
         const formattedStartDate = new Date(data.startDate).toISOString().split('T')[0];
         const formattedEndDate = new Date(data.endDate).toISOString().split('T')[0];
@@ -250,9 +257,9 @@ const EditEvent = () =>
       return false;
     }
 
-    // Only show the error if no category is selected (i.e., categoryName is empty)
-    if (!editEvent.categoryName) {
-      toast.error('Please select a category');
+    // Check if categoryName is either undefined or matches a valid category
+    if (editEvent.categoryName && !categories.some((cat) => cat.name === editEvent.categoryName)) {
+      toast.error('Please select a valid category.');
       return false;
     }
 
@@ -376,7 +383,12 @@ const EditEvent = () =>
       reader.onload = () =>
 
         // Once the file is Read Successfully, Update the cover in the Event State
-        setEditEvent((prev) => ({ ...prev, cover: reader.result }));
+        setEditEvent((prev) => ({ 
+          ...prev, 
+          cover: reader.result,
+          id: prev.id || id, // Ensure id is preserved
+
+        }));
 
       // Read the File as a Data URL (For Image Preview)
       reader.readAsDataURL(file);
@@ -389,6 +401,15 @@ const EditEvent = () =>
     if (!id) return; // Ensure ID exists
     
     e.preventDefault();  // Prevent the Default Form Submit Action
+
+      // Debugging log
+      console.log("editEvent.id:", editEvent.id);
+
+    // Ensure ID exists before proceeding
+    if (!editEvent.id) {
+      toast.error('Event ID is missing.');
+      return;
+    }
     
     // Check if a File is Selected
     if (!file) 
@@ -400,26 +421,11 @@ const EditEvent = () =>
     // Create a FormData Object for Image File
     const formData = new FormData();
 
-    // File to the FormData Object
-    formData.append('cover', file);
-
     // Append the event ID for the update operation
     formData.append('id', editEvent.id); // Append the ID
 
-    // Append other event fields as needed (only if present)
-    if (editEvent.name) formData.append('name', editEvent.name);
-    if (editEvent.description) formData.append('description', editEvent.description);
-    if (editEvent.startDate) formData.append('startDate', editEvent.startDate);
-    if (editEvent.endDate) formData.append('endDate', editEvent.endDate);
-    if (editEvent.capacity) formData.append('capacity', editEvent.capacity);
-    if (editEvent.categoryName) formData.append('categoryName', editEvent.categoryName); // Optional categoryName
-    if (editEvent.addressLine1) formData.append('addressLine1', editEvent.addressLine1);
-    if (editEvent.addressLine2) formData.append('addressLine2', editEvent.addressLine2);
-    if (editEvent.postalCode) formData.append('postalCode', editEvent.postalCode);
-    if (editEvent.city) formData.append('city', editEvent.city);
-    if (editEvent.region) formData.append('region', editEvent.region);
-    if (editEvent.country) formData.append('country', editEvent.country);
-    if (editEvent.status) formData.append('status', editEvent.status);
+    // File to the FormData Object
+    formData.append('cover', file);
 
     try 
     {
@@ -429,6 +435,9 @@ const EditEvent = () =>
         method: 'PUT',
         body: formData, // Send the FormData With the Image File
       });
+
+                    // Log the response to see more details if it fails
+                    console.log(response);
       
       // If the Response is Successful, Update the Event Cover
       if (response.success) 
@@ -436,7 +445,7 @@ const EditEvent = () =>
         toast.success('Cover Updated Successfully.');
         
         // Fetch Updated Event Data to Refresh the UI
-        const updatedEventData = await fetchAPI(`/api/v1/events/${id}`);
+        const updatedEventData = await fetchAPI(`/api/v1/events/${editEvent.id}`);
 
         // Update the Event State With the New Event Cover
         setEditEvent((prevEvent) => ({
@@ -968,11 +977,11 @@ const EditEvent = () =>
 
                   <div className="form-group">
                     
-                    <label htmlFor="categoryName">Selected Category: {editEvent.category}</label>
+                    <label htmlFor="categoryName">Category</label>
                     <select
                       id="categoryName"
                       name="categoryName"
-                      value={editEvent.categoryName || ""}
+                      value={editEvent.categoryName || editEvent.category || ""}
                       onChange={handleChange}
                       
                     >

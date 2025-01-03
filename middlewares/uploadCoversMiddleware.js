@@ -47,7 +47,7 @@ const storage = multer.diskStorage({
             if (event.cover) 
             {   
                 // Construct the Full Path
-                const oldCoverPath  = path.join(__dirname, '../0website/public/uploads/cover', event.cover);     
+                const oldCoverPath  = path.join(__dirname, '../0website/public/uploads/covers', event.cover);     
 
                 fs.unlink(oldCoverPath , (err) => 
                 {
