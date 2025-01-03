@@ -64,6 +64,12 @@
   margin-bottom: 0px;
 }
 
+.side-menu .type {
+  font-size: 12px;
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
 .side-menu .email {
   text-align: center;
   margin-bottom: 20px;

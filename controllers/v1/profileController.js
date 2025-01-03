@@ -28,6 +28,7 @@ exports.getProfile = async (req, res) =>
                 lastName: true,
                 phone: true,
                 email: true,
+                usersType: true, // Include the user's type
 
                 // Include related User Address
                 address: 

@@ -43,6 +43,7 @@ const EditEvent = () =>
   });
 
   // State Hooks for Handling Loading, Sections, and Other States
+  const [userType, setUserType] = useState(null);
   const [currentView, setCurrentView] = useState("menu"); // 'menu', 'create', or 'edit'
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState("");
@@ -53,9 +54,21 @@ const EditEvent = () =>
   const [file, setFile] = useState(null);                          // File for Uploading Event Cover
 
   const navigate = useNavigate(); // Hook for Navigation
- 
+
   useEffect(() => 
   {
+    const fetchUserType = async () => {
+      try {
+        // Fetch user information from the API using the token
+        const response = await fetchAPI('/api/v1/profile/get-profile'); // Adjust endpoint as needed
+        if (response?.usersType) {
+          setUserType(response.usersType);
+        }
+      } catch (error) {
+        console.error('Error fetching user type:', error);
+      }
+    };
+
     // Fetch the Event Data
     const fetchEvent = async () =>
     {
@@ -117,6 +130,7 @@ const EditEvent = () =>
     };
     
     // Call the Fetch Function to Load Data
+    fetchUserType();
     fetchEvent();
   }, [id]);
 
@@ -595,13 +609,23 @@ const EditEvent = () =>
                   </div>
                 </div>
 
-                <button onClick={handleCreateEvent} className="menu-button">
-                  CREATE EVENT
-                </button>
+                <div>
 
-                <button onClick={() => setCurrentView("edit")} className="menu-button">
-                  EDIT EVENT
-                </button>
+                  {['UserAdmin', 'UserSuperAdmin'].includes(userType) && (
+                    <>
+
+                    <button onClick={handleCreateEvent} className="menu-button">
+                      CREATE EVENT
+                    </button>
+
+                    <button onClick={() => setCurrentView("edit")} className="menu-button">
+                      EDIT EVENT
+                    </button>
+
+                    </>
+                  )}
+                  
+                </div>
 
               </div>
             </div>

@@ -418,6 +418,7 @@ const Dashboard = () =>
         )}
 
         <div><h4>WELCOME!</h4></div>
+        <div className="type">{profile.usersType}</div>
         <div className="email">{profile.email}</div>
 
         <ul>
