@@ -473,7 +473,7 @@ const Dashboard = () =>
                     <input 
                       type="text" 
                       name="userName" 
-                      value={profile.userName} 
+                      value={profile.userName || ''} 
                       onChange={handleChange} 
                       pattern="[a-zA-Z0-9_]{3,20}" 
                       title="Username | Length 3-20 Characters | Only Allowed (a-z), (A-Z), (0-9), (_)"
@@ -490,7 +490,7 @@ const Dashboard = () =>
                     <input 
                       type="text" 
                       name="firstName" 
-                      value={profile.firstName} 
+                      value={profile.firstName || ''} 
                       onChange={handleChange} 
                       placeholder="John" 
                       disabled={!isEditing} 
@@ -502,7 +502,7 @@ const Dashboard = () =>
                     <input 
                       type="text" 
                       name="lastName" 
-                      value={profile.lastName} 
+                      value={profile.lastName || ''} 
                       onChange={handleChange} 
                       placeholder="Doe" 
                       disabled={!isEditing} 
@@ -514,7 +514,7 @@ const Dashboard = () =>
                     <input 
                       type="tel" 
                       name="phone" 
-                      value={profile.phone} 
+                      value={profile.phone || ''} 
                       onChange={handleChange}
                       onInput={(e) => e.target.value = e.target.value.replace(/[^+\d]/g, '')} // Remove Invalid Characters
                       pattern="^\+?\d{1,15}$" 
@@ -530,7 +530,7 @@ const Dashboard = () =>
                     <input 
                       type="email" 
                       name="email" 
-                      value={profile.email} 
+                      value={profile.email || ''} 
                       onChange={handleChange}
                       pattern="^[^@\s]+@[^@\s]+\.(com|pt)$" 
                       title="Email | Must Contain (@) | End With (.com) or (.pt)"  
@@ -576,7 +576,7 @@ const Dashboard = () =>
                     <input 
                       type="text" 
                       name="address.addressLine1" 
-                      value={profile.address.addressLine1} 
+                      value={profile.address.addressLine1 || ''} 
                       onChange={handleChange} 
                       placeholder="Rua Example" 
                       disabled={!isEditing} 
@@ -588,7 +588,7 @@ const Dashboard = () =>
                     <input 
                       type="text" 
                       name="address.addressLine2" 
-                      value={profile.address.addressLine2} 
+                      value={profile.address.addressLine2 || ''} 
                       onChange={handleChange} 
                       placeholder="nº123" 
                       disabled={!isEditing} 
@@ -600,7 +600,7 @@ const Dashboard = () =>
                     <input 
                       type="text" 
                       name="address.postalCode" 
-                      value={profile.address.postalCode} 
+                      value={profile.address.postalCode || ''} 
                       onChange={handleChange}
                       onInput={(e) => e.target.value = e.target.value.replace(/[^0-9\-]/g, '')} // Remove Invalid Characters
                       pattern="[0-9\-]*"
@@ -615,7 +615,7 @@ const Dashboard = () =>
                     <input 
                       type="text" 
                       name="address.city" 
-                      value={profile.address.city} 
+                      value={profile.address.city || ''} 
                       onChange={handleChange} 
                       placeholder="City" 
                       disabled={!isEditing}
@@ -627,7 +627,7 @@ const Dashboard = () =>
                     <input 
                       type="text" 
                       name="address.region" 
-                      value={profile.address.region} 
+                      value={profile.address.region || ''} 
                       onChange={handleChange} 
                       placeholder="Region" 
                       disabled={!isEditing} 
@@ -639,7 +639,7 @@ const Dashboard = () =>
                     <input 
                       type="text" 
                       name="address.country" 
-                      value={profile.address.country} 
+                      value={profile.address.country || ''} 
                       onChange={handleChange} 
                       placeholder="Country" 
                       disabled={!isEditing} 
@@ -670,7 +670,7 @@ const Dashboard = () =>
                     <input 
                       type="password" 
                       name="userPassword"
-                      value={profile.userPassword} 
+                      value={profile.userPassword || ''} 
                       pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,8}" 
                       title="Password | Must Have 8 Characters | 1 (a-z), 1 (A-Z), 1 (0-9)" 
                       minLength={8}
