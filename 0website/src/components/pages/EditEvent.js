@@ -753,8 +753,9 @@ const EditEvent = () =>
                         type="text"
                         value={newCategoryName}
                         onChange={(e) => setNewCategoryName(e.target.value)}
+                        className="new-catg"
                       />
-                      <button type="button" onClick={saveNewCategory}>
+                      <button className="save-catg" type="button" onClick={saveNewCategory}>
                         Save Category
                       </button>
                     </div>

@@ -47,10 +47,10 @@
   background-color: #ffffff;
   cursor: pointer;
   border: 1px solid #000000;
+  transition: all 0.2s ease-in-out;
 }
 .event-cover button:hover {
   filter: invert(90%);
-  transition: ease-in-out 0.3s; 
 }
 
 .event-cover .edit-cover {
@@ -78,8 +78,6 @@
   flex-grow: 1;
   padding: 0px 0px 50px 50px;
 }
-
-
 
 .event-edit .form-group {
   display: flex;
@@ -141,6 +139,7 @@
   font-size: 16px; 
   margin: 0px 10px 10px 0px;
   min-width: 100%;
+  transition: all 0.2s ease-in-out;
 }
 
 .menu-button {
@@ -158,11 +157,7 @@
 .event-form .save-catg:hover {
   background: linear-gradient(45deg, #1967d2, #242424);
   scale: 102%;
-  transition: ease-in-out 0.2s; 
 }
-
-
-
 
 .event {
   gap: 20px;

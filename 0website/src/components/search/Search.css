@@ -7,8 +7,9 @@
   max-width: 1200px;
   width: 100%;
   padding: 10px;
-  background: #f8f8f8;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -20,13 +21,6 @@
   background-color: #fff;
   color: #333;
   cursor: pointer;
-}
-
-.category-dropdown:focus, 
-.category-dropdown:active, 
-.category-dropdown:hover, 
-.search-bar:hover { 
-  box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 1) !important;
 }
 
 .category-dropdown option:checked { 
@@ -48,22 +42,36 @@
   font-size: 16px;
 }
 
+.category-dropdown,
+.search-bar,
+.date-picker {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 8px !important;
+  border: 2px solid rgba(0, 0, 0, 0.8) !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.category-dropdown:focus,
+.category-dropdown:active,
+.category-dropdown:checked,
+.category-dropdown.selected,
+.category-dropdown:hover,
+.search-bar:focus,
+.search-bar:active,
+.search-bar:checked,
+.search-bar.selected,
+.search-bar:hover,
 .date-picker:focus, 
 .date-picker:active, 
 .date-picker:checked, 
 .date-picker.selected, 
-.date-picker:hover { 
-  border: #000000 !important;
-  box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 1) !important;
-}
-
+.date-picker:hover,
 .ant-picker:focus, 
 .ant-picker:active, 
 .ant-picker:checked, 
 .ant-picker.selected, 
-.ant-picker:hover { 
-  border: #000000 !important;
-  box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 1) !important;
+.ant-picker:hover  { 
+  filter: invert(80%);
 }
 
 /* Additional styles to ensure calendar dropdown is below the search container and remove the arrow pointers */ 
@@ -76,6 +84,23 @@
 }
 
 .ant-picker-dropdown .ant-picker-range-arrow { display: none !important; /* Hide the arrow pointers */ }
+
+.search-button {
+  padding: 7px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  transition: all 0.2s ease-in-out;
+}
+
+.search-button:hover {
+  filter: invert(80%);
+}
+
+.search-button svg {
+  width: 24px; 
+  height: 24px;
+}
 
 /* ----------------------------------------------------------------------- */
 
@@ -97,6 +122,7 @@
 
   .search-bar {
     padding: 15px;
+    margin-top: 0px !important;
   }
 
   .ant-picker-dropdown {

@@ -40,10 +40,10 @@
   background-color: #ffffff;
   cursor: pointer;
   border: 1px solid #000000;
+  transition: all 0.2s ease-in-out;
 }
 .profile-pic button:hover {
   filter: invert(90%);
-  transition: ease-in-out 0.3s; 
 }
 
 .profile-pic .edit-pic {
@@ -190,12 +190,13 @@
   cursor: pointer;
   font-size: 14px;
   align-self: center;
+  transition: all 0.2s ease-in-out;
 }
 
 .content form button:hover {
   background: linear-gradient(45deg, #1967d2, #242424);
   scale: 102%;
-  transition: ease-in-out 0.2s; 
+  
 }
 
 /* ----------------------------------------------------------------------- */
@@ -241,6 +242,10 @@
     padding: 0px 20px;
   }
 
+  .content .form-row {
+    gap: 10px;
+  }
+
   .section-header {
     padding: 10px;
     margin-bottom: 10px;
@@ -263,7 +268,7 @@
 
   .content .form-col label {
     font-size: 12px;
-    margin-bottom: 5px !important;
+    margin-bottom: 10px !important;
   }
 
   .content .phone label {

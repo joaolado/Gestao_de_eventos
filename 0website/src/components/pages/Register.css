@@ -50,9 +50,9 @@
   text-align: left;
 }
 
-input[type="email"],
-input[type="password"],
-input[type="text"] {
+.register-page input[type="email"],
+.register-page input[type="password"],
+.register-page input[type="text"] {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
@@ -66,12 +66,9 @@ input[type="text"] {
 }
 
 .register-page .password-container .eye-close {
-  margin-bottom: 5px;
+  margin-bottom: 1px;
 }
 
-.register-page .password-container .eye-open {
-  margin-bottom: 4px;
-}
 
 .toggle-password {
   position: absolute;
@@ -95,6 +92,7 @@ input[type="text"] {
   font-size: 18px;
   cursor: pointer;
   margin-top: 10px;
+  transition: all 0.2s ease-in-out;
 }
 
 .register-button:hover {

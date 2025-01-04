@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Import Navigation
-import { toast } from 'react-toastify';               // Import Toast
-import 'react-toastify/dist/ReactToastify.css';       // Import Toast CSS
+import { useNavigate, Link, useLocation } from 'react-router-dom'; // Import Navigation
+import { toast } from 'react-toastify';                            // Import Toast
+import 'react-toastify/dist/ReactToastify.css';                    // Import Toast CSS
 
 // API - Handle Fetch Requests
 import fetchAPI from '../../fetchAPI';
@@ -17,14 +17,20 @@ const Explore = () =>
   const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState([]); // To store all categories
 
-  const [filters, setFilters] = useState({
-    name: '',
-    city: '',
-    country: '',
-    categoryName: [],
-    status: '',
-    startDate: '',
-    endDate: '',
+  const location = useLocation(); // To get query params
+
+  // Parse query parameters and set as initial filters
+  const [filters, setFilters] = useState(() => {
+    const params = new URLSearchParams(location.search);
+    return {
+      name: params.get('name') || '',
+      city: params.get('city') || '',
+      country: params.get('country') || '',
+      categoryName: params.get('category') ? [params.get('category')] : [],
+      startDate: params.get('startDate') || '',
+      endDate: params.get('endDate') || '',
+      status: '',
+    };
   });
 
   const [sortOptions, setSortOptions] = useState({

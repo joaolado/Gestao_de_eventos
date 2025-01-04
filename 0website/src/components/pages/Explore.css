@@ -37,24 +37,29 @@
 }
 
 .filters input,
-.filters select,
-.filters button {
+.filters select {
   padding: 10px;
   font-size: 1rem;
   border-radius: 4px;
   border: 1px solid #ccc;
   flex: 1 1 100%;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  transition: all 0.2s ease-in-out;
 }
 
-.filters button {
-  background-color: #1967d2;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-.filters button:hover {
-  background-color: #145bb5;
+.filters input:focus, 
+.filters input:active, 
+.filters input:checked, 
+.filters input.selected, 
+.filters input:hover,
+.filters select:focus, 
+.filters select:active, 
+.filters select:checked, 
+.filters select.selected, 
+.filters select:hover  { 
+  filter: invert(80%);
 }
 
 .category-filters {
@@ -99,6 +104,7 @@
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  filter: none !important;
 }
 
 .category-filters input[type="checkbox"]:checked {
@@ -155,12 +161,23 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  transition: all 0.4s ease-in-out;
+}
+
+.event-card:hover {
+  scale: 105%;
 }
 
 .event-image {
   height: 70%;
   width: 100%;
   object-fit: cover;
+  transition: all 0.4s ease-in-out;
+}
+
+.event-image:hover {
+  height: 100%;
+  scale: 90%;
 }
 
 .event-details {
