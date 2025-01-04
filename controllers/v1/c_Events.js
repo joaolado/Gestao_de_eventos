@@ -28,11 +28,11 @@ exports.getAll = async (req, res) =>
         // Filters
         const filters = { deleted: null }; // Exclude Deleted Events
 
-        if (name) { filters.name = { contains: name, mode: 'insensitive' }; }        // Case-insensitive Partial Match
+        if (name) { filters.name = { contains: name, mode: 'insensitive' }; }          // Case-insensitive Partial Match
 
-        if (city) { filters.city = { equals: city, mode: 'insensitive' }; }          // Exact Match
+        if (city) { filters.city = { contains: city, mode: 'insensitive' }; }          // Case-insensitive Partial Match
 
-        if (country) { filters.country = { equals: country, mode: 'insensitive' }; } // Exact Match
+        if (country) { filters.country = { contains: country, mode: 'insensitive' }; } // Case-insensitive Partial Match
 
         // Greater than or equal to startDate
         if (startDate) { filters.startDate = {...(startDate && { gte: new Date(startDate) }), }; }
@@ -53,15 +53,18 @@ exports.getAll = async (req, res) =>
 
         // Include EventsCategory Filter if categoryName is provided
         let categoryFilter = {};
-        if (categoryName) {
-            const category = await prisma.eventsCategory.findUnique({
-                where: { name: categoryName }
-            });
-            if (!category) {
-                return res.status(404).json({ error: 'Category Not Found.' });
-            }
-            categoryFilter.categoryId = category.id;
+        
+        if (categoryName && categoryName.length > 0) {
+          const categoriesArray = decodeURIComponent(categoryName).split(',');
+          const categories = await prisma.eventsCategory.findMany({
+            where: { name: { in: categoriesArray } },
+          });
+        
+          if (categories.length > 0) {
+            categoryFilter.categoryId = { in: categories.map(c => c.id) };
+          }
         }
+        
 
         // Sort by
         const orderBy = {};

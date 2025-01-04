@@ -8,8 +8,8 @@ const controller = require('../../controllers/v1/c_Events');
 
 // Events CRUD
 // Public Routes (No Authentication Required - Token)
-eventsRouter.get('/', authenticateToken, controller.getAll);                                                                                // Get all Events
-eventsRouter.get('/:id', authenticateToken, controller.getById);                                                                            // Get a Events by ID
+eventsRouter.get('/', controller.getAll);                                                                                // Get all Events
+eventsRouter.get('/:id', controller.getById);                                                                            // Get a Events by ID
 
 // Protected Routes (Authentication Required - Token)
 eventsRouter.put('/edit', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), upload.single('cover'), controller.editEvent);   // Create/Edit Events
