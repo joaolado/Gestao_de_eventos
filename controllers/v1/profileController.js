@@ -199,6 +199,7 @@ exports.getWishlist = async (req, res) =>
                             { 
                                 id: true,
                                 name: true,
+                                category:{ select: { name:true } },
                                 startDate: true,
                                 endDate: true,
                             }       

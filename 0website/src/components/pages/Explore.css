@@ -151,7 +151,7 @@
 }
 
 .event-card {
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.8);
   color: #000;
   height: 80vh;
   width: 250px;
@@ -165,7 +165,9 @@
 }
 
 .event-card:hover {
-  scale: 105%;
+  scale: 102%;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 
 .event-image {
@@ -178,12 +180,20 @@
 .event-image:hover {
   height: 100%;
   scale: 90%;
+  margin-bottom: 10px;
 }
 
 .event-details {
-  padding: 15px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+}
+
+.event-details .event-title {
+  font-size: 1.2rem;
+  padding: 10px;
+  text-align: center;
   justify-content: space-between;
 }
 
@@ -210,10 +220,10 @@
   background: linear-gradient(45deg, #242424 20%, #1967d2 100%);
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  margin: 10px 0px 15px 0px;
+  margin: 5px 0px 15px 0px;
 }
 
-.event-dates,
+.event-data-time,
 .event-location {
   font-size: 0.9rem;
   color: #777;
@@ -226,6 +236,79 @@
 .event-card:hover {
   text-decoration: none; /* Ensure no underline on hover */
 }
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Aligns children to the left */
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  margin: 20px 0px;
+}
+
+.toggle-label p {
+  margin-right: 10px; /* Add space between the text and the checkbox */
+  font-size: 16px;
+}
+
+.toggle-switch input {
+  display: none; /* Hide the default checkbox */
+}
+
+.toggle-switch .slider {
+  position: relative;
+  width: 34px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 50px;
+  cursor: pointer;
+  background: linear-gradient(45deg, #242424, #1967d2);
+  transition: all 0.6s ease-in-out;
+}
+
+.toggle-switch input:checked + .slider {
+  background: linear-gradient(45deg, #1967d2, #242424);
+}
+
+.toggle-switch .slider:before {
+  content: "";
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background-color: white;
+  left: 2px;
+  bottom: 2px;
+  transition: all 0.3s ease-in-out;
+}
+
+.toggle-switch input:checked + .slider::before {
+  transform: translateX(14px); /* Move the slider knob when checked */
+}
+
+.add-event {
+  color: white;
+  font-size: 16px;
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(45deg, #242424, #1967d2);
+  border-radius: 8px;
+  border: none;
+  margin: 5px 0px 15px 0px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.add-event:hover {
+  background: linear-gradient(45deg, #1967d2, #242424);
+  scale: 102%;
+}
+
+
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {

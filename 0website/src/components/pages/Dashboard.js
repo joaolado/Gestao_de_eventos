@@ -352,6 +352,35 @@ const Dashboard = () =>
     }
   };
 
+  const handleRemoveFromWishlist = async (eventId) => {
+    try {
+      await fetchAPI('/api/v1/profile/remove-from-wishlist', {
+        method: 'DELETE',
+        body: JSON.stringify({ eventId }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      setWishlist((prevWishlist) => prevWishlist.filter((event) => event.id !== eventId));
+
+      // Reload the page to reflect changes
+      window.location.reload();
+      toast.success('Event removed from wishlist');
+    } catch (error) {
+      toast.error('Error removing event from wishlist');
+    }
+  };
+
+  const handleShareEvent = (event) => {
+    // Implement share logic here, possibly open a share dialog
+    toast.info(`Event "${event.name}" shared!`);
+  };
+
+  const handleAddComment = (eventId) => {
+    // Implement comment functionality, like opening a modal or form
+    toast.info('Add a comment for this event');
+  };
+
+
+
   // Frontend
   return (
 
@@ -703,21 +732,42 @@ const Dashboard = () =>
 
         {activeSection === 'wishlist' && (
 
-          <div className="section-box">
-            <div className="section">
-
-              <div className="section-header">
+          <div className="section-box wish-box">
+            <div className="section wish-wd">
+              <div className="section-header section-header-wish">
                 <h2 className="section-title">WISHLIST</h2>
               </div>
-
               <ul>
-                {wishlist.map(event => (
-                  <li key={event.id}>
-                    {event.name} - {event.startDate} to {event.endDate}
-                  </li>
-                ))}
+                {wishlist.map((item) => {
+                  const event = item.event;
+                  return (
+                    <li key={event.id} className="wishlist-item">
+                      <div className="wishlist-item-details button-wish">
+                        <h3>{event.name}</h3>
+                        <p>Category: {event.category?.name || 'N/A'}</p>
+                        <p>
+                          Date: {new Date(event.startDate).toLocaleDateString('en-GB')} -{' '}
+                          {new Date(event.endDate).toLocaleDateString('en-GB')}
+                        </p>
+                        <button onClick={() => navigate(`/event/${event.id}`)} className="view-event-btn">
+                          VIEW EVENT
+                        </button>
+                      </div>
+                      <div className="wishlist-item-actions button-wish">
+                        <button onClick={() => handleShareEvent(event)} className="share-btn">
+                          SHARE
+                        </button>
+                        <button onClick={() => handleAddComment(event.id)} className="comment-btn">
+                          COMMENT
+                        </button>
+                        <button onClick={() => handleRemoveFromWishlist(event.id)} className="remove-btn">
+                          REMOVE
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
-
             </div>
           </div>
         )}

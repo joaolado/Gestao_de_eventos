@@ -196,7 +196,105 @@
 .content form button:hover {
   background: linear-gradient(45deg, #1967d2, #242424);
   scale: 102%;
-  
+}
+
+
+.section-header-wish {
+  margin-bottom: 0px !important;
+}
+
+.wish-box {
+  width: 100%;
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  overflow: scroll;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.wish-box::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.wish-box {
+-ms-overflow-style: none;  /* IE and Edge */
+scrollbar-width: none;  /* Firefox */
+}
+
+.wishlist-item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0px;
+  width: 100%;
+}
+
+.wishlist-item-details {
+  flex: 1;
+}
+
+.wishlist-item-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.wishlist-item h3 {
+  margin: 10px 0px 10px 0px;
+  font-size: 2rem;
+}
+
+.wishlist-item p {
+  margin: 5px 0;
+}
+
+/* Make all event details text uppercase */
+.wishlist-item-details h3 {
+  text-transform: uppercase;
+}
+
+.button-wish button {
+  padding: 8px;
+  margin: 5px 0;
+  cursor: pointer;
+  display: inline-block;
+  border: none;
+  border-radius: 5px;
+  background: linear-gradient(45deg, #242424, #1967d2);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  align-self: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-wish button:hover {
+  background: linear-gradient(45deg, #1967d2, #242424);
+  scale: 102%;
+}
+
+.wishlist-item-details button {
+  min-width: 80%;
+  margin: 10px 10px 5px 0px;
+  padding: 10px 40px;
+}
+
+.wishlist-item-actions button {
+  min-width: 100%;
+  margin: 5px 0px 5px 0px;
+  padding: 10px 60px;
+}
+
+.remove-btn {
+  background: #000000 !important;
+  transition: all 0.3s ease-in-out;
+}
+
+.remove-btn:hover {
+  filter: invert(80%);
 }
 
 /* ----------------------------------------------------------------------- */

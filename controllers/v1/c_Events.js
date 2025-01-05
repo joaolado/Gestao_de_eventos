@@ -20,6 +20,8 @@ exports.getAll = async (req, res) =>
 
         sortBy,       // Sort By field
         sortOrder,    // Sort Order ('asc' or 'desc')
+
+        showDeleted, // Flag to control whether deleted events are included
               
     } = req.query;
 
@@ -51,6 +53,13 @@ exports.getAll = async (req, res) =>
             filters.status = { equals: status }; // Filter by valid status
         }
 
+        // Deleted filter
+        if (showDeleted === 'true') {
+            filters.deleted = { not: null }; // Include events that have a non-null 'deleted' field
+        } else {
+            filters.deleted = null; // Exclude soft-deleted events
+        }
+
         // Include EventsCategory Filter if categoryName is provided
         let categoryFilter = {};
         
@@ -65,7 +74,6 @@ exports.getAll = async (req, res) =>
           }
         }
         
-
         // Sort by
         const orderBy = {};
 
@@ -93,7 +101,7 @@ exports.getAll = async (req, res) =>
             {   
                 ...filters,
                 ...categoryFilter,
-                deleted: null, // Only includes Non-Deleted Events
+                deleted: filters.deleted, // Ensure this is set properly
             },
 
             select: 
@@ -165,7 +173,7 @@ exports.getById = async (req, res) =>
             where: 
             { 
                 id: id,
-                deleted: null, // Only if Events is Not-Deleted 
+                // deleted: null, // Only if Events is Not-Deleted
             },
 
             select: 

@@ -44,6 +44,7 @@ const EditEvent = () =>
 
   // State Hooks for Handling Loading, Sections, and Other States
   const [userType, setUserType] = useState(null);
+  const [isInWishlist, setIsInWishlist] = useState(false); // Track Wishlist State
   const [currentView, setCurrentView] = useState("menu"); // 'menu', 'create', or 'edit'
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState("");
@@ -54,6 +55,25 @@ const EditEvent = () =>
   const [file, setFile] = useState(null);                          // File for Uploading Event Cover
 
   const navigate = useNavigate(); // Hook for Navigation
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const wishlistResponse = await fetchAPI('/api/v1/profile/get-wishlist');
+        const updatedWishlist = wishlistResponse?.wishlist || [];
+  
+        // Update isInWishlist based on the updated wishlist data
+        const isInUpdatedWishlist = updatedWishlist.some((item) => item.event?.id === editEvent.id);
+        setIsInWishlist(isInUpdatedWishlist); // Update the state with the correct value
+      } catch (error) {
+        console.error('Error fetching wishlist:', error);
+      }
+    };
+  
+    // Fetch the wishlist after toggling the state
+    fetchWishlist();
+  }, [editEvent.id]);  // Re-run the effect whenever the event ID changes
+  
 
   useEffect(() => 
   {
@@ -88,18 +108,14 @@ const EditEvent = () =>
           return;
         }
 
-        // Format start and end dates
-        const formattedStartDate = new Date(data.startDate).toISOString().split('T')[0];
-        const formattedEndDate = new Date(data.endDate).toISOString().split('T')[0];
-
         // Update the Event State With the Fetched Data
         setEditEvent((prevEvent = {}) => ({
 
           ...prevEvent,
           ...data,
           id: data.id,  // Ensure that event id is added to the state
-          startDate: formattedStartDate,  // Set the formatted start date
-          endDate: formattedEndDate,      // Set the formatted end date
+          startDate: data.startDate,  
+          endDate: data.endDate,      
           capacity: data.capacity ?? null,
           tickets: {
             price: data.tickets?.price ?? null,
@@ -127,7 +143,7 @@ const EditEvent = () =>
         console.error('Error Fetching Event:', error);
         setIsLoading(false); // In case of Error - Stop Loading
       }
-    };
+    };  
     
     // Call the Fetch Function to Load Data
     fetchUserType();
@@ -199,27 +215,66 @@ const EditEvent = () =>
     }
   };
 
-  const formatDateToISO = (date) => {
-    // Ensure the date is in dd/MM/yyyy format
-    const [day, month, year] = date.split('/');
-    const formattedDate = `${year}-${month}-${day}`;
+  const formatDateToISO = (dateTime) => {
+    if (!dateTime) return null;
   
-    const parsedDate = new Date(formattedDate);
+    const [date, time] = dateTime.split('T');
+    const validTime = time || '00:00:00';
+    const isoString = `${date}T${validTime}`;
   
-    // Check if the parsed date is valid
-    if (isNaN(parsedDate)) {
-      console.error('Invalid date:', date);
+    // Ensure date and time are valid
+    const parsedDate = new Date(isoString);
+    if (isNaN(parsedDate.getTime())) {
+      console.error('Invalid DateTime:', isoString);
       return null;
     }
   
-    // Return date in yyyy-MM-dd format
-    return `${year}-${month}-${day}`;
+    return isoString;
+  };
+  
+  const extractDate = (isoString) => {
+    if (!isoString) return "N/A";
+    const date = new Date(isoString);
+    if (isNaN(date)) return "Invalid Date";
+    return date.toISOString().split('T')[0]; // Extract yyyy-MM-dd
+  };
+  
+  const extractTime = (isoString) => {
+    if (!isoString) return "N/A";
+    const date = new Date(isoString);
+    
+    // Check if the date is valid
+    if (isNaN(date.getTime())) return "Invalid Time";
+  
+    // Extract hours and minutes in local time
+    const hours = date.getHours(); // Local time hours
+    const minutes = date.getMinutes(); // Local time minutes
+  
+    // Pad hours and minutes with leading zeros
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
   };
 
-  const extractDate = (isoString) => {
-    if (!isoString) return '';
-    return isoString.split('T')[0]; // Extract yyyy-MM-dd from ISO string
+  const formatDateDisplay = (isoString) => {
+    if (!isoString) return 'N/A';
+    
+    const date = new Date(isoString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = date.getFullYear();
+  
+    return `${day}/${month}/${year}`;
   };  
+  
+  const formatTimeDisplay = (isoString) => {
+    if (!isoString) return 'N/A';
+  
+    const date = new Date(isoString);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+    return `${hours}:${minutes}`;
+  };
+    
 
   const saveNewCategory = async () => {
     if (!newCategoryName) return;
@@ -329,6 +384,7 @@ const EditEvent = () =>
       // Handle Success or Failure Based on the Response from the API
       if (response.success) {
         toast.success('Event Updated Successfully.');
+        setCurrentView("menu");
         setIsEditing(false);         // Stop Editing After Successful Update
         setCoverEdited(false);       // Reset Cover Edit State
       } 
@@ -338,9 +394,6 @@ const EditEvent = () =>
         // Show Error if Update Fails
         toast.error('Event Update failed. ' + response.message);
       }
-
-      // Redirect to the Dashboard
-      // navigate('/event/:id');
 
     } 
     
@@ -475,9 +528,6 @@ const EditEvent = () =>
         toast.error('Failed to Update Event Cover.');
       }
 
-      // Redirect to the Dashboard
-      // navigate('/event/:id');
-
     } 
     
     catch (error) 
@@ -509,6 +559,117 @@ const EditEvent = () =>
     setCurrentView("create");
   };
 
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+    setEditEvent((prev) => {
+      const existingTime = prev[name]?.split('T')[1] || '00:00:00';
+      return {
+        ...prev,
+        [name]: `${value}T${existingTime}`,
+      };
+    });
+  };
+  
+  const handleTimeChange = (e) => {
+    const { name, value } = e.target;
+    const field = name.replace('Time', 'Date');
+    setEditEvent((prev) => {
+      const existingDate = prev[field]?.split('T')[0] || new Date().toISOString().split('T')[0];
+      return {
+        ...prev,
+        [field]: `${existingDate}T${value}`,
+      };
+    });
+  };
+  
+  // Handle Soft Delete
+  const handleSoftDelete = async () => {
+    try {
+      // Make DELETE request to delete the event
+      const response = await fetchAPI(`/api/v1/events/delete/${id}`, {
+        method: 'DELETE',
+      });
+
+      // Show success message
+      if (response?.message) {
+        toast.success('Event deleted successfully.');
+        setCurrentView('menu'); // Go back to the menu or desired view
+      } else {
+        toast.error('Failed to delete event.');
+      }
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      toast.error('An error occurred while deleting the event.');
+    }
+  };
+
+  // Handle Restore Event
+  const handleRestoreEvent = async () => {
+    try {
+      // Make PATCH request to restore the event
+      const response = await fetchAPI(`/api/v1/events/restore/${id}`, {
+        method: 'PATCH',
+      });
+
+      // Show success message
+      if (response?.message) {
+        toast.success('Event restored successfully.');
+        setCurrentView('menu'); // Go back to the menu or desired view
+      } else {
+        toast.error('Failed to restore event.');
+      }
+    } catch (error) {
+      console.error('Error restoring event:', error);
+      toast.error('An error occurred while restoring the event.');
+    }
+  };
+
+  const toggleWishlist = async () => {
+    try {
+      if (!editEvent.id) {
+        toast.error('Event ID is missing. Unable to toggle wishlist.');
+        return;
+      }
+  
+      let response;
+  
+      // Add to wishlist
+      if (!isInWishlist) {
+        response = await fetchAPI('/api/v1/profile/add-to-wishlist', {
+          method: 'POST',
+          body: JSON.stringify({ eventId: editEvent.id }),
+        });
+        toast.success('Added to Wishlist.');
+      } else {
+        // Remove from wishlist
+        response = await fetchAPI('/api/v1/profile/remove-from-wishlist', {
+          method: 'DELETE',
+          body: JSON.stringify({ eventId: editEvent.id }),
+        });
+        toast.success('Removed from Wishlist.');
+      }
+  
+      // Refetch wishlist to get the updated status
+      const wishlistResponse = await fetchAPI('/api/v1/profile/get-wishlist');
+      const updatedWishlist = wishlistResponse?.wishlist || [];
+  
+      // Update this logic to match the structure of your wishlist items
+      const isInUpdatedWishlist = updatedWishlist.some((item) => item.event?.id === editEvent.id);
+  
+      console.log('Updated wishlist:', updatedWishlist);
+      console.log('Is in updated wishlist:', isInUpdatedWishlist);
+  
+      setIsInWishlist(isInUpdatedWishlist); // Update the state
+  
+    } catch (error) {
+      toast.error(error.message || 'Failed to update wishlist.');
+    }
+  };
+  
+  
+  
+  
+
 
 
 
@@ -521,7 +682,40 @@ const EditEvent = () =>
           <div className="edit-event-container">
               
             <div className="event-header">
+
+              <button onClick={() => navigate('/explore')} className="explore-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path fill="#fff" d="M9.857 15.962a.5.5 0 0 0 .243.68l9.402 4.193c1.496.667 
+                  3.047-.814 2.306-2.202l-3.152-5.904c-.245-.459-.245-1 0-1.458l3.152-5.904c.741-1.388-.81-2.87-2.306-2.202l-3.524 
+                  1.572a2 2 0 0 0-.975.932z"/>
+                  <path fill="#fff" d="M8.466 15.39a.5.5 0 0 1-.65.233l-4.823-2.15c-1.324-.59-1.324-2.355 
+                  0-2.945L11.89 6.56a.5.5 0 0 1 .651.68z" opacity="0.5"/>
+                </svg>
+                <p>BACK TO EXPLORE</p>
+              </button>
+
               <h1 className="event-title">EVENT: <span>{editEvent.name || "N/A"}</span></h1>
+
+              <button onClick={toggleWishlist} className="wishlist-button">
+                {isInWishlist ? 
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path  d="M22 10.1c.1-.5-.3-1.1-.8-1.1l-5.7-.8L12.9 
+                  3c-.1-.2-.2-.3-.4-.4c-.5-.3-1.1-.1-1.4.4L8.6 8.2L2.9 
+                  9q-.45 0-.6.3c-.4.4-.4 1 0 1.4l4.1 4l-1 5.7c0 .2 0 
+                  .4.1.6c.3.5.9.7 1.4.4l5.1-2.7l5.1 2.7c.1.1.3.1.5.1h.2c.5-.1.9-.6.8-1.2l-1-5.7l4.1-4c.2-.1.3-.3.3-.5"/>
+                </svg>
+                : 
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path  d="M21.919 10.127a1 1 0 0 0-.845-1.136l-5.651-.826l-2.526-5.147a1.037 1.037 
+                  0 0 0-1.795.001L8.577 8.165l-5.651.826a1 1 0 0 0-.556 1.704l4.093 4.013l-.966 5.664a1.002 1.002 0 
+                  0 0 1.453 1.052l5.05-2.67l5.049 2.669a1 1 0 0 0 1.454-1.05l-.966-5.665l4.094-4.014a1 1 0 0 0 
+                  .288-.567m-5.269 4.05a.5.5 0 0 0-.143.441l1.01 5.921l-5.284-2.793a.5.5 0 0 0-.466 0L6.483 
+                  20.54l1.01-5.922a.5.5 0 0 0-.143-.441L3.07 9.98l5.912-.864a.5.5 0 0 0 .377-.275L12 3.46l2.64 5.382a.5.5 
+                  0 0 0 .378.275l5.913.863z"/>
+                </svg> 
+                }
+              </button>
+
             </div>            
 
             <div className="event">
@@ -563,15 +757,27 @@ const EditEvent = () =>
                     <span>{editEvent.description || "N/A"}</span>
                   </div>
 
+
                   <div className="form-group">
                     <label>Start Date</label>
-                    <span>{editEvent.startDate || "N/A"}</span>
+                    <span>{editEvent.startDate ? formatDateDisplay(editEvent.startDate) : 'N/A'}</span>
                   </div>
 
                   <div className="form-group">
                     <label>End Date</label>
-                    <span>{editEvent.endDate || "N/A"}</span>
+                    <span>{editEvent.endDate ? formatDateDisplay(editEvent.endDate) : 'N/A'}</span>
                   </div>
+
+                  <div className="form-group">
+                    <label>Start Time</label>
+                    <span>{editEvent.startDate ? formatTimeDisplay(editEvent.startDate) : 'N/A'}</span>
+                  </div>
+
+                  <div className="form-group">
+                    <label>End Time</label>
+                    <span>{editEvent.endDate ? formatTimeDisplay(editEvent.endDate) : 'N/A'}</span>
+                  </div>
+
 
                   <div className="form-group">
                     <label>Capacity</label>
@@ -609,19 +815,19 @@ const EditEvent = () =>
                   </div>
                 </div>
 
-                <div>
+                <div className="event-form event-form-span">
 
                   {['UserAdmin', 'UserSuperAdmin'].includes(userType) && (
-                    <>
+                    <>             
+                      <div className="menu-div button-box-c-e">
+                        <button onClick={handleCreateEvent} className="menu-button">
+                          CREATE EVENT
+                        </button>
 
-                    <button onClick={handleCreateEvent} className="menu-button">
-                      CREATE EVENT
-                    </button>
-
-                    <button onClick={() => setCurrentView("edit")} className="menu-button">
-                      EDIT EVENT
-                    </button>
-
+                        <button onClick={() => setCurrentView("edit")} className="menu-button">
+                          EDIT EVENT
+                        </button>
+                      </div>
                     </>
                   )}
                   
@@ -637,7 +843,7 @@ const EditEvent = () =>
         {currentView === "create" && (
           <div className="edit-event-container">
 
-          <div className="event-header">
+          <div className="event-header-c-e">
             <h1 className="event-title">CREATE EVENT</h1>
           </div>
 
@@ -743,8 +949,6 @@ const EditEvent = () =>
                     
                   </select>
 
-                  <p>Selected Category: {editEvent.categoryName}</p>
-
                   {editEvent.categoryName === 'new' && (
                     <div>
                       <label htmlFor="newCategory">New Category Name</label>
@@ -800,7 +1004,7 @@ const EditEvent = () =>
                     id="startDate"
                     name="startDate"
                     value={editEvent.startDate ? extractDate(editEvent.startDate) : ''}
-                    onChange={(e) => setEditEvent({ ...editEvent, startDate: e.target.value })}
+                    onChange={handleDateChange}
                   />
                 </div>
 
@@ -811,8 +1015,29 @@ const EditEvent = () =>
                     id="endDate"
                     name="endDate"
                     value={editEvent.endDate ? extractDate(editEvent.endDate) : ''}
-                    onChange={(e) => setEditEvent({ ...editEvent, endDate: e.target.value })}
-                    
+                    onChange={handleDateChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="startTime">Start Time</label>
+                  <input
+                    type="time"
+                    id="startTime"
+                    name="startTime"
+                    value={editEvent.startDate ? extractTime(editEvent.startDate) : ''}
+                    onChange={handleTimeChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="endTime">End Time</label>
+                  <input
+                    type="time"
+                    id="endTime"
+                    name="endTime"
+                    value={editEvent.endDate ? extractTime(editEvent.endDate) : ''}
+                    onChange={handleTimeChange}
                   />
                 </div>
 
@@ -899,14 +1124,15 @@ const EditEvent = () =>
                     
                   />
                 </div>
+                <div className="button-box">
+                  <button type="submit" className="submit-button">
+                    SAVE
+                  </button>
 
-                <button type="submit" className="submit-button">
-                  SAVE CHANGES
-                </button>
-
-                <button onClick={() => setCurrentView("menu")} className="back-button">
-                  BACK
-                </button>
+                  <button onClick={() => setCurrentView("menu")} className="back-button">
+                    BACK
+                  </button>
+                </div>
               </form>
             </div>
           </div>
@@ -916,7 +1142,7 @@ const EditEvent = () =>
         {currentView === "edit" && (
           <div className="edit-event-container">
 
-            <div className="event-header">
+            <div className="event-header-c-e">
               <h1 className="event-title">EDIT EVENT</h1>
             </div>
 
@@ -1076,9 +1302,8 @@ const EditEvent = () =>
                       type="date"
                       id="startDate"
                       name="startDate"
-                      value={editEvent.startDate}
-                      onChange={handleChange}
-                      
+                      value={editEvent.startDate ? extractDate(editEvent.startDate) : ''}
+                      onChange={handleDateChange}
                     />
                   </div>
 
@@ -1088,9 +1313,30 @@ const EditEvent = () =>
                       type="date"
                       id="endDate"
                       name="endDate"
-                      value={editEvent.endDate}
-                      onChange={handleChange}
-                      
+                      value={editEvent.endDate ? extractDate(editEvent.endDate) : ''}
+                      onChange={handleDateChange}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="startTime">Start Time</label>
+                    <input
+                      type="time"
+                      id="startTime"
+                      name="startTime"
+                      value={editEvent.startDate ? extractTime(editEvent.startDate) : ''}
+                      onChange={handleTimeChange}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="endTime">End Time</label>
+                    <input
+                      type="time"
+                      id="endTime"
+                      name="endTime"
+                      value={editEvent.endDate ? extractTime(editEvent.endDate) : ''}
+                      onChange={handleTimeChange}
                     />
                   </div>
 
@@ -1178,13 +1424,30 @@ const EditEvent = () =>
                     />
                   </div>
 
-                  <button type="submit" className="submit-button">
-                    SAVE CHANGES
-                  </button>
+                  <div className="button-box">
 
-                  <button onClick={() => setCurrentView("menu")} className="back-button">
-                    BACK
-                  </button>
+                    <button type="submit" className="submit-button">
+                      SAVE
+                    </button>
+
+                    <button onClick={() => setCurrentView("menu")} className="back-button">
+                      BACK
+                    </button>
+
+                    <div className="button-line">
+                      <hr />
+                    </div>
+
+                    <button onClick={handleSoftDelete} className="back-button">
+                      DELETE
+                    </button>
+
+                    <button onClick={handleRestoreEvent} className="back-button">
+                      RESTORE
+                    </button>
+
+                  </div>
+                  
                 </form>
               </div>
             </div>

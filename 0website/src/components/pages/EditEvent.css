@@ -5,20 +5,6 @@
   margin: auto;
 }
 
-.event-header {
-  text-align: center;
-  background: linear-gradient(45deg, #242424 20%, #1967d2 100%);
-  color: white;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 50px;
-}
-
-.event-title {
-  font-size: 32px;
-  margin: 0;
-}
-
 .event {
   display: flex;
   flex-grow: 1;
@@ -114,6 +100,7 @@
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 14px;
+  min-width: 100%;
 }
 
 .description-input {
@@ -126,13 +113,33 @@
   flex-direction: column;
 }
 
-.menu-button,
+.menu-div {
+  width: 100%; 
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+}
+
+.menu-div .menu-button {
+  background: linear-gradient(45deg, #242424, #1967d2);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 10px 0px 0px 0px; 
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+}
+
 .event-form .submit-button,
 .event-form .back-button,
 .event-form .save-catg {
   background: linear-gradient(45deg, #242424, #1967d2);
   color: white;
-  padding: 10px 50px;
+  padding: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -142,21 +149,36 @@
   transition: all 0.2s ease-in-out;
 }
 
-.menu-button {
-  margin: 10px;
-  margin-bottom: 0px !important;
-}
-
 .event-form .save-catg {
   margin-bottom: 30px;
 }
 
-.menu-button:hover,
+.menu-div .menu-button:hover,
 .event-form .submit-button:hover,
 .event-form .back-button:hover,
 .event-form .save-catg:hover {
   background: linear-gradient(45deg, #1967d2, #242424);
   scale: 102%;
+}
+
+.button-box {
+  padding: 20px 10px 10px 10px;
+  background: rgba(255, 255, 255, 0);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  margin: 10px 0px 0px 0px;
+}
+
+.button-box-c-e {
+  padding: 10px 10px 20px 10px;
+  background: rgba(255, 255, 255, 0);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  margin: 10px 0px 0px 0px;
+}
+
+.button-line {
+  margin: 10px 0px 20px 0px;
 }
 
 .event {
@@ -183,4 +205,102 @@
   padding: 8px 10px;
   border-radius: 4px;
   width: 100%;
+}
+
+/* Container for the input and button */
+.new-category-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  
+}
+
+/* Style the event header container */
+.event-header {
+  color: white;
+  display: flex;
+  text-align: center;
+  align-items: center;  /* Vertically center the items */
+  justify-content: space-between;  /* Space out the items */
+  padding: 20px;
+  background: linear-gradient(45deg, #242424 20%, #1967d2 100%);
+  border-radius: 8px;
+  margin-bottom: 50px;
+}
+
+.event-header-c-e {
+  color: white;
+  display: flex;
+  text-align: center;
+  align-items: center;  /* Vertically center the items */
+  justify-content: center;  /* Space out the items */
+  padding: 20px;
+  background: linear-gradient(45deg, #242424 20%, #1967d2 100%);
+  border-radius: 8px;
+  margin-bottom: 50px;
+}
+
+.event-title {
+  font-size: 36px;
+  margin: 0;
+}
+
+.event-title span {
+  font-size: 28px;
+  color: #000000;
+}
+
+.event-header .explore-button {
+  display: flex;      
+  align-items: center;    
+  gap: 15px;               
+  padding: 10px 20px;
+  font-size: 14px;
+  background: linear-gradient(45deg, #242424, #1967d2);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.event-header .explore-button:hover {
+  background: linear-gradient(45deg, #1967d2, #242424);
+  scale: 102%;
+}
+
+.event-header .explore-button svg {
+  width: 24px;              
+  height: 24px;
+}
+
+.event-header .explore-button p {
+  margin: 0;              
+  font-size: 14px;         
+  color: #fff;    
+}
+
+.wishlist-button {
+  padding: 0px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.wishlist-button:hover {
+  transform: scale(120%);
+}
+
+/* Style the SVG icon for the wishlist button */
+.wishlist-button svg {
+  height: 40px;
+  width: 40px;
+  fill: #ffc701;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Change the color of the SVG icon when hovering the wishlist button */
+.wishlist-button:hover svg {
+  filter: brightness(110%)
 }

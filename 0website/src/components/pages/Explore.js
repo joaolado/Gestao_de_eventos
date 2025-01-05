@@ -14,10 +14,13 @@ import './Explore.css';
 const Explore = () => 
 {
   const [loading, setLoading] = useState(false);
+  const [userType, setUserType] = useState(null);
   const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState([]); // To store all categories
+  const [showDeleted, setShowDeleted] = useState(false); // New state to toggle deleted events
 
   const location = useLocation(); // To get query params
+  const navigate = useNavigate();  // Initialize the useNavigate hook
 
   // Parse query parameters and set as initial filters
   const [filters, setFilters] = useState(() => {
@@ -29,6 +32,8 @@ const Explore = () =>
       categoryName: params.get('category') ? [params.get('category')] : [],
       startDate: params.get('startDate') || '',
       endDate: params.get('endDate') || '',
+      startTime: params.get('startTime') || '',
+      endTime: params.get('endTime') || '',
       status: '',
     };
   });
@@ -38,6 +43,17 @@ const Explore = () =>
     sortOrder: 'asc',
   });
 
+  const fetchUserType = async () => {
+    try {
+      const response = await fetchAPI('/api/v1/profile/get-profile'); // Adjust endpoint as needed
+      if (response?.usersType) {
+        setUserType(response.usersType);
+      }
+    } catch (error) {
+      console.error('Error fetching user type:', error);
+    }
+  };
+
   // Fetch events
   const fetchEvents = async () => {
     try {
@@ -46,7 +62,8 @@ const Explore = () =>
 
         ...filters,
         categoryName: filters.categoryName, // Send as an array
-        ...sortOptions 
+        ...sortOptions,
+        showDeleted: showDeleted.toString(), // Include deleted filter in the request
 
       }).toString();
 
@@ -85,8 +102,12 @@ const Explore = () =>
   };
 
   useEffect(() => {
+    fetchUserType();
+  }, []);
+
+  useEffect(() => {
     fetchEvents();
-  }, [filters, sortOptions]);
+  }, [filters, sortOptions, showDeleted]); // This should trigger fetch when showDeleted changes  
 
   useEffect(() => {
     fetchCategories();
@@ -126,11 +147,45 @@ const Explore = () =>
     });
   };
 
+  const handleToggleDeleted = () => {
+    setShowDeleted((prevState) => {
+      
+      return !prevState; // Toggle deleted filter state
+    });
+  };
+
+  // Handle Button click to create a new event
+  const handleCreateEvent = () => {
+    navigate('/event/new');  // Navigate to the 'create' route
+  };
+
   return (
     <div className="explore">
       <div className="event-container">
 
         <div className="filters">
+
+          {['UserAdmin', 'UserSuperAdmin'].includes(userType) && (
+
+            <div>
+              <button onClick={handleCreateEvent} className="add-event">
+                + ADD EVENT
+              </button>
+
+              <label className="toggle-switch">
+                <div className="toggle-label">
+                  <p>Active / Deleted Events</p>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={showDeleted}
+                  onChange={handleToggleDeleted}
+                />
+                <span className="slider"></span>
+              </label>
+            </div>
+          )}
+
 
           <select name="sortBy" value={sortOptions.sortBy} onChange={handleSortChange}>
             <option value="">Sort By</option>
@@ -209,7 +264,9 @@ const Explore = () =>
         </div>
         <div className="event-list">
           {loading ? (
-            <h1 className="no-event">Loading Events...</h1>
+            <div className="no-event-center">
+              <h1 className="no-event">Loading Events...</h1>
+            </div>
           ) : events.length ? (
             events
 
@@ -240,11 +297,15 @@ const Explore = () =>
                     style={{ objectFit: 'cover' }}
                   />
                   <div className="event-details">
-                    <h2 className="event-title">{event.name}</h2>
+                    <h2 className="event-title">{event.name && event.name.length > 15 ? `${event.name.slice(0, 15)}...` : event.name}</h2>
                     <p className="event-category">{event.category || 'N/A'}</p>
-                    <p className="event-dates">
-                      Date: {new Date(event.startDate).toLocaleDateString()} -{' '}
-                      {new Date(event.endDate).toLocaleDateString()}
+                    <p className="event-data-time">
+                      Date: {new Date(event.startDate).toLocaleDateString('en-GB')} -{' '}
+                      {new Date(event.endDate).toLocaleDateString('en-GB')}
+                    </p>
+                    <p className="event-data-time">
+                      Time: {new Date(event.startDate).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} -{' '}
+                      {new Date(event.endDate).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
                     </p>
                     <p className="event-location">
                       Location: {event.city}, {event.country}
