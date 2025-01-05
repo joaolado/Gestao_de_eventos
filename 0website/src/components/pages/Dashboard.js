@@ -1,4 +1,5 @@
 
+import ReactModal from 'react-modal';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import Navigation
 import { toast } from 'react-toastify';         // Import Toast
@@ -10,6 +11,9 @@ import fetchAPI from '../../fetchAPI';
 // CSS
 import '../../App.css';
 import './Dashboard.css';
+
+// Configure Modal Root Element (once in your app entry file)
+ReactModal.setAppElement('#root');
 
 const Dashboard = () => 
 {
@@ -46,6 +50,11 @@ const Dashboard = () =>
   const [passwordEdited, setPasswordEdited] = useState(false);     // Whether Password was Edited
   const [profilePicEdited, setProfilePicEdited] = useState(false); // Whether Profile Picture was Edited
   const [file, setFile] = useState(null);                          // File for Uploading Profile Picture
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
 
   const navigate = useNavigate(); // Hook for Navigation
 
@@ -116,9 +125,19 @@ const Dashboard = () =>
       }
     };
 
+    const fetchSharedEvents = async () => {
+      try {
+        const data = await fetchAPI('/api/v1/profile/get-shared-events');  // Create an endpoint to fetch shared events
+        setSharedEvents(data.sharedEvents);  // Assuming response contains 'sharedEvents' data
+      } catch (error) {
+        console.error('Error Fetching Shared Events:', error);
+      }
+    };
+
     // Call the Fetch Function to Load Data
     fetchProfile();
     fetchWishlist();
+    fetchSharedEvents();
 
   }, []); // Empty Dependency Array
 
@@ -352,32 +371,85 @@ const Dashboard = () =>
     }
   };
 
-  const handleRemoveFromWishlist = async (eventId) => {
+  // Open the modal and set the selected event ID
+  const openModal = (eventId) => {
+    setSelectedEventId(eventId);
+    setIsModalOpen(true);
+  };
+
+  // Close the modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedEventId(null);
+  };
+
+  // Remove from Wishlist Handler
+  const handleRemoveFromWishlist = async () => {
     try {
       await fetchAPI('/api/v1/profile/remove-from-wishlist', {
         method: 'DELETE',
-        body: JSON.stringify({ eventId }),
+        body: JSON.stringify({ eventId: selectedEventId }),
         headers: { 'Content-Type': 'application/json' },
       });
-      setWishlist((prevWishlist) => prevWishlist.filter((event) => event.id !== eventId));
 
-      // Reload the page to reflect changes
-      window.location.reload();
+      // Update wishlist state
+      setWishlist((prevWishlist) =>
+        prevWishlist.filter((item) => item.event.id !== selectedEventId)
+      );
+
+      // Show success message
       toast.success('Event removed from wishlist');
     } catch (error) {
       toast.error('Error removing event from wishlist');
+    } finally {
+      // Close the modal
+      closeModal();
     }
   };
 
-  const handleShareEvent = (event) => {
-    // Implement share logic here, possibly open a share dialog
-    toast.info(`Event "${event.name}" shared!`);
+  // Open Share Modal
+  const openShareModal = (eventId) => {
+    setSelectedEventId(eventId);
+    setIsShareModalOpen(true);
   };
 
-  const handleAddComment = (eventId) => {
-    // Implement comment functionality, like opening a modal or form
-    toast.info('Add a comment for this event');
+  // Close Share Modal
+  const closeShareModal = () => {
+    setIsShareModalOpen(false);
+    setSelectedEventId(null);
+    setEmail('');
+    setMessage('');
   };
+
+  // Handle Share Event
+  const handleShareEvent = async (eventId) => {
+    if (!email || !message) {
+      toast.error("Email and message are required.");
+      return;
+    }
+  
+    try {
+      const response = await fetchAPI('/api/v1/profile/share-event', {
+        method: 'POST',
+        body: JSON.stringify({
+          senderId: profile.id,  // Assuming 'profile.id' holds the current user's ID
+          receiverEmail: email,
+          eventId,  // Only the eventId is needed to link the event
+          message,
+        }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+  
+      toast.success("Event shared successfully.");
+      closeShareModal();
+    } catch (error) {
+      console.error("Error sharing event:", error);
+      toast.error("Failed to share the event.");
+    }
+  };
+  
+  
+  
 
 
 
@@ -754,13 +826,13 @@ const Dashboard = () =>
                         </button>
                       </div>
                       <div className="wishlist-item-actions button-wish">
-                        <button onClick={() => handleShareEvent(event)} className="share-btn">
+                        <button onClick={() => openShareModal(event.id)} className="share-btn">
                           SHARE
                         </button>
-                        <button onClick={() => handleAddComment(event.id)} className="comment-btn">
-                          COMMENT
+                        <button className="cs-btn" type="button" disabled>
+                          COMING SOON
                         </button>
-                        <button onClick={() => handleRemoveFromWishlist(event.id)} className="remove-btn">
+                        <button onClick={() => openModal(event.id)} className="remove-btn">
                           REMOVE
                         </button>
                       </div>
@@ -768,28 +840,116 @@ const Dashboard = () =>
                   );
                 })}
               </ul>
+
+              {/* Share Modal */}
+              <ReactModal
+                isOpen={isShareModalOpen}
+                onRequestClose={closeShareModal}
+                contentLabel="Share Event"
+                className="modal-content"
+                overlayClassName="modal-overlay"
+              >
+                <h2>Share Event</h2>
+                <p>Enter the Receiver Email and an Optional Message:</p>
+                <input
+                  type="email"
+                  placeholder="Receiver Email: example@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="input-field"
+                />
+                <textarea
+                  placeholder="Add a Message (Optional)"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="textarea-field"
+                />
+                <div className="modal-actions">
+                  <button onClick={() => handleShareEvent(selectedEventId)}>
+                    SHARE
+                  </button>
+                  <button onClick={closeShareModal} className='remove-btn'>
+                    CANCEL
+                  </button>
+                </div>
+              </ReactModal>
+
+              {/* Modal Component */}
+              <ReactModal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Confirm Removal"
+                className="modal-content"
+                overlayClassName="modal-overlay"
+              >
+                <h2>Confirm Removal</h2>
+
+                <p className='removal-txt'>Are you sure you want to </p>
+                <p className='red-txt'>REMOVE</p>
+                <p className='removal-txt'> this Event from your Wishlist?</p>
+
+                <div className="modal-actions">
+                  <button onClick={handleRemoveFromWishlist} className="remove-btn">
+                    YES, REMOVE
+                  </button>
+                  <button onClick={closeModal}>
+                    NO, CANCEL
+                  </button>
+                </div>
+              </ReactModal>
+
             </div>
           </div>
         )}
 
         {activeSection === 'sharedEvents' && (
 
-          <div className="section-box">
-            <div className="section">
-
-              <div className="section-header">
-                <h2 className="section-title">SHARED EVENTS</h2>
-              </div>
-
-              <ul>
-                {sharedEvents.map(event => (
-                  <li key={event.id}>
-                    Sender: {event.senderEmail}, Receiver: {event.receiverEmail}, Event: {event.name} - {event.startDate} to {event.endDate}
-                  </li>
-                ))}
-              </ul>
-
+          <div className="section-box wish-box">
+          <div className="section wish-wd">
+            <div className="section-header section-header-wish">
+              <h2 className="section-title">SHARED EVENTS</h2>
             </div>
+            <ul>
+              {sharedEvents.map((item) => {
+                const event = item.event;  // Assuming 'item.event' holds the event details
+                return (
+                  <li key={event.id} className="wishlist-item">
+                    <div className="wishlist-item-details button-wish">
+                      <h3>{event.name}</h3>
+                      <p>Category: {event.category?.name || 'N/A'}</p>
+                      <p>
+                        Date: {new Date(event.startDate).toLocaleDateString('en-GB')} -{' '}
+                        {new Date(event.endDate).toLocaleDateString('en-GB')}
+                      </p>
+                      <button onClick={() => navigate(`/event/${event.id}`)} className="view-event-btn">
+                        VIEW EVENT
+                      </button>
+                    </div>
+                    <div className="wishlist-item-actions button-wish">
+                      
+                        {/*
+
+                        <button onClick={handleAddToWishlist} >
+                          {isEventInWishlist ? 'ALREADY IN WISHLIST' : 'ADD TO WISHLIST'}
+                        </button>
+                        
+
+                        <span>
+                          <strong>Sender Email:</strong> {senderEmail || 'N/A'}
+                        </span>
+
+                        <span>
+                          <strong>Message:</strong> {message || 'No message provided'}
+                        </span>
+
+                        */}
+
+                      </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
           </div>
         )}
       </div>

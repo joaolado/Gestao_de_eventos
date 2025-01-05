@@ -18,10 +18,4 @@ usersRouter.delete('/delete/:id', authenticateToken, authorizeRole(['UserSuperAd
 usersRouter.patch('/restore/:id', authenticateToken, authorizeRole(['UserSuperAdmin']), controller.restore);        // Restore Users by ID
 usersRouter.patch('/update-type', authenticateToken, authorizeRole(['UserSuperAdmin']), controller.updateType);     // Update User Type by ID
 
-// Share an Event
-usersRouter.post('/share-event', authenticateToken, controller.shareEvent);   
-
-// Get Shared Events
-usersRouter.get('/:userId/shared-events', authenticateToken, controller.getSharedEvents); 
-
 module.exports = usersRouter;

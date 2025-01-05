@@ -15,4 +15,10 @@ profileRouter.get('/get-wishlist', authenticateToken, authorizeRole(['UserClient
 profileRouter.post('/add-to-wishlist', authenticateToken, authorizeRole(['UserClient', 'UserAdmin', 'UserSuperAdmin']), controller.addToWishlist);              // Add To User Wishlist
 profileRouter.delete('/remove-from-wishlist', authenticateToken, authorizeRole(['UserClient', 'UserAdmin', 'UserSuperAdmin']), controller.removeFromWishlist);  // Remove From User Wishlist
 
+// Share an Event
+profileRouter.post('/share-event', authenticateToken, authorizeRole(['UserClient', 'UserAdmin', 'UserSuperAdmin']), controller.shareEvent);   
+
+// Get Shared Events
+profileRouter.get('/get-shared-events', authenticateToken, authorizeRole(['UserClient', 'UserAdmin', 'UserSuperAdmin']), controller.getSharedEvents); 
+
 module.exports = profileRouter;
