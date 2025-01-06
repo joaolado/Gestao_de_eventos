@@ -3,6 +3,7 @@ const profileRouter = require('express').Router();
 const authenticateToken = require('../../middlewares/authMiddleware');  // Import the JWT auth Middleware
 const authorizeRole = require('../../middlewares/authorizeRole');       // Import authorizeRole
 const upload = require('../../middlewares/uploadprofilePicMiddleware'); // Import Multer Upload Middleware
+
 const controller = require('../../controllers/v1/profileController');
 
 

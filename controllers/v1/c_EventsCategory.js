@@ -16,14 +16,14 @@ exports.getAll = async (req, res) =>
     
     catch (error) 
     {
-        res.status(500).json({ error: 'Failed to Retrieve EventsCategory.', details: error.message });
+        res.status(500).json({ error: 'Failed to Retrieve Events Category.', details: error.message });
     }
 };
 
 // Return EventsCategory by ID
 exports.getById = async (req, res) => 
 {
-    // Get EventsCategory ID requested
+    // Get EventsCategory ID Requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
     try 
@@ -43,50 +43,67 @@ exports.getById = async (req, res) =>
 
     catch (error) 
     {
-        res.status(404).json({ error: 'EventsCategory Not Found.', details: error.message });
+        res.status(404).json({ error: 'Events Category Not Found.', details: error.message });
     }
 };
 
 // Creates EventsCategory
-exports.create = async (req, res) => {
-    const { name, description } = req.body;
+exports.create = async (req, res) => 
+{
+    const 
+    { 
+        name, 
+        description,
+
+    } = req.body;
   
-    try {
-      // Check if the category already exists
-      let category = await prisma.eventsCategory.findUnique({
-        where: { name: name },
-      });
-  
-      // If category doesn't exist, create a new one
-      if (!category) {
-        category = await prisma.eventsCategory.create({
-          data: {
-            name: name,
-            description: description,
-          },
+    try 
+    {
+        // Check if the Category Already Exists
+        let category = await prisma.eventsCategory.findUnique({
+
+            where: 
+            { 
+                name: name,
+            },
         });
   
-        return res.status(201).json({
-          success: true,
-          message: 'Event Category Created',
-          categoryId: category.id,
-          categoryName: category.name,
-        });
-      }
+        // If Category doesn't Exist, Create a New One
+        if (!category) 
+        {
+            category = await prisma.eventsCategory.create({
+                
+                data: 
+                {
+                    name: name,
+                    description: description,
+                },
+            });
+    
+            return res.status(201).json({
+                success: true,
+                message: 'Event Category Created.',
+                categoryId: category.id,
+                categoryName: category.name,
+            });
+        }
   
-      // If category exists, return a message
-      res.status(400).json({
-        success: false,
-        message: 'Event Category already exists',
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        error: 'Failed to Create EventsCategory.',
-        details: error.message,
-      });
+        // If Category Exists, Return a Message
+        res.status(400).json({
+            success: false,
+            message: 'Event Category Already Exists.',
+        });
+    } 
+    
+    catch (error) 
+    {
+        res.status(500).json({
+            success: false,
+            error: 'Failed to Create Events Category.',
+            details: error.message,
+        });
     }
-  };
+};
   
 
 // Updates EventsCategory by ID
@@ -123,14 +140,14 @@ exports.update = async (req, res) =>
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Update EventsCategory.', details: error.message });
+        res.status(400).json({ error: 'Failed to Update Events Category.', details: error.message });
     }
 };
 
 // Delete EventsCategory by ID
 exports.delete = async (req, res) => 
 {
-    // Get EventsCategory ID requested
+    // Get EventsCategory ID Requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
     try
@@ -145,11 +162,11 @@ exports.delete = async (req, res) =>
         });
 
         // Returns EventsCategory Deleted
-        res.status(200).json({ message: 'EventsCategory Deleted Successfully.' });
+        res.status(200).json({ message: 'Events Category Deleted Successfully.' });
     }
 
     catch (error)
     {
-        res.status(400).json({ error: 'Failed to Delete EventsCategory.', details: error.message });
+        res.status(400).json({ error: 'Failed to Delete Events Category.', details: error.message });
     }
 };

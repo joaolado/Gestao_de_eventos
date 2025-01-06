@@ -21,7 +21,7 @@ exports.getAll = async (req, res) =>
         sortBy,       // Sort By field
         sortOrder,    // Sort Order ('asc' or 'desc')
 
-        showDeleted, // Flag to control whether deleted events are included
+        showDeleted,  // Flag to Control Whether Deleted Events are Included
               
     } = req.query;
 
@@ -42,7 +42,7 @@ exports.getAll = async (req, res) =>
         // Less than or equal to endDate
         if (endDate) { filters.endDate = {...(endDate && { lte: new Date(endDate) }) }; }
 
-        // Status Filter and validate status
+        // Status Filter and validate Status
         if (status) 
         {
             if (!validStatuses.includes(status)) 
@@ -50,28 +50,43 @@ exports.getAll = async (req, res) =>
                 return res.status(404).json({ error: `Invalid Status. Allowed Status are: ${validStatuses.join(', ')}` });
             }
 
-            filters.status = { equals: status }; // Filter by valid status
+            filters.status = { equals: status }; // Filter by Valid Status
         }
 
-        // Deleted filter
-        if (showDeleted === 'true') {
-            filters.deleted = { not: null }; // Include events that have a non-null 'deleted' field
-        } else {
-            filters.deleted = null; // Exclude soft-deleted events
+        // Deleted Filter
+        if (showDeleted === 'true') 
+        {
+            filters.deleted = { not: null }; // Include Events that Have a non-null 'deleted' Field
+        } 
+        
+        else 
+        {
+            filters.deleted = null;          // Exclude soft-deleted Events
         }
 
-        // Include EventsCategory Filter if categoryName is provided
-        let categoryFilter = {};
+        // Include EventsCategory Filter if categoryName is Provided
+        let categoryFilter = {}; // Initialize an Empty Filter for Categories
         
-        if (categoryName && categoryName.length > 0) {
-          const categoriesArray = decodeURIComponent(categoryName).split(',');
-          const categories = await prisma.eventsCategory.findMany({
-            where: { name: { in: categoriesArray } },
-          });
-        
-          if (categories.length > 0) {
-            categoryFilter.categoryId = { in: categories.map(c => c.id) };
-          }
+        if (categoryName && categoryName.length > 0) 
+        {
+            // Split it Into an Array of Category Names
+            const categoriesArray = decodeURIComponent(categoryName).split(',');
+
+            // Find Matching Category 
+            const categories = await prisma.eventsCategory.findMany({
+                
+                where: 
+                { 
+                    name: { in: categoriesArray } // Find Categories with Names Matching the Array
+                },
+
+            });
+            
+            // If Matching Categories are Found, Add Their IDs to the Category Filter
+            if (categories.length > 0) 
+            {
+                categoryFilter.categoryId = { in: categories.map(c => c.id) };
+            }
         }
         
         // Sort by
@@ -85,7 +100,7 @@ exports.getAll = async (req, res) =>
 
             if (validSortFields.includes(sortBy)) 
             {
-                orderBy[sortBy] = sortOrder === 'desc' ? 'desc' : 'asc'; // Default to 'asc' if sortOrder is invalid
+                orderBy[sortBy] = sortOrder === 'desc' ? 'desc' : 'asc'; // Default to 'asc' if sortOrder is Invalid
             } 
 
             else 
@@ -101,7 +116,7 @@ exports.getAll = async (req, res) =>
             {   
                 ...filters,
                 ...categoryFilter,
-                deleted: filters.deleted, // Ensure this is set properly
+                deleted: filters.deleted,
             },
 
             select: 
@@ -114,7 +129,7 @@ exports.getAll = async (req, res) =>
                 endDate: true,
                 capacity: true,
                 status: true,
-                category: { select: { name: true, }, }, // Only select the EventsCategory name
+                category: { select: { name: true, }, },
                 addressLine1: true,
                 addressLine2: true,
                 postalCode: true,
@@ -122,13 +137,13 @@ exports.getAll = async (req, res) =>
                 region: true,
                 country: true,
 
-                // Include ticketsInfo with its Related fields
+                // Include ticketsInfo
                 tickets: { 
                     select: {
                         price: true,
                         quantity: true,
                         status: true,
-                        type: { select: { name: true } }, // Include the related ticketsType name
+                        type: true,
                     },
                 },
             },
@@ -138,15 +153,10 @@ exports.getAll = async (req, res) =>
         });
 
 
-        // Transform the response to replace category object with category name - Makes it Linear
+        // Transform the Response to Replace Category with Category Name
         const formattedResponse = response.map(event => ({
             ...event,
-            category: event.category?.name || null, // Simplify EventsCategory to its name
-
-            tickets: event.tickets.map(ticket => ({
-                ...ticket,
-                type: ticket.type?.name || null,    // Simplify Tickets Type to its name
-            })),
+            category: event.category?.name || null, // Simplify Events Category to its Name
         }));
 
         // Return All Events
@@ -162,7 +172,7 @@ exports.getAll = async (req, res) =>
 // Return Events by ID
 exports.getById = async (req, res) => 
 {
-    // Get Events ID requested
+    // Get Events ID Requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
     try
@@ -186,7 +196,7 @@ exports.getById = async (req, res) =>
                 endDate: true,
                 capacity: true,
                 status: true,
-                category: { select: { name: true, }, }, // Only select the EventsCategory name
+                category: { select: { name: true, }, },
                 addressLine1: true,
                 addressLine2: true,
                 postalCode: true,
@@ -194,13 +204,13 @@ exports.getById = async (req, res) =>
                 region: true,
                 country: true,
 
-                // Include ticketsInfo with its Related fields
+                // Include ticketsInfo
                 tickets: { 
                     select: {
                         price: true,
                         quantity: true,
                         status: true,
-                        type: { select: { name: true } }, // Include the Related ticketsType name
+                        type: true,
                     },
                 },
             }
@@ -211,16 +221,10 @@ exports.getById = async (req, res) =>
             return res.status(404).json({ error: 'Event Not Found.' });
         }
         
-        // Transform the response to replace category object with category name - Makes it Linear
+        // Transform the Response to Replace Category with Category Name
         const formattedResponse = {
             ...response,
-            category: response.category?.name || null, // Simplify EventsCategory to its name
-
-            tickets: response.tickets?.map(ticket => ({
-                ...ticket,
-                type: ticket.type?.name || null,       // Simplify ticketsType to its name
-            })) 
-            || [], // Empty Array if no Tickets are found
+            category: response.category?.name || null, // Simplify Events Category to its Name
         };
         
         // Return Event
@@ -233,96 +237,6 @@ exports.getById = async (req, res) =>
     }
 };
 
-exports.create = async (req, res) => {
-    const {
-      name,
-      description,
-      startDate,
-      endDate,
-      capacity,
-      categoryName,
-      addressLine1,
-      addressLine2,
-      postalCode,
-      city,
-      region,
-      country,
-    } = req.body;
-
-    try {
-      const cover = req.file ? req.file.path : null;
-
-      // Check if category exists
-      const category = await prisma.eventsCategory.findUnique({
-        where: { name: categoryName },
-      });
-
-      if (!category) {
-        return res.status(404).json({ error: 'Category Not Found.' });
-      }
-
-      // Create Event
-      const newEvent = await prisma.events.create({
-        data: {
-          name,
-          description,
-          cover,
-          startDate: new Date(startDate),
-          endDate: new Date(endDate),
-          capacity: capacity ? parseInt(capacity, 10) : null,
-          categoryId: category.id,
-          addressLine1,
-          addressLine2: addressLine2 || '',
-          postalCode,
-          city,
-          region: region || '',
-          country,
-        },
-      });
-
-      // Handle Tickets
-      if (req.body.tickets) {
-        try {
-          const tickets = JSON.parse(req.body.tickets);
-
-          if (!Array.isArray(tickets)) {
-            throw new Error('Tickets must be an array.');
-          }
-
-          // Create Tickets
-          for (const ticket of tickets) {
-            await prisma.ticketsInfo.create({
-              data: {
-                eventsId: newEvent.id,
-                typeId: ticket.typeId,  // Use typeId instead of type
-                price: parseFloat(ticket.price),
-                quantity: parseInt(ticket.quantity, 10),
-                status: ticket.status || 'Available',
-              },
-            });
-          }
-        } catch (error) {
-          console.error('Failed to parse or create tickets:', error);
-          return res.status(400).json({ success: false, message: 'Invalid tickets format.' });
-        }
-      }
-
-      res.status(201).json({
-        success: true,
-        event: newEvent,
-      });
-    } catch (error) {
-      console.error('Error creating event:', error);
-      res.status(500).json({ error: 'Failed to create event' });
-    }
-};
-
-
-
-
-
-  
-
 // Create/Edit Events by ID
 exports.editEvent = async (req, res) => 
 {
@@ -334,7 +248,7 @@ exports.editEvent = async (req, res) =>
         startDate,
         endDate,
         capacity,
-        categoryName, // Return categoryName instead of categoryId
+        categoryName,
         addressLine1, 
         addressLine2, 
         postalCode, 
@@ -353,29 +267,38 @@ exports.editEvent = async (req, res) =>
         // Check if a File is Uploaded
         const cover = req.file ? req.file.filename : undefined;
 
-        // Initialize categoryId as undefined
+        // Initialize categoryId as Undefined
         let categoryId;
 
-        if (categoryName) {
-            // Check if the category exists
+        if (categoryName) 
+        {
+            // Check if the Category Exists
             const category = await prisma.eventsCategory.findUnique({
+
                 where: { name: categoryName },
             });
 
-            if (category) {
-                // If categoryName is provided and exists, use its ID
+            if (category) 
+            {
+                // If categoryName is Provided and Exists, use its ID
                 categoryId = category.id;
-            } else {
-                console.warn(`Category "${categoryName}" not found. Proceeding without category.`);
+            } 
+            
+            else 
+            {
+                console.warn(`Category "${categoryName}" Not Found. Proceeding Without Category.`);
             }
         }
         
-        // If id exists, it's an update
-        if (id) {
-            // Update Event Logic (existing event with id)
+        // If ID Exists, it's an Update
+        if (id) 
+        {
+            // Update Event Logic (Existing event with ID)
             const parsedId = parseInt(id, 10);
-            if (isNaN(parsedId)) {
-                return res.status(400).json({ error: 'Invalid value for ID. Expected an integer.' });
+
+            if (isNaN(parsedId)) 
+            {
+                return res.status(400).json({ error: 'Invalid Value for ID. Expected an integer.' });
             }
 
             // Finds Events to Update their Data
@@ -394,7 +317,7 @@ exports.editEvent = async (req, res) =>
                     startDate: startDate ? new Date(startDate) : undefined, // Only Update if Provided
                     endDate: endDate ? new Date(endDate) : undefined,       // Only Update if Provided
                     capacity: capacity,
-                    categoryId: categoryId || undefined, // Allow null category
+                    categoryId: categoryId || undefined,
                     addressLine1: addressLine1,
                     addressLine2: addressLine2,
                     postalCode: postalCode,
@@ -410,28 +333,32 @@ exports.editEvent = async (req, res) =>
                 },
             });
 
-            return res.status(200).json({ success: true, message: 'Event Updated', updatedEvents });
+            return res.status(200).json({ success: true, message: 'Event Updated.', updatedEvents });
         }
         
-        // Create a new event if no event is found
+        // Create a New Event if no Event is Found
         const createdEvent = await prisma.events.create({
-            data: {
+
+            data: 
+            {
                 name: name,
                 description: description,
                 cover: cover,
                 startDate: startDate ? new Date(startDate) : undefined,
                 endDate: endDate ? new Date(endDate) : undefined,
                 capacity: capacity,
-                categoryId: categoryId || undefined, // Allow null category
+                categoryId: categoryId || undefined,
                 addressLine1: addressLine1,
                 addressLine2: addressLine2,
                 postalCode: postalCode,
                 city: city,
                 region: region,
                 country: country,
-                status: status || 'Scheduled',
+                status: status || 'Scheduled', // Default Value
+
                 tickets: {
-                    create: [
+                    create: 
+                    [
                         {
                             price: price,
                             quantity: quantity,
@@ -439,6 +366,7 @@ exports.editEvent = async (req, res) =>
                     ]
                 }
             },
+
             include: { tickets: true },
         });
 
@@ -447,16 +375,10 @@ exports.editEvent = async (req, res) =>
 
     catch (error) 
     {   
-        console.error("Error:", error);  // Log error for debugging
+        console.error("Error:", error);
         res.status(400).json({ success: false, error: 'Failed to Update Events.', details: error.message });
     }
 };
-
-
-
-
-
-
 
 // Update Event Status by ID
 // Valid Status
@@ -488,11 +410,11 @@ exports.updateStatus = async (req, res) =>
 
             data: 
             {
-                status: status, // Update the Status Field
+                status: status,
             },
         });
 
-        res.status(200).json({ message: 'Event Status Updated Successfully: ', updatedEvent });
+        res.status(200).json({ message: 'Event Status Updated Successfully. ', updatedEvent });
     } 
 
     catch (error) 
@@ -504,12 +426,12 @@ exports.updateStatus = async (req, res) =>
 // Delete Events by ID
 exports.delete = async (req, res) => 
 {
-    // Get Events ID requested
+    // Get Events ID Requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
     try
     {   
-        // Delete Events ( Soft delete by setting the `deleted` field )
+        // Delete Events ( Soft Delete by Setting the `deleted` field )
         const deletedEvents = await prisma.events.update({
 
             where: 
@@ -524,7 +446,7 @@ exports.delete = async (req, res) =>
         });
 
         // Returns Events Deleted
-        res.status(200).json({ message: 'Event Deleted successfully: ', deletedEvents });
+        res.status(200).json({ message: 'Event Deleted successfully. ', deletedEvents });
     }
 
     catch (error)
@@ -536,7 +458,7 @@ exports.delete = async (req, res) =>
 // Restore Events by ID
 exports.restore = async (req, res) => 
 {
-     // Get Events ID requested
+     // Get Events ID Requested
     const id = parseInt(req.params.id); // Ensure ID is an integer
 
     try 
@@ -551,12 +473,12 @@ exports.restore = async (req, res) =>
 
             data: 
             {   
-                deleted: null, // Clear the Deleted Field
+                deleted: null,
             }, 
         });
 
         // Returns Events Restored
-        res.status(200).json({ message: 'Event Restored Successfully: ', restoredEvent });
+        res.status(200).json({ message: 'Event Restored Successfully. ', restoredEvent });
     } 
 
     catch (error) 
@@ -565,7 +487,7 @@ exports.restore = async (req, res) =>
     }
 };
 
-// Get Users Linked to an Event by Event ID
+// Get Users Linked to an Event by Event ID (NOT USING)
 exports.getUsersByEvent = async (req, res) => 
 {
     const { eventId } = req.params; // Extract Event ID from Request Parameters

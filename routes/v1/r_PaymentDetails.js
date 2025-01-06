@@ -2,6 +2,7 @@
 const paymentDetailsRouter = require('express').Router();
 const authenticateToken = require('../../middlewares/authMiddleware'); // Import the JWT auth Middleware
 const authorizeRole = require('../../middlewares/authorizeRole');      // Import authorizeRole
+
 const controller = require('../../controllers/v1/c_PaymentDetails');
 
 // PaymentDetails CRUD
@@ -12,9 +13,9 @@ paymentDetailsRouter.get('/:id', authenticateToken, controller.getById);        
 // Protected Routes (Authentication Required - Token)
 paymentDetailsRouter.post('/create', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.create);                     // Create a new PaymentDetails
 paymentDetailsRouter.put('/update', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.update);                      // Update a PaymentDetails
-paymentDetailsRouter.delete('/delete/:id', authenticateToken, authenticateToken, authorizeRole(['UserSuperAdmin']), controller.delete);         // Delete a PaymentDetails by ID
+paymentDetailsRouter.delete('/delete/:id', authenticateToken, authorizeRole(['UserSuperAdmin']), controller.delete);                            // Delete a PaymentDetails by ID
 
 // PATCH Used for Parcial Update (Authentication Required - Token)
-paymentDetailsRouter.patch('/update-status', authenticateToken, authenticateToken, authorizeRole(['UserSuperAdmin']), controller.updateStatus); // Update PaymentDetails Status by ID
+paymentDetailsRouter.patch('/update-status', authenticateToken, authorizeRole(['UserSuperAdmin']), controller.updateStatus);                    // Update PaymentDetails Status by ID
 
 module.exports = paymentDetailsRouter;

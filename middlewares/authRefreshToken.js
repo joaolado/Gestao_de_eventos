@@ -48,7 +48,7 @@ const refreshToken = async (req, res, next) =>
   
   catch (err) 
   {
-    console.error('Error in authenticateToken middleware:', err);
+    console.error('Error in authenticateToken Middleware:', err);
     return res.status(403).json({ error: err.name === 'JsonWebTokenError' ? 'Invalid Token.' : 'Internal Server Error.' });
   }
 };

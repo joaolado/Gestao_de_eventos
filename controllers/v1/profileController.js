@@ -28,9 +28,9 @@ exports.getProfile = async (req, res) =>
                 lastName: true,
                 phone: true,
                 email: true,
-                usersType: true, // Include the user's type
+                usersType: true,
 
-                // Include related User Address
+                // Include Related User Address
                 address: 
                 { 
                     select:
@@ -119,7 +119,7 @@ exports.profile = async (req, res) =>
         
         else 
         {
-            // Create a New Address and Add to User
+            // Create a New Address and Add it to User
             const newAddress = await prisma.usersAddress.create({
 
                 data: addressData,
@@ -161,7 +161,7 @@ exports.profile = async (req, res) =>
         });
 
         // Return the Updated User Profile
-        res.status(200).json({ success: true, message: 'User Profile Updated Successfully: ', updatedUsers });
+        res.status(200).json({ success: true, message: 'User Profile Updated Successfully.', updatedUsers });
 
     } 
 
@@ -258,12 +258,12 @@ exports.addToWishlist = async (req, res) =>
             },
         });
 
-        res.status(200).json({ message: 'Event Added to Wishlist Successfully.', profileWishlist });
+        res.status(200).json({ success: true, message: 'Event Added to Wishlist Successfully.', profileWishlist });
     } 
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Add Event to Wishlist.', details: error.message });
+        res.status(400).json({ success: false, error: 'Failed to Add Event to Wishlist.', details: error.message });
     }
 };
 
@@ -301,87 +301,112 @@ exports.removeFromWishlist = async (req, res) =>
 
             where: 
             {
-                id: profileWishlist.id, // Use the PK to Delete
+                id: profileWishlist.id,
             },
         });
 
-        res.status(200).json({ message: 'Event Removed from Wishlist Successfully.', profileWishlist });
+        res.status(200).json({ success: true, message: 'Event Removed from Wishlist Successfully.', profileWishlist });
     } 
 
     catch (error) 
     {
-        res.status(500).json({ error: 'Failed to Remove Event from Wishlist.', details: error.message });
+        res.status(500).json({ success: false, error: 'Failed to Remove Event from Wishlist.', details: error.message });
     }
 };
 
 // Share Event
 exports.shareEvent = async (req, res) => 
 {
-    const { receiverEmail, eventId, message } = req.body;
+    const 
+    { 
+        receiverEmail, 
+        eventId, 
+        message,
+    
+    } = req.body;
   
     try {
 
         // Get User ID from Token
         const senderId = req.users.id;
 
-      // Check if Sender Exists
-      const senderExists = await prisma.users.findUnique({ where: { id: senderId } });
-      if (!senderExists) {
-        return res.status(404).json({ error: 'Sender not found.' });
-      }
+        // Check if Sender Exists
+        const senderExists = await prisma.users.findUnique({ 
+            
+            where: { id: senderId } 
+        });
+
+        if (!senderExists) 
+        {
+            return res.status(404).json({ error: 'Sender Not Found.' });
+        }
+    
+        // Check if Event Exists in Sender's Wishlist
+        const wishlistEntry = await prisma.usersWishlist.findUnique({
+
+            where: 
+            {
+                userId_eventId: { userId: senderId, eventId },
+            },
+        });
+    
+        if (!wishlistEntry) 
+        {
+            return res.status(404).json({ error: 'Event Not Found in Sender Wishlist.' });
+        }
+    
+        // Resolve Receiver ID from Email
+        const receiverExists = await prisma.users.findUnique({ 
+            
+            where: 
+            { 
+                email: receiverEmail,
+            },
+        });
+
+        if (!receiverExists) 
+        {
+            return res.status(404).json({ error: 'Receiver Not Found.' });
+        }
+    
+        const receiverId = receiverExists.id;
+    
+        // Create a Shared Event Record
+        const sharedEvent = await prisma.sharedEvents.create({
+
+            data: 
+            {
+                senderId,
+                receiverId,
+                eventId,
+                message,
+            },
+        });
   
-      // Check if Event Exists in Sender's Wishlist
-      const wishlistEntry = await prisma.usersWishlist.findUnique({
-        where: {
-          userId_eventId: { userId: senderId, eventId },
-        },
-      });
-  
-      if (!wishlistEntry) {
-        return res.status(404).json({ error: 'Event not found in sender\'s wishlist.' });
-      }
-  
-      // Resolve Receiver ID from Email
-      const receiverExists = await prisma.users.findUnique({ where: { email: receiverEmail } });
-      if (!receiverExists) {
-        return res.status(404).json({ error: 'Receiver not found.' });
-      }
-  
-      const receiverId = receiverExists.id;
-  
-      // Create a Shared Event Record
-      const sharedEvent = await prisma.sharedEvents.create({
-        data: {
-          senderId,
-          receiverId,
-          eventId,
-          message,
-        },
-      });
-  
-      res.status(200).json({ message: 'Event shared successfully.', sharedEvent });
-    } catch (error) {
-      console.error('Error sharing event:', error);
-      res.status(500).json({ error: 'Failed to share the event. Please try again later.' });
+        res.status(200).json({ success: true, message: 'Event Shared Successfully.', sharedEvent });
+    } 
+    
+    catch (error) 
+    {
+        console.error('Error Sharing Event:', error);
+        res.status(500).json({ success: false, error: 'Failed to Share the Event. Please Try Again Later.' });
     }
 };
 
 // Get Shared Events
 exports.getSharedEvents = async (req, res) => 
 {
-    
-
     try 
     {   
         // Get User ID from Token
         const userId = req.users.id;
 
-
+        // Share Event
         const sharedEvents = await prisma.sharedEvents.findMany({
 
             where: 
             { 
-                receiverId: userId, // Now we're using the logged-in user's ID
+                receiverId: userId,
             },
 
             include: 
@@ -411,10 +436,10 @@ exports.getSharedEvents = async (req, res) =>
         });
 
         res.status(200).json({ message: 'Shared Events Retrieved Successfully.', sharedEvents });
-    } 
+    }
+
     catch (error) 
     {
         res.status(500).json({ error: 'Failed to Retrieve Shared Events.', details: error.message });
     }
 };
-    

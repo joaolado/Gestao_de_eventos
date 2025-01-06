@@ -2,6 +2,7 @@
 const usersAddressRouter = require('express').Router();
 const authenticateToken = require('../../middlewares/authMiddleware'); // Import the JWT auth Middleware
 const authorizeRole = require('../../middlewares/authorizeRole');      // Import authorizeRole
+
 const controller = require('../../controllers/v1/c_UsersAddress');
 
 // UsersAddress CRUD
@@ -12,6 +13,6 @@ usersAddressRouter.get('/:id', authenticateToken, controller.getById);          
 // Protected Routes (Authentication Required - Token)
 usersAddressRouter.post('/create', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.create);             // Create a new UsersAddress
 usersAddressRouter.put('/update', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.update);              // Update a UsersAddress
-usersAddressRouter.delete('/delete/:id', authenticateToken, authenticateToken, authorizeRole(['UserSuperAdmin']), controller.delete); // Delete a UsersAddress by ID
+usersAddressRouter.delete('/delete/:id', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.delete);       // Delete a UsersAddress by ID
 
 module.exports = usersAddressRouter;

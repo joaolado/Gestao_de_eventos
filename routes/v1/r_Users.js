@@ -2,6 +2,7 @@
 const usersRouter = require('express').Router();
 const authenticateToken = require('../../middlewares/authMiddleware'); // Import the JWT auth Middleware
 const authorizeRole = require('../../middlewares/authorizeRole');      // Import authorizeRole
+
 const controller = require('../../controllers/v1/c_Users');
 
 // Users CRUD

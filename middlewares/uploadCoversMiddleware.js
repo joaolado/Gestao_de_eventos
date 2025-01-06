@@ -21,13 +21,13 @@ const storage = multer.diskStorage({
             const { id } = req.body;
 
             if (!id) {
-                return cb(new Error('Event ID is missing.'));
+                return cb(new Error('Event ID is Missing.'));
             }
 
             // Get Event Details
             const event = await prisma.events.findUnique({
 
-                where: { id: parseInt(id) }, // Find Category by ID 
+                where: { id: parseInt(id) },
 
                 select: 
                 {   
@@ -40,10 +40,10 @@ const storage = multer.diskStorage({
                 return cb(new Error('Event Not Found.')); // If Not Found, Use 'default'
             }
 
-            // Generate a Unique File Name With Event ID and Timestamp
+            // Generate a Unique File Name With Timestamp
             const fileName = `${Date.now()}-${file.originalname}`;
 
-            // Check for Old cover and Delete it
+            // Check for Old Cover and Delete it
             if (event.cover) 
             {   
                 // Construct the Full Path

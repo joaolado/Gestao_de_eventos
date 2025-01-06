@@ -56,7 +56,7 @@ const authenticateToken = async (req, res, next) =>
             return res.status(403).json({ error: 'Token Expired.' });
         }
 
-        console.error('Error in authenticateToken middleware:', err);
+        console.error('Error in authenticateToken Middleware:', err);
         return res.status(500).json({ error: 'Internal Server Error.' });
     }
 };
