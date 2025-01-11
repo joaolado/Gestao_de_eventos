@@ -34,7 +34,7 @@ const fetchAPI = async (url, options = {}) =>
   // Error Responses
   if (!response.ok) 
   {
-    throw new Error(data.error || 'API Request Failed');
+    throw new Error(data.error || 'API Request Failed.');
   }
 
   return data;

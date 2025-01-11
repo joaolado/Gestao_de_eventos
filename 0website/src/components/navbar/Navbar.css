@@ -41,6 +41,10 @@
   font-size: 1.8rem;
 }
 
+.btn--medium {
+  font-weight: 600;
+}
+
 .nav-menu {
   display: grid;
   grid-template-columns: repeat(4, auto);
@@ -71,7 +75,7 @@
 
 .nav-item.active .nav-links {
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 600;
   color: #fff;
   padding-top: 10px;
   border-bottom: 4px solid #fff;
@@ -132,7 +136,7 @@
 
   .nav-item.active .nav-links {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 600;
     background-color: #444;
     color: #ffffff;
     padding: 2rem;
@@ -170,6 +174,7 @@
     width: 80%;
     text-decoration: none;
     font-size: 1.5rem;
+    font-weight: 600;
     background-color: transparent;
     color: #fff;
     padding: 14px 20px;

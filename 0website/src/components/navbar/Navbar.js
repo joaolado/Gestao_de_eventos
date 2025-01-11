@@ -50,7 +50,8 @@ function Navbar({ isLoggedIn, handleLogout })
             className="navbar-logo" 
             onClick={closeMobileMenu}
             >EventFlow
-            <img src="/images/logo-w.png" alt="EventFlow Logo" />
+            {/* <img src="/images/logo-w.png" alt="EventFlow Logo" /> */}
+            <i class='fab fa-odnoklassniki' />
           </Link>
 
           <div className="menu-icon" onClick={handleClick}>

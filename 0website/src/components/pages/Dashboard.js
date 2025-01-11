@@ -423,8 +423,8 @@ const Dashboard = () =>
 
   // Handle Share Event
   const handleShareEvent = async (eventId) => {
-    if (!email || !message) {
-      toast.error("Email and message are required.");
+    if (!email) {
+      toast.error("Email is Required.");
       return;
     }
   
@@ -440,11 +440,14 @@ const Dashboard = () =>
         headers: { 'Content-Type': 'application/json' },
       });
   
-      toast.success("Event shared successfully.");
+      toast.success("Event Shared Successfully.");
       closeShareModal();
-    } catch (error) {
+    } 
+    
+    catch (error) 
+    {
       console.error("Error sharing event:", error);
-      toast.error("Failed to share the event.");
+      toast.error("Failed to Share the Event, Email Probably Incorrect, Try Again.");
     }
   };
   
@@ -911,8 +914,13 @@ const Dashboard = () =>
             </div>
             <ul>
               {sharedEvents.map((item) => {
+
                 const event = item.event;  // Assuming 'item.event' holds the event details
+                const senderEmail = item.sender?.email || 'N/A'; // Get sender email
+                const message = item.message || 'No Message Provided.'; // Get message
+
                 return (
+
                   <li key={event.id} className="wishlist-item">
                     <div className="wishlist-item-details button-wish">
                       <h3>{event.name}</h3>
@@ -925,24 +933,15 @@ const Dashboard = () =>
                         VIEW EVENT
                       </button>
                     </div>
-                    <div className="wishlist-item-actions button-wish">
+                    <div className="share-item-actions button-share">
                       
-                        {/*
-
-                        <button onClick={handleAddToWishlist} >
-                          {isEventInWishlist ? 'ALREADY IN WISHLIST' : 'ADD TO WISHLIST'}
-                        </button>
-                        
-
                         <span>
-                          <strong>Sender Email:</strong> {senderEmail || 'N/A'}
+                          <strong>Sender Email:</strong> {senderEmail}
                         </span>
-
+                        <hr />
                         <span>
-                          <strong>Message:</strong> {message || 'No message provided'}
+                          <strong>Message:</strong> {message}
                         </span>
-
-                        */}
 
                       </div>
                   </li>

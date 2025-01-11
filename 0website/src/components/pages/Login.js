@@ -69,7 +69,8 @@ function Login({ setIsLoggedIn })
 
         <div className="logo">
           EventFlow
-          <img src="/images/logo-b.png" alt="EventFlow Logo" />
+          {/* <img src="/images/logo-b.png" alt="EventFlow Logo" /> */}
+          <i class='fab fa-odnoklassniki' />
         </div>
 
         <h2>Welcome Back!</h2>

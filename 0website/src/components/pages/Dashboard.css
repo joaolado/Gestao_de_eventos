@@ -7,7 +7,7 @@
 
 .side-menu {
   color: white;
-  font-size: 1.2rem;
+  font-size: 1rem;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -20,8 +20,7 @@
 
 .profile-pic {
   text-align: center;
-  margin: 30px;
-  margin-top: 0px;
+  margin: 0px  30px  5px  30px;
   padding-top: 0px;
 }
 
@@ -59,8 +58,8 @@
 }
 
 .side-menu h4 {
-  font-size: 20px;
-  margin-top: -15px;
+  font-size: 18px;
+  margin-top: 0px;
   margin-bottom: 0px;
 }
 
@@ -90,14 +89,15 @@
 }
 
 .side-menu li:hover {
+  font-weight: 600;
   color: #ffffff;
   background-color: #1966d25b;
 }
 
 .side-menu li.active {
+  font-weight: 600;
   color: #000000;
   background-color: #ffffff;
-  font-weight: bold;
 }
 
 .content {
@@ -136,6 +136,7 @@
 
 .section-title {
   font-size: 2rem;
+  font-weight: 600;
   margin: 0;
 }
 
@@ -159,13 +160,13 @@
 .content .form-col label {
   display: block;
   margin-bottom: 5px !important;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .content .phone label {
   display: block;
   margin-bottom: 5px !important;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .content form input {
@@ -189,6 +190,7 @@
   color: #fff;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 600;
   align-self: center;
   transition: all 0.2s ease-in-out;
 }
@@ -243,8 +245,9 @@ scrollbar-width: none;  /* Firefox */
 }
 
 .wishlist-item h3 {
-  margin: 10px 0px 10px 0px;
+  margin: 3px 0px 3px 0px;
   font-size: 2rem;
+  font-weight: 600;
 }
 
 .wishlist-item p {
@@ -267,6 +270,7 @@ scrollbar-width: none;  /* Firefox */
   color: #fff;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 600;
   align-self: center;
   transition: all 0.2s ease-in-out;
 }
@@ -288,7 +292,38 @@ scrollbar-width: none;  /* Firefox */
   padding: 10px 60px;
 }
 
+.share-item-actions {
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  padding: 10px; 
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  margin-top: 0px;
+  min-width: 50%;
+}
+
+.share-item-actions span {
+  display: flex;
+  flex-direction: column; 
+  gap: 1px;
+  font-size: 14px; 
+  color: #333;
+}
+
+.share-item-actions span strong {
+  font-weight: 600; 
+  color: #555;
+}
+
+.share-item-actions hr {
+  margin: 0 !important;
+}
+
 .cs-btn {
+  font-weight: 600;
   background: #555 !important;
   transition: none !important;
   cursor: default !important;
@@ -330,7 +365,7 @@ scrollbar-width: none;  /* Firefox */
 }
 
 .modal-content p {
-  font-size: 18px;
+  font-size: 16px;
   color: #555;
   margin-bottom: 20px;
 }
@@ -370,7 +405,7 @@ scrollbar-width: none;  /* Firefox */
 
 .red-txt {
   color: red !important;
-  font-weight: 900;
+  font-weight: 600;
 }
 
 .modal-actions button {
@@ -385,6 +420,7 @@ scrollbar-width: none;  /* Firefox */
   color: #fff;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 600;
   align-self: center;
   transition: all 0.2s ease-in-out;
 }
@@ -414,8 +450,7 @@ scrollbar-width: none;  /* Firefox */
   }
 
   .profile-pic {
-    margin: 40px 10px;
-    margin-top: 0px;
+    margin: 0px  30px  5px  30px;
     padding-top: 0px;
   }
 
@@ -478,7 +513,7 @@ scrollbar-width: none;  /* Firefox */
   .content .phone label {
     display: block;
     margin-bottom: 10px !important;
-    font-weight: bold;
+    font-weight: 600;
   }
 
   .content form input {
@@ -490,6 +525,7 @@ scrollbar-width: none;  /* Firefox */
     margin: 15px 0px -10px 0px !important;
     min-width: 100%;
     font-size: 12px;
+    font-weight: 600;
   }
 }
 
@@ -502,8 +538,7 @@ scrollbar-width: none;  /* Firefox */
   }
 
   .profile-pic {
-    margin: 50px 10px;
-    margin-top: 0px;
+    margin: 0px  30px  5px  30px;
     padding-top: 0px;
   }
 

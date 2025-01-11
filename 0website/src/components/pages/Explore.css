@@ -21,6 +21,7 @@
 
 .no-event {
   font-size: 50px;
+  font-weight: 600;
   margin: 50px;
 }
 
@@ -72,6 +73,7 @@
 
 .category-filters h4 {
   font-size: 1.2rem;
+  font-weight: 600;
   color: #fff;
   margin-bottom: 10px;
   text-align: center;
@@ -192,6 +194,7 @@
 
 .event-details .event-title {
   font-size: 1.2rem;
+  font-weight: 600;
   padding: 10px;
   text-align: center;
   justify-content: space-between;
@@ -199,6 +202,7 @@
 
 .event-title {
   font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .event-title,
@@ -215,17 +219,19 @@
 .event-category {
   color: white;
   font-size: 16px;
+  font-weight: 600;
   width: 100%;
   padding: 3px;
   background: linear-gradient(45deg, #242424 20%, #1967d2 100%);
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  margin: 5px 0px 15px 0px;
+  margin: 0px 0px 15px 0px;
 }
 
 .event-data-time,
 .event-location {
-  font-size: 0.9rem;
+  text-align: center;
+  font-size: 0.7rem;
   color: #777;
 }
 
@@ -250,7 +256,8 @@
 
 .toggle-label p {
   margin-right: 10px; /* Add space between the text and the checkbox */
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .toggle-switch input {
@@ -291,6 +298,7 @@
 .add-event {
   color: white;
   font-size: 16px;
+  font-weight: 600;
   width: 100%;
   padding: 10px;
   background: linear-gradient(45deg, #242424, #1967d2);

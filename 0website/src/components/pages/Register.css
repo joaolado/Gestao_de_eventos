@@ -16,6 +16,10 @@
   text-align: center;
 }
 
+.left-section label {
+  font-weight: 600;
+}
+
 .right-section {
   flex: 1;
   position: relative;
@@ -26,7 +30,7 @@
 
 .register-page .logo {
   font-size: 80px;
-  font-weight: bold;
+  /* font-weight: bold; */
   color: #000;
   margin-bottom: 20px;
 }
@@ -42,6 +46,10 @@
   font-size: 30px;
   margin-bottom: 20px;
   color: #000;
+}
+
+.register-page u {
+  font-weight: 600;
 }
 
 .input-group {
@@ -90,6 +98,7 @@
   border: none;
   border-radius: 4px;
   font-size: 18px;
+  font-weight: 600;
   cursor: pointer;
   margin-top: 10px;
   transition: all 0.2s ease-in-out;
