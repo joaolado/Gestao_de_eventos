@@ -22,6 +22,9 @@ exports.getAll = async (req, res) =>
         sortOrder,    // Sort Order ('asc' or 'desc')
 
         showDeleted,  // Flag to Control Whether Deleted Events are Included
+
+        page = 1,     // Pagination: Default to 1 if Not Provided
+        pageSize = 8  // Pagination: Default to 8 if Not Provided
               
     } = req.query;
 
@@ -147,11 +150,17 @@ exports.getAll = async (req, res) =>
                     },
                 },
             },
-
-            // Dynamic Sorting if orderBy has any Value
-            orderBy: orderBy,
+            
+            orderBy: orderBy,            // Dynamic Sorting if orderBy has any Value
+            skip: (page - 1) * pageSize, // Skip records Based on Page Number
+            take: parseInt(pageSize),    // Limit the Number of Records per Page
         });
 
+        // Total Count of Events to Calculate Total Pages
+        const totalCount = await prisma.events.count({
+
+            where: { ...filters, ...categoryFilter }
+        });
 
         // Transform the Response to Replace Category with Category Name
         const formattedResponse = response.map(event => ({
@@ -160,7 +169,15 @@ exports.getAll = async (req, res) =>
         }));
 
         // Return All Events
-        res.status(200).json(formattedResponse);
+        res.status(200).json({
+
+            data: formattedResponse,
+            page: parseInt(page),
+            pageSize: parseInt(pageSize),
+            totalPages: Math.ceil(totalCount / pageSize), // Total Number of Pages
+            totalCount: totalCount,                       // Total Number of Events
+
+        });
     }
     
     catch (error) 

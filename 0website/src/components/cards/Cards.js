@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 // CSS
 import '../cards/Cards.css';
@@ -7,55 +6,54 @@ import '../cards/Cards.css';
 // Components
 import CardItem from './CardItem';
 
-function Cards() 
-{
+// API Fetch (Replace this with your actual API call if needed)
+import fetchAPI from '../../fetchAPI'; 
+
+function Cards() {
+  const [events, setEvents] = useState([]); // State to hold events
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const data = await fetchAPI('/api/v1/events/');
+        console.log('Fetched events:', data); // Log the entire response to confirm the structure
+  
+        // Make sure the response contains the 'data' field, and handle accordingly
+        if (data && data.data && Array.isArray(data.data)) {
+          const sortedEvents = data.data.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+          setEvents(sortedEvents.slice(0, 5)); // Get the last 3 events
+        } else {
+          console.error('Data format is incorrect:', data);
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchEvents(); // Call the fetch function to load events
+  }, []); // Empty dependency array ensures it only runs once when the component is mounted
+
   return (
     <div className='cards'>
-
-      <h1>Check out these EPIC Destinations!</h1>
-
+      <h1>Discover Our Latest Events!</h1>
       <div className='cards__container'>
         <div className='cards__wrapper'>
-
           <ul className='cards__items'>
-
-            <CardItem
-              src='images/img-9.jpg'
-              text='Explore the hidden waterfall deep inside the Amazon Jungle'
-              label='Adventure'
-              path='/explore'
-            />
-
-            <CardItem
-              src='images/img-2.jpg'
-              text='Travel through the Islands of Bali in a Private Cruise'
-              label='Luxury'
-              path='/explore'
-            />
-          </ul>
-
-          <ul className='cards__items'>
-            
-            <CardItem
-              src='images/img-3.jpg'
-              text='Set Sail in the Atlantic Ocean visiting Uncharted Waters'
-              label='Mystery'
-              path='/explore'
-            />
-
-            <CardItem
-              src='images/img-4.jpg'
-              text='Experience Football on Top of the Himilayan Mountains'
-              label='Adventure'
-              path='/dashboard'
-            />
-
-            <CardItem
-              src='images/img-8.jpg'
-              text='Ride through the Sahara Desert on a guided camel tour'
-              label='Adrenaline'
-              path='/login'
-            />
+            {events.map(event => (
+              <CardItem
+                key={event.id}
+                src={
+                  event.cover
+                    ? event.cover.startsWith('data:image')
+                      ? event.cover
+                      : `/uploads/covers/${event.cover}`
+                    : '/uploads/covers/default-cover.jpg'
+                }
+                text={event.name || 'No Title Available'} // Handle missing description
+                label={event.category || 'General'}
+                path={`/event/${event.id}`} // Assuming there's a detail page for each event
+              />
+            ))}
           </ul>
         </div>
       </div>

@@ -18,6 +18,10 @@ const Explore = () =>
   const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState([]); // To store all categories
   const [showDeleted, setShowDeleted] = useState(false); // New state to toggle deleted events
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1); // Track the total pages
+  const [pageSize] = useState(8); // Define the page size (can be customized)
+
 
   const location = useLocation(); // To get query params
   const navigate = useNavigate();  // Initialize the useNavigate hook
@@ -55,7 +59,7 @@ const Explore = () =>
   };
 
   // Fetch events
-  const fetchEvents = async () => {
+  const fetchEvents = async (page = 1, pageSize = 8) => {
     try {
       setLoading(true);
       const query = new URLSearchParams({ 
@@ -64,12 +68,17 @@ const Explore = () =>
         categoryName: filters.categoryName, // Send as an array
         ...sortOptions,
         showDeleted: showDeleted.toString(), // Include deleted filter in the request
+        page: page.toString(), // Include page parameter
+        pageSize: pageSize.toString(), // Include pageSize parameter
 
       }).toString();
 
       const data = await fetchAPI(`/api/v1/events?${query}`, { method: 'GET' });
 
-      setEvents(data);
+      console.log('Fetched events data:', data);  // Log the response data
+
+      setEvents(data.data);
+      setTotalPages(data.totalPages); // Set total pages from backend (assuming it's included in the response)
     } 
     
     catch (error) 
@@ -106,8 +115,8 @@ const Explore = () =>
   }, []);
 
   useEffect(() => {
-    fetchEvents();
-  }, [filters, sortOptions, showDeleted]); // This should trigger fetch when showDeleted changes  
+    fetchEvents(currentPage, pageSize);
+  }, [filters, sortOptions, showDeleted, currentPage]); // This should trigger fetch when showDeleted changes  
 
   useEffect(() => {
     fetchCategories();
@@ -186,6 +195,42 @@ const Explore = () =>
             </div>
           )}
 
+          <div className="category-filters pag-filters">
+            <h4>Events Page</h4>
+          
+
+            <div className="pagination">
+              <button
+                onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="#fff" d="M9.857 15.962a.5.5 0 0 0 .243.68l9.402 4.193c1.496.667 
+                  3.047-.814 2.306-2.202l-3.152-5.904c-.245-.459-.245-1 
+                  0-1.458l3.152-5.904c.741-1.388-.81-2.87-2.306-2.202l-3.524 1.572a2 2 0 0 0-.975.932z"/>
+                  <path fill="#fff" d="M8.466 15.39a.5.5 0 0 1-.65.233l-4.823-2.15c-1.324-.59-1.324-2.355 
+                  0-2.945L11.89 6.56a.5.5 0 0 1 .651.68z" opacity="0.5"/>
+                </svg>
+              </button>
+              
+              <span>
+                {currentPage} of {totalPages}
+              </span>
+
+              <button
+                onClick={() => setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages))}
+                disabled={currentPage === totalPages}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="#fff" d="M14.143 15.962a.5.5 0 0 1-.244.68l-9.402 
+                  4.193c-1.495.667-3.047-.814-2.306-2.202l3.152-5.904c.245-.459.245-1 0-1.458L2.191 5.367c-.74-1.388.81-2.87 
+                  2.306-2.202l3.525 1.572a2 2 0 0 1 .974.932z"/>
+                  <path fill="#fff" d="M15.533 15.39a.5.5 0 0 0 .651.233l4.823-2.15c1.323-.59 1.323-2.355 0-2.945L12.109 
+                  6.56a.5.5 0 0 0-.651.68z" opacity="0.5"/>
+                </svg>
+              </button>
+            </div>
+          </div>
 
           <select name="sortBy" value={sortOptions.sortBy} onChange={handleSortChange}>
             <option value="">Sort By</option>
@@ -207,7 +252,7 @@ const Explore = () =>
             onChange={handleFilterChange}
           />
 
-          <div className="category-filters">
+          <div className="category-filters cat-filters">
           <h4>Categories</h4>
             {categories.map((category) => (
               <div className="category-filters-div" key={category.id}>
@@ -267,7 +312,7 @@ const Explore = () =>
             <div className="no-event-center">
               <h1 className="no-event">Loading Events...</h1>
             </div>
-          ) : events.length ? (
+          ) : events && events.length ? (
             events
 
               .filter((event) => {
@@ -319,6 +364,13 @@ const Explore = () =>
             </div>
           )}
         </div>
+
+
+
+
+
+
+
       </div>
     </div>
   );
