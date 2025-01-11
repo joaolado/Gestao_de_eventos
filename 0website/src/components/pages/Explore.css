@@ -50,6 +50,11 @@
   transition: all 0.2s ease-in-out;
 }
 
+.date-cursor,
+.filters select {
+  cursor: pointer;
+}
+
 .filters input:focus, 
 .filters input:active, 
 .filters input:checked, 
@@ -167,6 +172,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  text-decoration: none; /* Remove underline */
   transition: all 0.4s ease-in-out;
 }
 
@@ -174,6 +180,7 @@
   scale: 102%;
   background-color: rgba(255, 255, 255, 0.2);
   color: #ffffff;
+  text-decoration: none;
 }
 
 .event-image {
@@ -215,11 +222,6 @@
   text-transform: uppercase !important;
 }
 
-.event-description {
-  color: #555;
-  margin-bottom: 10px;
-}
-
 .event-category {
   color: white;
   font-size: 16px;
@@ -236,15 +238,6 @@
 .event-location {
   text-align: center;
   font-size: 0.7rem;
-  color: #777;
-}
-
-.event-card {
-  text-decoration: none; /* Remove underline */
-}
-
-.event-card:hover {
-  text-decoration: none; /* Ensure no underline on hover */
 }
 
 .toggle-switch {

@@ -277,6 +277,7 @@ const Explore = () =>
           </select>
 
           <input
+            className="date-cursor"
             type="date"
             name="startDate"
             value={filters.startDate}
@@ -284,6 +285,7 @@ const Explore = () =>
           />
 
           <input
+            className="date-cursor"
             type="date"
             name="endDate"
             value={filters.endDate}
