@@ -302,7 +302,7 @@ scrollbar-width: none;  /* Firefox */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
   margin-top: 0px;
-  min-width: 50%;
+  min-width: 40%;
 }
 
 .share-item-actions span {
@@ -322,15 +322,136 @@ scrollbar-width: none;  /* Firefox */
   margin: 0 !important;
 }
 
-.cs-btn {
-  font-weight: 600;
-  background: #555 !important;
-  transition: none !important;
-  cursor: default !important;
+.calendar-overlay {
+  background-color: rgba(0, 0, 0, 0.75);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.cs-btn:hover {
-  scale: none !important;
+.calendar-content {
+  background-color: white;
+  text-align: center;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px;
+  max-width: 800px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-content h2,
+.calendar-content h3 {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.calendar-content hr {
+  margin: 25px 25px 10px 25px;
+}
+
+.calendar-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.my-calendar-container {
+  display: flex;
+  justify-content: center;  /* Horizontally center the calendar */
+  align-items: center;      /* Vertically center the calendar */
+  margin: 20px 0px 20px 0px;
+  width: 100%;             /* Full width */
+  border: none;            /* Remove any border */
+}
+
+.react-calendar {
+  width: 100% !important;  /* Make sure the calendar takes full width */
+  border: none;            /* Remove the border from the calendar */
+}
+
+
+/* Style for the events title */
+.wish-event-title {
+  font-size: 20px;
+  color: #333;
+}
+
+/* Style for the Navigation Buttons (Previous/Next) */
+.react-calendar__navigation button {
+  font-size: 20px; /* Change the font size of the navigation buttons */
+  font-weight: 600;
+  padding: 8px;    /* Adjust button padding to make it look better */
+}
+
+.react-calendar__year-view .react-calendar__tile, 
+.react-calendar__decade-view .react-calendar__tile, 
+.react-calendar__century-view .react-calendar__tile {
+  padding: 1.4em 0.5em;
+}
+
+/* Styling for calendar's highlighted dates */
+.react-calendar__tile.highlighted-date {
+  background: #1967d2;
+  color: white !important; /* White text */
+  transition: all 0.2s ease-in-out;
+}
+
+/* Styling for calendar's highlighted dates */
+.react-calendar__tile.highlighted-date:hover {
+  background: linear-gradient(180deg, #1967d2, #242424);
+  scale: 102%;
+}
+
+/* Optionally, customize the current date's color */
+.react-calendar__tile.react-calendar__tile--now {
+  background-color: #000000 !important; /* Custom color for today */
+  color: white !important;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Optionally, customize the current date's color */
+.react-calendar__tile.react-calendar__tile--now:hover {
+  background: linear-gradient(180deg, #1967d2, #242424);
+  scale: 102%;
+}
+
+/* Style for the selected date */
+.react-calendar__tile--active {
+  background: linear-gradient(180deg, #242424, #1967d2) !important;
+  color: white;              /* Change the text color of the selected date */
+  transition: all 0.2s ease-in-out;
+}
+
+/* Optional: Style for hover effect on selected date */
+.react-calendar__tile--active:hover {
+  background: linear-gradient(180deg, #1967d2, #242424) !important;
+  scale: 102%;
+}
+
+.modal-actions-myCal button {
+  display: inline-block;
+  margin: 20px 0px 0px 0px;
+  padding: 10px 40px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  align-self: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.modal-actions-myCal button:hover {
+  scale: 102%;
 }
 
 .modal-overlay {

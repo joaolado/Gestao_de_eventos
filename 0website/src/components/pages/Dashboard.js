@@ -2,8 +2,12 @@
 import ReactModal from 'react-modal';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import Navigation
+
 import { toast } from 'react-toastify';         // Import Toast
 import 'react-toastify/dist/ReactToastify.css'; // Import Toast CSS
+
+import MyCalendar from 'react-calendar';  // Import React Calendar
+import 'react-calendar/dist/Calendar.css'; // Import Calendar Styles
 
 // API - Handle Fetch Requests
 import fetchAPI from '../../fetchAPI';
@@ -55,6 +59,10 @@ const Dashboard = () =>
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [isCalModalOpen, setIsCalModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date()); // For managing selected date
+  const [eventsOnDate, setEventsOnDate] = useState([]); // For managing events of the selected date
+  const [eventDates, setEventDates] = useState([]); // For managing all event dates
 
   const navigate = useNavigate(); // Hook for Navigation
 
@@ -117,6 +125,13 @@ const Dashboard = () =>
         const data = await fetchAPI('/api/v1/profile/get-wishlist');
 
         setWishlist(data.wishlist);
+
+        // Extract dates from wishlist events to highlight on the calendar
+        const eventDates = data.wishlist.map(item => ({
+          startDate: new Date(item.event.startDate),
+          endDate: new Date(item.event.endDate),
+        }));
+        setEventDates(eventDates);
       } 
 
       catch (error) 
@@ -451,10 +466,70 @@ const Dashboard = () =>
     }
   };
   
+    // Event data for calendar
+    const events = wishlist.map((item) => ({
+      title: item.event.name,
+      startDate: new Date(item.event.startDate), // Start date of event
+      endDate: new Date(item.event.endDate), // End date of event
+    }));
   
+    // Open the Calendar Modal
+    const openCalendarModal = () => {
+      setIsCalModalOpen(true);
+    };
+  
+    // Close the Calendar Modal
+    const closeCalendarModal = () => {
+      setIsCalModalOpen(false);
+    };
+  
+  const normalizeDate = (date) => {
+    // Normalize to midnight to remove the time part
+    return new Date(date.setHours(0, 0, 0, 0));
+  };
   
 
+  const tileClassName = ({ date, view }) => {
+    if (view === 'month') {
 
+      const normalizedCurrentDate = normalizeDate(new Date(date));
+
+      for (let i = 0; i < eventDates.length; i++) {
+        const { startDate, endDate } = eventDates[i];
+  
+        const normalizedStartDate = normalizeDate(new Date(startDate));
+        const normalizedEndDate = normalizeDate(new Date(endDate));
+        
+  
+        // Compare normalized dates (ignoring time)
+        if (
+          normalizedCurrentDate >= normalizedStartDate && 
+          normalizedCurrentDate <= normalizedEndDate
+        ) {
+          return 'highlighted-date';
+        }
+      }
+    }
+  };
+
+  // Handle Date Change in Calendar (for events on the selected date)
+  const onDateChange = (date) => {
+    setSelectedDate(date);
+    
+    // Normalize the selected date
+    const normalizedSelectedDate = normalizeDate(new Date(date));
+    
+    // Filter events based on the normalized date
+    const eventsForSelectedDate = events.filter((event) => {
+      const normalizedStartDate = normalizeDate(new Date(event.startDate));
+      const normalizedEndDate = normalizeDate(new Date(event.endDate));
+      
+      // Return events where the normalized selected date is between the start and end date
+      return normalizedSelectedDate >= normalizedStartDate && normalizedSelectedDate <= normalizedEndDate;
+    });
+    
+    setEventsOnDate(eventsForSelectedDate); // Update events for the selected date
+  };
 
   // Frontend
   return (
@@ -832,8 +907,8 @@ const Dashboard = () =>
                         <button onClick={() => openShareModal(event.id)} className="share-btn">
                           SHARE
                         </button>
-                        <button className="cs-btn" type="button" disabled>
-                          COMING SOON
+                        <button onClick={() => openCalendarModal()} className="share-btn">
+                          CALENDAR
                         </button>
                         <button onClick={() => openModal(event.id)} className="remove-btn">
                           REMOVE
@@ -843,6 +918,45 @@ const Dashboard = () =>
                   );
                 })}
               </ul>
+
+                    {/* Calendar Modal */}
+                    <ReactModal 
+                      isOpen={isCalModalOpen} 
+                      onRequestClose={closeCalendarModal} 
+                      className="calendar-content"
+                      overlayClassName="calendar-overlay"
+                      >
+                        
+
+                      <h2>Wishlist Calendar</h2>
+                      
+                      {/* React Calendar */}
+                      <div className="my-calendar-container">
+                        <MyCalendar
+                          onChange={onDateChange}
+                          value={selectedDate}
+                          tileClassName={tileClassName}  // Pass the tileClassName prop
+                        />
+                      </div>
+
+                      <hr/>
+
+                      <h3 className="wish-event-title">Events on {selectedDate.toLocaleDateString()}</h3>
+                      
+                      <ul>
+                        {eventsOnDate.length > 0 ? (
+                          eventsOnDate.map((event, index) => (
+                            <li key={index}>{event.title}</li>
+                          ))
+                        ) : (
+                          <p>No Events on this Day.</p>
+                        )}
+                      </ul>
+                      
+                      <div className="modal-actions-myCal">
+                        <button onClick={closeCalendarModal} className="remove-btn">Close</button>
+                      </div>
+                    </ReactModal>
 
               {/* Share Modal */}
               <ReactModal
