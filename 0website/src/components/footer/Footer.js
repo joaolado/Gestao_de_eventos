@@ -1,5 +1,7 @@
 
 import React from 'react';
+
+// Import Navigation
 import { Link } from 'react-router-dom';
 
 // CSS
@@ -10,10 +12,15 @@ import { Button } from '../button/Button';
 
 function Footer() 
 {
+  //-----------------------------------------------------------------------------------------------------------------
+  // FRONTEND
+  //-----------------------------------------------------------------------------------------------------------------
   return (
+
     <div className='footer-container'>
 
       <section className='footer-subscription'>
+
         <p className='footer-subscription-heading'>
           Subscribe to the EventFlow Newsletter and be the First to Know About Upcoming Events!
         </p>
@@ -32,8 +39,10 @@ function Footer()
             />
 
             <Button buttonStyle='btn--outline'>Subscribe</Button>
+
           </form>
         </div>
+
       </section>
 
       <div class='footer-links'>
@@ -53,6 +62,7 @@ function Footer()
             <Link to='/'>Destinations</Link>
             <Link to='/'>Sponsorships</Link>
           </div>
+
         </div>
 
         <div className='footer-link-wrapper'>
@@ -71,6 +81,7 @@ function Footer()
             <Link to='/'>Youtube</Link>
             <Link to='/'>Tiktok</Link>
           </div>
+          
         </div>
       </div>
 

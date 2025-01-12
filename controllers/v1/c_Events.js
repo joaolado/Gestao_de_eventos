@@ -152,7 +152,7 @@ exports.getAll = async (req, res) =>
             },
             
             orderBy: orderBy,            // Dynamic Sorting if orderBy has any Value
-            skip: (page - 1) * pageSize, // Skip records Based on Page Number
+            skip: (page - 1) * pageSize, // Skip Records Based on Page Number
             take: parseInt(pageSize),    // Limit the Number of Records per Page
         });
 

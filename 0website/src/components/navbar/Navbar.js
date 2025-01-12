@@ -1,5 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
+
+// Import Navigation
 import { Link, useLocation } from 'react-router-dom';
 
 // CSS
@@ -10,36 +12,43 @@ import { Button } from '../button/Button';
 
 function Navbar({ isLoggedIn, handleLogout }) 
 {
-  const [click, setClick] = useState(false);
-  const [button, setButton] = useState(true);
+  // State Variables for Managing User Inputs and Fetched Data
+  const [click, setClick] = useState(false);    // State to Manage Mobile Menu Visibility (open/close)
+  const [button, setButton] = useState(true);   // State to Manage Display the Button for Desktop View
 
-  const location = useLocation();
+  const location = useLocation();  // Initialize Navigation
 
   const isActive = (path) => location.pathname === path;
 
-  const handleClick = () => setClick(!click);
-  const closeMobileMenu = () => setClick(false);
+  const handleClick = () => setClick(!click);    // Toggle the Mobile Menu
+  const closeMobileMenu = () => setClick(false); //  Close the Mobile Menu
 
+  // Show or Hide the Button Based on the Window Width
   const showButton = () => 
   {
     if (window.innerWidth <= 960) 
     {
-      setButton(false);
+      setButton(false); // Hide Button
     } 
     
     else 
     {
-      setButton(true);
+      setButton(true); // Show Button
     }
   };
 
+  // Run the showButton Function
   useEffect(() => 
   {
     showButton();
   }, []);
 
+   // Add an Event Listener to Handle Window Resize and Adjust the Button Visibility
   window.addEventListener('resize', showButton);
 
+  //-----------------------------------------------------------------------------------------------------------------
+  // FRONTEND
+  //-----------------------------------------------------------------------------------------------------------------
   return (
     <>
       <nav className="navbar">
@@ -61,6 +70,7 @@ function Navbar({ isLoggedIn, handleLogout })
           </div>
 
           <ul className={click ? 'nav-menu active' : 'nav-menu'}>
+
             <li className={`nav-item ${isActive('/') ? 'active' : ''}`}>
               <Link 
                 to="/" 
@@ -121,6 +131,7 @@ function Navbar({ isLoggedIn, handleLogout })
               >{isLoggedIn ? 'LOGOUT' : 'LOGIN / REGISTER'}
             </Button>
           )}
+          
         </div>
       </nav>
     </>

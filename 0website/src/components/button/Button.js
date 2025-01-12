@@ -1,12 +1,14 @@
 
 import React from 'react';
+
+// Import Navigation
 import { Link } from 'react-router-dom';
 
 // CSS
 import '../button/Button.css';
 
+// Buttons Style and Size
 const STYLES = ['btn--primary', 'btn--outline', 'btn--test'];
-
 const SIZES = ['btn--medium', 'btn--large'];
 
 export const Button = ({
@@ -25,6 +27,9 @@ export const Button = ({
 
   const checkButtonSize = SIZES.includes(buttonSize) ? buttonSize : SIZES[0];
 
+  //-----------------------------------------------------------------------------------------------------------------
+  // FRONTEND
+  //-----------------------------------------------------------------------------------------------------------------
   return (
 
     <Link to='/login' className='btn-mobile'>
@@ -35,7 +40,9 @@ export const Button = ({
         type={type}
       >
         {children}
+        
       </button>
+
     </Link>
   );
 };

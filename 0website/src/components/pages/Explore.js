@@ -1,8 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom'; // Import Navigation
-import { toast } from 'react-toastify';                            // Import Toast
-import 'react-toastify/dist/ReactToastify.css';                    // Import Toast CSS
+
+// Import Navigation
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+
+// Import Toast
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // API - Handle Fetch Requests
 import fetchAPI from '../../fetchAPI';
@@ -13,23 +17,27 @@ import './Explore.css';
 
 const Explore = () => 
 {
-  const [loading, setLoading] = useState(false);
-  const [userType, setUserType] = useState(null);
-  const [events, setEvents] = useState([]);
-  const [categories, setCategories] = useState([]); // To store all categories
-  const [showDeleted, setShowDeleted] = useState(false); // New state to toggle deleted events
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1); // Track the total pages
-  const [pageSize] = useState(8); // Define the page size (can be customized)
+  // State Variables for Managing User Inputs and Fetched Data
+  const [loading, setLoading] = useState(false);         // To Show a Loading Indicator
+  const [userType, setUserType] = useState(null);        // To Store the Logged-in User Type
+  const [events, setEvents] = useState([]);              // To Store the List of Fetched Events
+  const [categories, setCategories] = useState([]);      // To Store All Event Categories
+  const [showDeleted, setShowDeleted] = useState(false); // Toggle for Showing Deleted Events
+  const [currentPage, setCurrentPage] = useState(1);     // Track the Current Page for Pagination
+  const [totalPages, setTotalPages] = useState(1);       // Track the Total Pages
+  const [pageSize] = useState(8);                        // Number of Events per Page
 
+  const location = useLocation();  // Access the C URL and Query Parameters
+  const navigate = useNavigate();  // Hook for Navigation
 
-  const location = useLocation(); // To get query params
-  const navigate = useNavigate();  // Initialize the useNavigate hook
-
-  // Parse query parameters and set as initial filters
-  const [filters, setFilters] = useState(() => {
+  // Query parameters and set Initial Filters
+  const [filters, setFilters] = useState(() => 
+  {
+    // Extract Query Parameters from URL
     const params = new URLSearchParams(location.search);
+
     return {
+
       name: params.get('name') || '',
       city: params.get('city') || '',
       country: params.get('country') || '',
@@ -39,46 +47,62 @@ const Explore = () =>
       startTime: params.get('startTime') || '',
       endTime: params.get('endTime') || '',
       status: '',
+
     };
   });
 
+  // State for Sorting Options
   const [sortOptions, setSortOptions] = useState({
+
     sortBy: '',
     sortOrder: 'asc',
+
   });
 
-  const fetchUserType = async () => {
-    try {
-      const response = await fetchAPI('/api/v1/profile/get-profile'); // Adjust endpoint as needed
-      if (response?.usersType) {
+  // Fetch the User Type
+  const fetchUserType = async () => 
+  {
+    try 
+    {
+      // Make an API Call to Get Profile (User Type)
+      const response = await fetchAPI('/api/v1/profile/get-profile');
+
+      if (response?.usersType) 
+      {
         setUserType(response.usersType);
       }
-    } catch (error) {
+    } 
+    
+    catch (error) 
+    {
       console.error('Error fetching user type:', error);
     }
   };
 
-  // Fetch events
-  const fetchEvents = async (page = 1, pageSize = 8) => {
-    try {
+  // Fetch Events
+  const fetchEvents = async (page = 1, pageSize = 8) => 
+  {
+    try 
+    {
       setLoading(true);
+
+      // Construct Query String With Filters, Sorting, and Pagination
       const query = new URLSearchParams({ 
 
         ...filters,
-        categoryName: filters.categoryName, // Send as an array
+        categoryName: filters.categoryName,
         ...sortOptions,
-        showDeleted: showDeleted.toString(), // Include deleted filter in the request
-        page: page.toString(), // Include page parameter
-        pageSize: pageSize.toString(), // Include pageSize parameter
+        showDeleted: showDeleted.toString(), 
+        page: page.toString(),
+        pageSize: pageSize.toString(),
 
       }).toString();
 
+      // Make an API Call to Get Events Query
       const data = await fetchAPI(`/api/v1/events?${query}`, { method: 'GET' });
 
-      console.log('Fetched events data:', data);  // Log the response data
-
-      setEvents(data.data);
-      setTotalPages(data.totalPages); // Set total pages from backend (assuming it's included in the response)
+      setEvents(data.data);           // Update Events State
+      setTotalPages(data.totalPages); // Update Total Pages
     } 
     
     catch (error) 
@@ -93,45 +117,61 @@ const Explore = () =>
     }
   };
 
-  // Fetch Categories
-  const fetchCategories = async () => {
-    try {
-
+  // Fetch Events Categories
+  const fetchCategories = async () => 
+  {
+    try 
+    {
+      // Make an API Call to Get Events Categories
       const data = await fetchAPI('/api/v1/eventsCategory', { method: 'GET' });
 
       setCategories(data);
-
     } 
     
     catch (error) 
     {
-      console.error('Error fetching categories:', error.message);
+      console.error('Error Fetching Categories:', error.message);
       toast.error(`Error: ${error.message}`);
     }
   };
 
-  useEffect(() => {
+  // Fetch User Type
+  useEffect(() => 
+  {
     fetchUserType();
   }, []);
 
-  useEffect(() => {
+  // Fetch Events When Filters, Sorting Options, or Pagination Change
+  useEffect(() => 
+  {
     fetchEvents(currentPage, pageSize);
-  }, [filters, sortOptions, showDeleted, currentPage]); // This should trigger fetch when showDeleted changes  
+  }, [filters, sortOptions, showDeleted, currentPage]);
 
-  useEffect(() => {
+  // Fetch Events Categories
+  useEffect(() => 
+  {
     fetchCategories();
   }, []);
 
-  const handleCategoryChange = (categoryName) => {
-    setFilters((prevFilters) => {
+  // Handle Category Filter Changes (Add or Remove Categories)
+  const handleCategoryChange = (categoryName) => 
+  {
+    setFilters((prevFilters) => 
+    {
       let updatedCategories = [...prevFilters.categoryName];
-      if (updatedCategories.includes(categoryName)) {
-        // Remove category if already selected
+
+      if (updatedCategories.includes(categoryName)) 
+      {
+        // Remove Category if Already Selected
         updatedCategories = updatedCategories.filter((name) => name !== categoryName);
-      } else {
-        // Add category if not selected
+      } 
+      
+      else 
+      {
+        // Add Category if Not Selected
         updatedCategories.push(categoryName);
       }
+      
       return {
         ...prevFilters,
         categoryName: updatedCategories,
@@ -139,36 +179,46 @@ const Explore = () =>
     });
   };
   
-
-  // Handle input changes for filters
-  const handleFilterChange = (e) => {
+  // Handle Input Changes for Filters
+  const handleFilterChange = (e) => 
+  {
     setFilters({
+
       ...filters,
       [e.target.name]: e.target.value,
     });
   };
 
-  // Handle sorting changes
-  const handleSortChange = (e) => {
+  // Handle Sorting Changes
+  const handleSortChange = (e) => 
+  {
     setSortOptions({
+
       ...sortOptions,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleToggleDeleted = () => {
+  // Toggle the Display of Deleted Events
+  const handleToggleDeleted = () => 
+  {
     setShowDeleted((prevState) => {
       
-      return !prevState; // Toggle deleted filter state
+      return !prevState;
     });
   };
 
-  // Handle Button click to create a new event
-  const handleCreateEvent = () => {
-    navigate('/event/new');  // Navigate to the 'create' route
+  // Handle Button Click to Create a New Event
+  const handleCreateEvent = () => 
+  {
+    navigate('/event/new');  // Navigate to the 'Create' Route
   };
 
+  //-----------------------------------------------------------------------------------------------------------------
+  // FRONTEND
+  //-----------------------------------------------------------------------------------------------------------------
   return (
+
     <div className="explore">
       <div className="event-container">
 
@@ -178,7 +228,13 @@ const Explore = () =>
 
             <div>
               <button onClick={handleCreateEvent} className="add-event">
-                + ADD EVENT
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="#fff" d="M11 13v3q0 .425.288.713T12 17t.713-.288T13 16v-3h3q.425 0 .713-.288T17 
+                  12t-.288-.712T16 11h-3V8q0-.425-.288-.712T12 7t-.712.288T11 8v3H8q-.425 0-.712.288T7 12t.288.713T8 
+                  13zm-6 8q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 
+                  1.413T19 21z"/>
+                </svg>
+                ADD EVENT
               </button>
 
               <label className="toggle-switch">
@@ -196,9 +252,9 @@ const Explore = () =>
           )}
 
           <div className="category-filters pag-filters">
+
             <h4>Events Page</h4>
           
-
             <div className="pagination">
               <button
                 onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
@@ -206,10 +262,10 @@ const Explore = () =>
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <path fill="#fff" d="M9.857 15.962a.5.5 0 0 0 .243.68l9.402 4.193c1.496.667 
-                  3.047-.814 2.306-2.202l-3.152-5.904c-.245-.459-.245-1 
-                  0-1.458l3.152-5.904c.741-1.388-.81-2.87-2.306-2.202l-3.524 1.572a2 2 0 0 0-.975.932z"/>
+                    3.047-.814 2.306-2.202l-3.152-5.904c-.245-.459-.245-1 
+                    0-1.458l3.152-5.904c.741-1.388-.81-2.87-2.306-2.202l-3.524 1.572a2 2 0 0 0-.975.932z"/>
                   <path fill="#fff" d="M8.466 15.39a.5.5 0 0 1-.65.233l-4.823-2.15c-1.324-.59-1.324-2.355 
-                  0-2.945L11.89 6.56a.5.5 0 0 1 .651.68z" opacity="0.5"/>
+                    0-2.945L11.89 6.56a.5.5 0 0 1 .651.68z" opacity="0.5"/>
                 </svg>
               </button>
               
@@ -223,10 +279,10 @@ const Explore = () =>
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <path fill="#fff" d="M14.143 15.962a.5.5 0 0 1-.244.68l-9.402 
-                  4.193c-1.495.667-3.047-.814-2.306-2.202l3.152-5.904c.245-.459.245-1 0-1.458L2.191 5.367c-.74-1.388.81-2.87 
-                  2.306-2.202l3.525 1.572a2 2 0 0 1 .974.932z"/>
+                    4.193c-1.495.667-3.047-.814-2.306-2.202l3.152-5.904c.245-.459.245-1 0-1.458L2.191 5.367c-.74-1.388.81-2.87 
+                    2.306-2.202l3.525 1.572a2 2 0 0 1 .974.932z"/>
                   <path fill="#fff" d="M15.533 15.39a.5.5 0 0 0 .651.233l4.823-2.15c1.323-.59 1.323-2.355 0-2.945L12.109 
-                  6.56a.5.5 0 0 0-.651.68z" opacity="0.5"/>
+                    6.56a.5.5 0 0 0-.651.68z" opacity="0.5"/>
                 </svg>
               </button>
             </div>
@@ -253,16 +309,22 @@ const Explore = () =>
           />
 
           <div className="category-filters cat-filters">
-          <h4>Categories</h4>
+
+            <h4>Categories</h4>
+
             {categories.map((category) => (
+
               <div className="category-filters-div" key={category.id}>
                 <label>
+
                   <input
                     type="checkbox"
                     checked={filters.categoryName.includes(category.name)}
                     onChange={() => handleCategoryChange(category.name)}
                   />
+
                   {category.name}
+
                 </label>
               </div>
             ))}
@@ -309,28 +371,37 @@ const Explore = () =>
           />
 
         </div>
+
         <div className="event-list">
+
           {loading ? (
+
             <div className="no-event-center">
               <h1 className="no-event">Loading Events...</h1>
             </div>
+
           ) : events && events.length ? (
             events
 
-              .filter((event) => {
-                // If no categories are selected, show all events
-                if (filters.categoryName.length === 0) {
+              .filter((event) => 
+              {
+                // If no Categories are Selected, Show Sll Events
+                if (filters.categoryName.length === 0) 
+                {
                   return true;
                 }
 
-                // Check if the event's category matches any of the selected categories (case insensitive)
+                // Check if the Events Category Matches Selected Categories (Case Insensitive)
                 return filters.categoryName.some((category) =>
+
                   event.category && event.category.toLowerCase().includes(category.toLowerCase())
                 );
               })   
 
               .map((event) => (
+
                 <Link key={event.id} to={`/event/${event.id}`} className="event-card">
+
                   <img
                     src={
                       event.cover
@@ -339,21 +410,27 @@ const Explore = () =>
                           : `/uploads/covers/${event.cover}`
                         : '/uploads/covers/default-cover.jpg'
                     }
+
                     alt={event.name}
                     className="event-image"
                     style={{ objectFit: 'cover' }}
                   />
+
                   <div className="event-details">
+                    
                     <h2 className="event-title">{event.name && event.name.length > 15 ? `${event.name.slice(0, 15)}...` : event.name}</h2>
                     <p className="event-category">{event.category || 'N/A'}</p>
+
                     <p className="event-data-time">
                       Date: {new Date(event.startDate).toLocaleDateString('en-GB')} -{' '}
                       {new Date(event.endDate).toLocaleDateString('en-GB')}
                     </p>
+
                     <p className="event-data-time">
                       Time: {new Date(event.startDate).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} -{' '}
                       {new Date(event.endDate).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
                     </p>
+
                     <p className="event-location">
                       Location: {event.city}, {event.country}
                     </p>
@@ -361,18 +438,13 @@ const Explore = () =>
                 </Link>
               ))
           ) : (
+
             <div className="no-event-center">
               <h1 className="no-event">No Events Found...</h1>
             </div>
+            
           )}
         </div>
-
-
-
-
-
-
-
       </div>
     </div>
   );

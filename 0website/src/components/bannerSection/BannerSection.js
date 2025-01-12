@@ -10,14 +10,19 @@ import Search from '../search/Search';
 
 function BannerSection() 
 {
+  //-----------------------------------------------------------------------------------------------------------------
+  // FRONTEND
+  //-----------------------------------------------------------------------------------------------------------------
   return (
     <div>
 
       <div className='banner-container'>
         
         <video src='/videos/video-1.mp4' autoPlay loop muted />
+        
         <h1>What Are You Waiting For?</h1>
 
+        {/* Search Component*/}
         <div>
           <Search />
         </div>

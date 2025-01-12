@@ -1,8 +1,12 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import Navigation
-import { toast } from 'react-toastify';         // Import Toast
-import 'react-toastify/dist/ReactToastify.css'; // Import Toast CSS
+
+// Import Navigation
+import { useNavigate } from 'react-router-dom';
+
+// Import Toast
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // API - Handle Fetch Requests
 import fetchAPI from '../../fetchAPI';
@@ -13,10 +17,10 @@ import './Register.css';
 
 function Register() 
 {
-  // State Variables for Form Inputs and Password Visibility
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  // State Variables for Managing User Inputs and Fetched Data
+  const [email, setEmail] = useState('');                        // Holds the Email Input
+  const [password, setPassword] = useState('');                  // Holds the Password Input
+  const [passwordVisible, setPasswordVisible] = useState(false); // Toggles Password Visibility
 
   const navigate = useNavigate(); // Hook for Navigation
 
@@ -47,7 +51,7 @@ function Register()
 
       toast.success('Registration Successful! Lets Get Started.');
 
-      // Redirect to Login Page After Successful Registration
+      // Redirect to Login Page After Registration
       navigate('/login'); 
     } 
     
@@ -58,7 +62,11 @@ function Register()
     }
   };
 
+  //-----------------------------------------------------------------------------------------------------------------
+  // FRONTEND
+  //-----------------------------------------------------------------------------------------------------------------
   return (
+
     <div className="register-page">
       <div className="left-section">
 

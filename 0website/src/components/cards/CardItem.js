@@ -1,9 +1,14 @@
 
 import React from 'react';
+
+// Import Navigation
 import { Link } from 'react-router-dom';
 
 function CardItem(props) 
 {
+  //-----------------------------------------------------------------------------------------------------------------
+  // FRONTEND
+  //-----------------------------------------------------------------------------------------------------------------
   return (
     <>
       <li className='cards__item'>
@@ -13,7 +18,7 @@ function CardItem(props)
           <figure className='cards__item__pic-wrap' data-category={props.label}>
             <img
               className='cards__item__img'
-              alt='Travel Image'
+              alt='Image'
               src={props.src}
             />
           </figure>

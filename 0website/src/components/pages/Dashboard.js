@@ -1,13 +1,17 @@
 
-import ReactModal from 'react-modal';
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import Navigation
 
-import { toast } from 'react-toastify';         // Import Toast
-import 'react-toastify/dist/ReactToastify.css'; // Import Toast CSS
+// Import Navigation & Modal
+import ReactModal from 'react-modal';
+import { useNavigate } from 'react-router-dom'; 
 
-import MyCalendar from 'react-calendar';  // Import React Calendar
-import 'react-calendar/dist/Calendar.css'; // Import Calendar Styles
+// Import Toast
+import { toast } from 'react-toastify';         
+import 'react-toastify/dist/ReactToastify.css';
+
+// Import Calendar
+import MyCalendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 // API - Handle Fetch Requests
 import fetchAPI from '../../fetchAPI';
@@ -16,12 +20,12 @@ import fetchAPI from '../../fetchAPI';
 import '../../App.css';
 import './Dashboard.css';
 
-// Configure Modal Root Element (once in your app entry file)
+// Configure Modal Root Element
 ReactModal.setAppElement('#root');
 
 const Dashboard = () => 
 {
-  // State Hooks for Managing Profiles
+  // State Variables for Managing Profiles
   const [profile, setProfile] = useState({
 
     profilePic: '',
@@ -44,25 +48,25 @@ const Dashboard = () =>
 
   });
 
-  // State Hooks for Handling Loading, Sections, and Other States
-  const [isLoading, setIsLoading] = useState(true);                // Determines if Data is Still Loading
-  const [wishlist, setWishlist] = useState([]);                    // Wishlist Data
-  const [sharedEvents, setSharedEvents] = useState([]);            // Shared Events Fata
-  const [activeSection, setActiveSection] = useState('profile');   // Active Section for UI
-  const [isEditing, setIsEditing] = useState(false);               // Whether the User is Editing Their Profile
-  const [emailEdited, setEmailEdited] = useState(false);           // Whether Email was Edited
-  const [passwordEdited, setPasswordEdited] = useState(false);     // Whether Password was Edited
-  const [profilePicEdited, setProfilePicEdited] = useState(false); // Whether Profile Picture was Edited
-  const [file, setFile] = useState(null);                          // File for Uploading Profile Picture
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedEventId, setSelectedEventId] = useState(null);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [isCalModalOpen, setIsCalModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date()); // For managing selected date
-  const [eventsOnDate, setEventsOnDate] = useState([]); // For managing events of the selected date
-  const [eventDates, setEventDates] = useState([]); // For managing all event dates
+  // State Variables for Managing User Inputs and Fetched Data
+  const [isLoading, setIsLoading] = useState(true);                // Tracks if Data is Loading
+  const [wishlist, setWishlist] = useState([]);                    // Stores User Wishlist
+  const [sharedEvents, setSharedEvents] = useState([]);            // Stores Events Shared With User
+  const [activeSection, setActiveSection] = useState('profile');   // Current UI Section Being Displayed
+  const [isEditing, setIsEditing] = useState(false);               // Tracks if User is Editing Profile
+  const [emailEdited, setEmailEdited] = useState(false);           // Tracks if Email was Edited
+  const [passwordEdited, setPasswordEdited] = useState(false);     // Tracks if Password was Edited
+  const [profilePicEdited, setProfilePicEdited] = useState(false); // Tracks if Profile Picture was Edited
+  const [file, setFile] = useState(null);                          // Stores Selected Profile Picture File for Upload
+  const [isModalOpen, setIsModalOpen] = useState(false);           // Controls Remove from Wishlist Modal Visibility
+  const [selectedEventId, setSelectedEventId] = useState(null);    // Stores Selected Event ID for Sharing
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false); // Controls Sharing modal Visibility
+  const [email, setEmail] = useState('');                          // Email for Event Sharing
+  const [message, setMessage] = useState('');                      // Message for Event Sharing
+  const [isCalModalOpen, setIsCalModalOpen] = useState(false);     // Controls Calendar modal Visibility
+  const [selectedDate, setSelectedDate] = useState(new Date());    // Tracks Selected Date in Calendar
+  const [eventsOnDate, setEventsOnDate] = useState([]);            // Stores Events for the Selected Date
+  const [eventDates, setEventDates] = useState([]);                // Stores All Event Dates for Calendar
 
   const navigate = useNavigate(); // Hook for Navigation
 
@@ -81,14 +85,14 @@ const Dashboard = () =>
 
   useEffect(() => 
   {
-    // Fetch the Profile Data
+    // Fetch Profile
     const fetchProfile = async () =>
     {
-      setIsLoading(true); // Set Loading to True While Fetching Data
+      setIsLoading(true); 
 
       try 
       {
-        // Fetch Profile Data From the Server
+        // Make an API Call to Get Profile
         const data = await fetchAPI('/api/v1/profile/get-profile');
 
         // Update the Profile State With the Fetched Data
@@ -107,30 +111,33 @@ const Dashboard = () =>
           },
         }));
 
-        setIsLoading(false); // Set Loading to False once the Data is Fetched
+        setIsLoading(false);
       } 
       
       catch (error) 
       {
         console.error('Error Fetching Profile:', error);
-        setIsLoading(false); // In case of Error - Stop Loading
+        setIsLoading(false);
       }
     };
 
+    // Fetch Wishlist
     const fetchWishlist = async () => 
     {
       try 
       { 
-        // Fetch Profile Wishlist Data From the Server
+        // Make an API Call to Get Profile Wishlist
         const data = await fetchAPI('/api/v1/profile/get-wishlist');
 
         setWishlist(data.wishlist);
 
-        // Extract dates from wishlist events to highlight on the calendar
+        // Extract Dates from Wishlist Events to Highlight on the Calendar
         const eventDates = data.wishlist.map(item => ({
+
           startDate: new Date(item.event.startDate),
           endDate: new Date(item.event.endDate),
         }));
+
         setEventDates(eventDates);
       } 
 
@@ -140,11 +147,19 @@ const Dashboard = () =>
       }
     };
 
-    const fetchSharedEvents = async () => {
-      try {
-        const data = await fetchAPI('/api/v1/profile/get-shared-events');  // Create an endpoint to fetch shared events
-        setSharedEvents(data.sharedEvents);  // Assuming response contains 'sharedEvents' data
-      } catch (error) {
+    // Fetch Shared Events
+    const fetchSharedEvents = async () => 
+    {
+      try 
+      {
+        // Make an API Call to Get Profile Shared Events
+        const data = await fetchAPI('/api/v1/profile/get-shared-events');
+
+        setSharedEvents(data.sharedEvents);
+      } 
+      
+      catch (error) 
+      {
         console.error('Error Fetching Shared Events:', error);
       }
     };
@@ -154,12 +169,11 @@ const Dashboard = () =>
     fetchWishlist();
     fetchSharedEvents();
 
-  }, []); // Empty Dependency Array
+  }, []);
 
   // Handle Input Changes and Update Profile Data
   const handleChange = (e) => 
   { 
-    // Destructure the Name and Value from the Event Target
     const { name, value } = e.target; 
     
     // Set Flags for Specific Fields When They are Edited
@@ -196,7 +210,7 @@ const Dashboard = () =>
   {
     e.preventDefault(); // Prevent the Default Form Submit Action
 
-    // Create the updated profile data to send in the Request Body
+    // Create the Updated Profile Data to Send in the Request Body
     const updatedProfile = 
     {
       userName: profile.userName,
@@ -227,7 +241,7 @@ const Dashboard = () =>
       return;
     }
   
-    // Ensure address is part of updatedProfile
+    // Ensure Address is Part of Updated Profile
     if (!updatedProfile.address) updatedProfile.address = profile.address;
     
     // Only Include userPassword if Changed
@@ -240,10 +254,9 @@ const Dashboard = () =>
       {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedProfile), // Send the Updated Profile Data in the Request Body
+        body: JSON.stringify(updatedProfile),
       });
       
-      // Handle Success or Failure Based on the Response from the API
       if (response.success) 
       {
         toast.success('Profile Updated Successfully.');
@@ -256,7 +269,7 @@ const Dashboard = () =>
       else 
       {
         // Show Error if Update Fails
-        toast.error('Profile Update failed. ' + response.message);
+        toast.error('Profile Update failed.' + response.message);
       }
 
       // Redirect to the Dashboard
@@ -265,7 +278,7 @@ const Dashboard = () =>
     
     catch (error) 
     {
-      console.error('Error Updating Profile ', error);
+      console.error('Error Updating Profile.', error);
       toast.error('Failed to Update Profile.');
     }
   };  
@@ -301,24 +314,28 @@ const Dashboard = () =>
     </div>
   );
 
-  // File Change Handler to Preview the Image
+  // Handle File Selection for Profile Picture Update 
   const handleFileChange = (e) => 
   {
-    // Get the First File From the File Input
+    // Get the Selected File
     const file = e.target.files[0];
 
-    // Set the Selected File to the State Variable "file"
+    // Store the File in the State
     setFile(file);
 
     if (file) 
     {
-      // Create a New FileReader Object to Read the File
+      // Create a FileReader to Preview the Image
       const reader = new FileReader(); 
 
       reader.onload = () =>
 
         // Once the file is Read Successfully, Update the profilePic in the Profile State
-        setProfile((prev) => ({ ...prev, profilePic: reader.result }));
+        setProfile((prev) => ({ 
+          
+          ...prev, 
+          profilePic: reader.result 
+        }));
 
       // Read the File as a Data URL (For Image Preview)
       reader.readAsDataURL(file);
@@ -340,19 +357,19 @@ const Dashboard = () =>
     // Create a FormData Object for Image File
     const formData = new FormData();
 
-    // File to the FormData Object
+    // Append the ProfilePic
     formData.append('profilePic', file);
   
     try 
     {
-      // Make the PUT Request to Update the Profile Picture
+      // Make the API Call to Update the Profile Picture
       const response = await fetchAPI('/api/v1/profile/update', 
       {
         method: 'PUT',
-        body: formData, // Send the FormData With the Image File
+        body: formData,
       });
-      
-      // If the Response is Successful, Update the Profile Picture
+
+      // If the Profile Picture Update is Successful, Update the UI
       if (response.success) 
       {
         toast.success('Profile Picture Updated Successfully.');
@@ -376,82 +393,102 @@ const Dashboard = () =>
 
       // Redirect to the Dashboard
       navigate('/dashboard');
-
     } 
     
     catch (error) 
     {
-      console.error('Error Updating Profile Picture ', error);
+      console.error('Error Updating Profile Picture.', error);
       toast.error('Error Updating profile Picture.');
     }
   };
 
-  // Open the modal and set the selected event ID
-  const openModal = (eventId) => {
+  // Open Remove from Wishlist Modal
+  const openModal = (eventId) => 
+  {
     setSelectedEventId(eventId);
     setIsModalOpen(true);
   };
 
-  // Close the modal
-  const closeModal = () => {
+  // Close Remove from Wishlist Modal
+  const closeModal = () => 
+  {
     setIsModalOpen(false);
     setSelectedEventId(null);
   };
 
-  // Remove from Wishlist Handler
-  const handleRemoveFromWishlist = async () => {
-    try {
-      await fetchAPI('/api/v1/profile/remove-from-wishlist', {
+  // Remove From Wishlist
+  const handleRemoveFromWishlist = async () => 
+  {
+    try 
+    {
+      // Make the API Call to Remove from Wishlist
+      await fetchAPI('/api/v1/profile/remove-from-wishlist', 
+      {
         method: 'DELETE',
         body: JSON.stringify({ eventId: selectedEventId }),
         headers: { 'Content-Type': 'application/json' },
       });
 
-      // Update wishlist state
+      // Update Wishlist State by Filtering out the Removed Event
       setWishlist((prevWishlist) =>
+
         prevWishlist.filter((item) => item.event.id !== selectedEventId)
       );
 
-      // Show success message
-      toast.success('Event removed from wishlist');
-    } catch (error) {
-      toast.error('Error removing event from wishlist');
-    } finally {
-      // Close the modal
+      toast.success('Event Removed from Wishlist.');
+    } 
+    
+    catch (error) 
+    {
+      toast.error('Error Removing Event from Wishlist.');
+    } 
+    
+    finally 
+    {
       closeModal();
     }
   };
 
   // Open Share Modal
-  const openShareModal = (eventId) => {
-    setSelectedEventId(eventId);
-    setIsShareModalOpen(true);
+  const openShareModal = (eventId) => 
+  {
+    setSelectedEventId(eventId); // Store the Selected Event ID
+    setIsShareModalOpen(true);   // Open the Share Modal
   };
 
   // Close Share Modal
-  const closeShareModal = () => {
-    setIsShareModalOpen(false);
-    setSelectedEventId(null);
-    setEmail('');
-    setMessage('');
+  const closeShareModal = () => 
+  {
+    setIsShareModalOpen(false);  // Close the Share Modal
+    setSelectedEventId(null);    // Clear the Selected Event ID
+    setEmail('');                // Reset Email Input
+    setMessage('');              // Reset Message Input
   };
 
   // Handle Share Event
-  const handleShareEvent = async (eventId) => {
-    if (!email) {
+  const handleShareEvent = async (eventId) => 
+  {
+    // Ensure Email is Provided
+    if (!email) 
+    {
       toast.error("Email is Required.");
       return;
     }
   
-    try {
-      const response = await fetchAPI('/api/v1/profile/share-event', {
+    try 
+    {
+      // Make the API Call to Share the Event
+      const response = await fetchAPI('/api/v1/profile/share-event', 
+      {
         method: 'POST',
         body: JSON.stringify({
-          senderId: profile.id,  // Assuming 'profile.id' holds the current user's ID
+
+          senderId: profile.id,
           receiverEmail: email,
-          eventId,  // Only the eventId is needed to link the event
+          eventId,
           message,
         }),
+
         headers: { 'Content-Type': 'application/json' },
       });
   
@@ -461,81 +498,93 @@ const Dashboard = () =>
     
     catch (error) 
     {
-      console.error("Error sharing event:", error);
+      console.error("Error Sharing Event:", error);
       toast.error("Failed to Share the Event, Email Probably Incorrect, Try Again.");
     }
   };
   
-    // Event data for calendar
-    const events = wishlist.map((item) => ({
-      title: item.event.name,
-      startDate: new Date(item.event.startDate), // Start date of event
-      endDate: new Date(item.event.endDate), // End date of event
-    }));
+  // Prepare Event Data for Calendar Display
+  const events = wishlist.map((item) => ({
+
+    title: item.event.name,
+    startDate: new Date(item.event.startDate),
+    endDate: new Date(item.event.endDate),
+  }));
+
+  // Open the Calendar Modal
+  const openCalendarModal = () => 
+  {
+    setIsCalModalOpen(true);
+  };
+
+  // Close the Calendar Modal
+  const closeCalendarModal = () => 
+  {
+    setIsCalModalOpen(false);
+  };
   
-    // Open the Calendar Modal
-    const openCalendarModal = () => {
-      setIsCalModalOpen(true);
-    };
-  
-    // Close the Calendar Modal
-    const closeCalendarModal = () => {
-      setIsCalModalOpen(false);
-    };
-  
-  const normalizeDate = (date) => {
-    // Normalize to midnight to remove the time part
+  // Normalize Date to Remove the Time Part (Set Time to Midnight)
+  const normalizeDate = (date) => 
+  {
     return new Date(date.setHours(0, 0, 0, 0));
   };
   
-
-  const tileClassName = ({ date, view }) => {
-    if (view === 'month') {
+  // Assign CSS Class to Calendar Tile Based on Event Dates
+  const tileClassName = ({ date, view }) => 
+  {
+    // Apply Logic Only if the View is 'month'
+    if (view === 'month') 
+    {
 
       const normalizedCurrentDate = normalizeDate(new Date(date));
 
-      for (let i = 0; i < eventDates.length; i++) {
+      for (let i = 0; i < eventDates.length; i++) 
+      {
         const { startDate, endDate } = eventDates[i];
   
         const normalizedStartDate = normalizeDate(new Date(startDate));
         const normalizedEndDate = normalizeDate(new Date(endDate));
         
-  
-        // Compare normalized dates (ignoring time)
+        // Compare Normalized Dates
         if (
           normalizedCurrentDate >= normalizedStartDate && 
           normalizedCurrentDate <= normalizedEndDate
-        ) {
+        ) 
+        
+        {
+          // Apply 'highlighted-date' Class if the Date is Within the Event Range
           return 'highlighted-date';
         }
       }
     }
   };
 
-  // Handle Date Change in Calendar (for events on the selected date)
-  const onDateChange = (date) => {
+  // Handle Date Change in Calendar (for Events on the Selected Date)
+  const onDateChange = (date) => 
+  {
     setSelectedDate(date);
     
-    // Normalize the selected date
+    // Normalize the Selected Date
     const normalizedSelectedDate = normalizeDate(new Date(date));
     
-    // Filter events based on the normalized date
-    const eventsForSelectedDate = events.filter((event) => {
+    // Filter Events that Fall on the Selected Date
+    const eventsForSelectedDate = events.filter((event) => 
+    {
       const normalizedStartDate = normalizeDate(new Date(event.startDate));
       const normalizedEndDate = normalizeDate(new Date(event.endDate));
       
-      // Return events where the normalized selected date is between the start and end date
       return normalizedSelectedDate >= normalizedStartDate && normalizedSelectedDate <= normalizedEndDate;
     });
     
-    setEventsOnDate(eventsForSelectedDate); // Update events for the selected date
+    setEventsOnDate(eventsForSelectedDate);
   };
 
-  // Frontend
+  //-----------------------------------------------------------------------------------------------------------------
+  // FRONTEND
+  //-----------------------------------------------------------------------------------------------------------------
   return (
 
     <div className="dashboard">
-
       <div className="side-menu">
 
         {isLoading ? (
@@ -545,8 +594,8 @@ const Dashboard = () =>
         ) : (
 
           <div className="profile-pic">
-
             <img
+
               src={
                 profile?.profilePic 
                   ? profile.profilePic.startsWith('data:image')
@@ -554,6 +603,7 @@ const Dashboard = () =>
                   : `/uploads/profilePic/${profile.profilePic}` 
                   : '/uploads/profilePic/default-pic.png'
               }
+
               alt="Profile"
               style={{ objectFit: 'cover' }}
             />
@@ -631,13 +681,10 @@ const Dashboard = () =>
             >Shared Events
           </li>
         </ul>
-
       </div>
       
       <div className="content">
-
         {activeSection === 'profile' && (
-
           <div className="section-box">
             <div className="section">
 
@@ -729,7 +776,7 @@ const Dashboard = () =>
                       disabled={!isEditing} 
                     />
                   </div>
-                 
+               
                 </div>
 
                 {renderButtons()}
@@ -740,7 +787,6 @@ const Dashboard = () =>
         )}
 
         {activeSection === 'address' && (
-
           <div className="section-box">
             <div className="section">
 
@@ -834,7 +880,6 @@ const Dashboard = () =>
         )}
 
         {activeSection === 'security' && (
-
           <div className="section-box">
             <div className="section">
 
@@ -881,28 +926,36 @@ const Dashboard = () =>
         )}
 
         {activeSection === 'wishlist' && (
-
           <div className="section-box wish-box">
             <div className="section wish-wd">
+
               <div className="section-header section-header-wish">
                 <h2 className="section-title">WISHLIST</h2>
               </div>
+
               <ul>
                 {wishlist.map((item) => {
+
                   const event = item.event;
+
                   return (
+
                     <li key={event.id} className="wishlist-item">
                       <div className="wishlist-item-details button-wish">
+
                         <h3>{event.name}</h3>
                         <p>Category: {event.category?.name || 'N/A'}</p>
+
                         <p>
                           Date: {new Date(event.startDate).toLocaleDateString('en-GB')} -{' '}
                           {new Date(event.endDate).toLocaleDateString('en-GB')}
                         </p>
+
                         <button onClick={() => navigate(`/event/${event.id}`)} className="view-event-btn">
                           VIEW EVENT
                         </button>
                       </div>
+
                       <div className="wishlist-item-actions button-wish">
                         <button onClick={() => openShareModal(event.id)} className="share-btn">
                           SHARE
@@ -919,150 +972,159 @@ const Dashboard = () =>
                 })}
               </ul>
 
-                    {/* Calendar Modal */}
-                    <ReactModal 
-                      isOpen={isCalModalOpen} 
-                      onRequestClose={closeCalendarModal} 
-                      className="calendar-content"
-                      overlayClassName="calendar-overlay"
-                      >
-                        
+                {/* Calendar Modal */}
+                <ReactModal 
+                  isOpen={isCalModalOpen} 
+                  onRequestClose={closeCalendarModal} 
+                  className="calendar-content"
+                  overlayClassName="calendar-overlay"
+                >
+                    
+                  <h2>Wishlist Calendar</h2>
+                  
+                  <div className="my-calendar-container">
+                    <MyCalendar
+                      onChange={onDateChange}
+                      value={selectedDate}
+                      tileClassName={tileClassName}
+                    />
+                  </div>
 
-                      <h2>Wishlist Calendar</h2>
-                      
-                      {/* React Calendar */}
-                      <div className="my-calendar-container">
-                        <MyCalendar
-                          onChange={onDateChange}
-                          value={selectedDate}
-                          tileClassName={tileClassName}  // Pass the tileClassName prop
-                        />
-                      </div>
+                  <hr/>
 
-                      <hr/>
+                  <h3 className="wish-event-title">Events on {selectedDate.toLocaleDateString()}</h3>
+                  
+                  <ul>
+                    {eventsOnDate.length > 0 ? (
 
-                      <h3 className="wish-event-title">Events on {selectedDate.toLocaleDateString()}</h3>
-                      
-                      <ul>
-                        {eventsOnDate.length > 0 ? (
-                          eventsOnDate.map((event, index) => (
-                            <li key={index}>{event.title}</li>
-                          ))
-                        ) : (
-                          <p>No Events on this Day.</p>
-                        )}
-                      </ul>
-                      
-                      <div className="modal-actions-myCal">
-                        <button onClick={closeCalendarModal} className="remove-btn">Close</button>
-                      </div>
-                    </ReactModal>
+                      eventsOnDate.map((event, index) => (
+                        <li key={index}>{event.title}</li>
+                      ))
 
-              {/* Share Modal */}
-              <ReactModal
-                isOpen={isShareModalOpen}
-                onRequestClose={closeShareModal}
-                contentLabel="Share Event"
-                className="modal-content"
-                overlayClassName="modal-overlay"
-              >
-                <h2>Share Event</h2>
-                <p>Enter the Receiver Email and an Optional Message:</p>
-                <input
-                  type="email"
-                  placeholder="Receiver Email: example@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="input-field"
-                />
-                <textarea
-                  placeholder="Add a Message (Optional)"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="textarea-field"
-                />
-                <div className="modal-actions">
-                  <button onClick={() => handleShareEvent(selectedEventId)}>
-                    SHARE
-                  </button>
-                  <button onClick={closeShareModal} className='remove-btn'>
-                    CANCEL
-                  </button>
-                </div>
-              </ReactModal>
+                    ) : (
 
-              {/* Modal Component */}
-              <ReactModal
-                isOpen={isModalOpen}
-                onRequestClose={closeModal}
-                contentLabel="Confirm Removal"
-                className="modal-content"
-                overlayClassName="modal-overlay"
-              >
-                <h2>Confirm Removal</h2>
+                      <p>No Events on this Day.</p>
+                    )}
+                  </ul>
+                  
+                  <div className="modal-actions-myCal">
+                    <button onClick={closeCalendarModal} className="remove-btn">Close</button>
+                  </div>
+                </ReactModal>
 
-                <p className='removal-txt'>Are you sure you want to </p>
-                <p className='red-txt'>REMOVE</p>
-                <p className='removal-txt'> this Event from your Wishlist?</p>
+                {/* Share Modal */}
+                <ReactModal
+                  isOpen={isShareModalOpen}
+                  onRequestClose={closeShareModal}
+                  contentLabel="Share Event"
+                  className="modal-content"
+                  overlayClassName="modal-overlay"
+                >
+                  <h2>Share Event</h2>
+                  <p>Enter the Receiver Email and an Optional Message:</p>
 
-                <div className="modal-actions">
-                  <button onClick={handleRemoveFromWishlist} className="remove-btn">
-                    YES, REMOVE
-                  </button>
-                  <button onClick={closeModal}>
-                    NO, CANCEL
-                  </button>
-                </div>
-              </ReactModal>
+                  <input
+                    type="email"
+                    placeholder="Receiver Email: example@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="input-field"
+                  />
 
+                  <textarea
+                    placeholder="Add a Message (Optional)."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="textarea-field"
+                  />
+
+                  <div className="modal-actions">
+                    <button onClick={() => handleShareEvent(selectedEventId)}>
+                      SHARE
+                    </button>
+                    <button onClick={closeShareModal} className='remove-btn'>
+                      CANCEL
+                    </button>
+                  </div>
+                </ReactModal>
+
+                {/* Remove from Wishlist Modal */}
+                <ReactModal
+                  isOpen={isModalOpen}
+                  onRequestClose={closeModal}
+                  contentLabel="Confirm Removal"
+                  className="modal-content"
+                  overlayClassName="modal-overlay"
+                >
+                  <h2>Confirm Removal</h2>
+
+                  <p className='removal-txt'>Are you sure you want to </p>
+                  <p className='red-txt'>REMOVE</p>
+                  <p className='removal-txt'> this Event from your Wishlist?</p>
+
+                  <div className="modal-actions">
+                    <button onClick={handleRemoveFromWishlist} className="remove-btn">
+                      YES, REMOVE
+                    </button>
+                    <button onClick={closeModal}>
+                      NO, CANCEL
+                    </button>
+                  </div>
+                </ReactModal>
             </div>
           </div>
         )}
 
         {activeSection === 'sharedEvents' && (
-
           <div className="section-box wish-box">
-          <div className="section wish-wd">
-            <div className="section-header section-header-wish">
-              <h2 className="section-title">SHARED EVENTS</h2>
-            </div>
-            <ul>
-              {sharedEvents.map((item) => {
+            <div className="section wish-wd">
 
-                const event = item.event;  // Assuming 'item.event' holds the event details
-                const senderEmail = item.sender?.email || 'N/A'; // Get sender email
-                const message = item.message || 'No Message Provided.'; // Get message
+              <div className="section-header section-header-wish">
+                <h2 className="section-title">SHARED EVENTS</h2>
+              </div>
 
-                return (
+              <ul>
+                {sharedEvents.map((item) => {
 
-                  <li key={event.id} className="wishlist-item">
-                    <div className="wishlist-item-details button-wish">
-                      <h3>{event.name}</h3>
-                      <p>Category: {event.category?.name || 'N/A'}</p>
-                      <p>
-                        Date: {new Date(event.startDate).toLocaleDateString('en-GB')} -{' '}
-                        {new Date(event.endDate).toLocaleDateString('en-GB')}
-                      </p>
-                      <button onClick={() => navigate(`/event/${event.id}`)} className="view-event-btn">
-                        VIEW EVENT
-                      </button>
-                    </div>
-                    <div className="share-item-actions button-share">
-                      
+                  const event = item.event;
+                  const senderEmail = item.sender?.email || 'N/A';
+                  const message = item.message || 'No Message Provided.';
+
+                  return (
+
+                    <li key={event.id} className="wishlist-item">
+                      <div className="wishlist-item-details button-wish">
+
+                        <h3>{event.name}</h3>
+                        <p>Category: {event.category?.name || 'N/A'}</p>
+
+                        <p>
+                          Date: {new Date(event.startDate).toLocaleDateString('en-GB')} -{' '}
+                          {new Date(event.endDate).toLocaleDateString('en-GB')}
+                        </p>
+
+                        <button onClick={() => navigate(`/event/${event.id}`)} className="view-event-btn">
+                          VIEW EVENT
+                        </button>
+                      </div>
+
+                      <div className="share-item-actions button-share">
+                        
                         <span>
                           <strong>Sender Email:</strong> {senderEmail}
                         </span>
+
                         <hr />
+
                         <span>
                           <strong>Message:</strong> {message}
                         </span>
-
                       </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
         )}
       </div>
