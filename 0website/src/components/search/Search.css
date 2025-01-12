@@ -17,7 +17,7 @@
   padding: 10px 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 1rem;
   background-color: #fff;
   color: #333;
   cursor: pointer;
@@ -29,17 +29,17 @@
 }
 
 .search-bar {
-  flex: 1; /* Take remaining space */
+  flex: 1;
   padding: 10px 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .date-picker {
   padding: 10px 15px;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .category-dropdown,
@@ -74,16 +74,16 @@
   filter: invert(80%);
 }
 
-/* Additional styles to ensure calendar dropdown is below the search container and remove the arrow pointers */ 
 .ant-picker-dropdown {
-  position: fixed; /* Position fixed to ensure it's centered on screen */
-  top: 57% !important; /* Center vertically */
-  left: 50% !important; /* Center horizontally */
-  transform: translate(-50%, -50%) !important; /* Adjust to align center */
-  z-index: 1000; /* Ensure it appears above other elements */
+  position: fixed;
+  top: 57% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 1000;
 }
 
-.ant-picker-dropdown .ant-picker-range-arrow { display: none !important; /* Hide the arrow pointers */ }
+/* Hide the Arrow Pointers */
+.ant-picker-dropdown .ant-picker-range-arrow { display: none !important; }
 
 .search-button {
   padding: 7px;
@@ -97,9 +97,7 @@
   transition: all 0.2s ease-in-out;
 }
 
-.search-button:hover {
-  filter: invert(80%);
-}
+.search-button:hover { filter: invert(80%); }
 
 .search-button svg {
   width: 24px; 
@@ -121,7 +119,7 @@
   .search-bar,
   .date-picker {
     width: 100%;
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .search-bar {
@@ -143,15 +141,13 @@
     align-items: center;
   }
   
-  .ant-picker-calendar {
-    margin: 10px 0;
-  }
+  .ant-picker-calendar { margin: 10px 0; }
 
   .ant-picker-dropdown {
-    position: fixed; /* Position fixed to ensure it's centered on screen */
-    top: 50% !important; /* Center vertically */
-    left: 50% !important; /* Center horizontally */
-    transform: translate(-50%, -50%) !important; /* Adjust to align center */
-    z-index: 1000; /* Ensure it appears above other elements */
+    position: fixed;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 1000;
   }
 }

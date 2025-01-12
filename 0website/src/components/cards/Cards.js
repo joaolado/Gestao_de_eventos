@@ -30,7 +30,7 @@ function Cards()
           // Sort the Events by Start Date in Descending =rder
           const sortedEvents = data.data.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
-          setEvents(sortedEvents.slice(0, 5)); // Get the last 5 Events
+          setEvents(sortedEvents.slice(0, 4)); // Get the last 5 Events
         } 
         
         else 

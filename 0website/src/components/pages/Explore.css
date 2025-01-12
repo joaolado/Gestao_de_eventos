@@ -1,3 +1,4 @@
+
 .explore {
   background: linear-gradient(360deg, #242424 10%, #1967d2 60%, #1967d2 60%, #1b1919 90%);
   padding: 30px 40px 100px 40px;
@@ -8,6 +9,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  flex-direction: row;
 }
 
 .no-event-center {
@@ -20,7 +22,7 @@
 }
 
 .no-event {
-  font-size: 50px;
+  font-size: 3.125rem;
   font-weight: 600;
   margin: 50px;
 }
@@ -35,6 +37,10 @@
   padding: 10px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
+  flex-direction: column;
+  max-width: 300px;
+  margin-right: 20px;
+  order: -1;
 }
 
 .filters input,
@@ -48,6 +54,12 @@
   border-radius: 8px;
   border: 2px solid rgba(0, 0, 0, 0.8);
   transition: all 0.2s ease-in-out;
+}
+
+.filters input,
+.filters select,
+.filters button {
+  flex: 1 1 auto;
 }
 
 .date-cursor,
@@ -68,9 +80,7 @@
   filter: invert(80%);
 }
 
-.pag-filters {
-  margin: 0px;
-}
+.pag-filters { margin: 0px; }
 
 .cat-filters {
   background: rgba(255, 255, 255, 0.2);
@@ -100,9 +110,7 @@
   padding: 5px 0;
 }
 
-.category-filters label:hover {
-  color: #1967d2;
-}
+.category-filters label:hover { color: #1967d2; }
 
 .category-filters input[type="checkbox"] {
   appearance: none;
@@ -126,7 +134,7 @@
 .category-filters input[type="checkbox"]:checked::before {
   content: '✓';
   color: #fff;
-  font-size: 14px;
+  font-size: 0.875rem;
   display: block;
   text-align: center;
   line-height: 18px;
@@ -156,9 +164,10 @@
 
 .event-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Adjust the `minmax` value as needed */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 40px;
-  position: relative; /* Ensure positioning for centering */
+  position: relative;
+  flex: 1;
 }
 
 .event-card {
@@ -172,7 +181,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  text-decoration: none; /* Remove underline */
+  text-decoration: none;
   transition: all 0.4s ease-in-out;
 }
 
@@ -224,7 +233,7 @@
 
 .event-category {
   color: white;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
   width: 100%;
   padding: 3px;
@@ -243,7 +252,7 @@
 .toggle-switch {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Aligns children to the left */
+  justify-content: space-between;
   padding: 10px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
@@ -252,14 +261,12 @@
 }
 
 .toggle-label p {
-  margin-right: 10px; /* Add space between the text and the checkbox */
-  font-size: 14px;
+  margin-right: 10px;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 
-.toggle-switch input {
-  display: none; /* Hide the default checkbox */
-}
+.toggle-switch input { display: none; }
 
 .toggle-switch .slider {
   position: relative;
@@ -272,9 +279,7 @@
   transition: all 0.6s ease-in-out;
 }
 
-.toggle-switch input:checked + .slider {
-  background: linear-gradient(45deg, #1967d2, #242424);
-}
+.toggle-switch input:checked + .slider { background: linear-gradient(45deg, #1967d2, #242424); }
 
 .toggle-switch .slider:before {
   content: "";
@@ -288,9 +293,7 @@
   transition: all 0.3s ease-in-out;
 }
 
-.toggle-switch input:checked + .slider::before {
-  transform: translateX(14px); /* Move the slider knob when checked */
-}
+.toggle-switch input:checked + .slider::before { transform: translateX(14px); }
 
 .add-event {
   display: flex;  
@@ -298,7 +301,7 @@
   justify-content:center;
   gap: 5px;        
   color: white;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
   width: 100%;
   padding: 10px;
@@ -319,14 +322,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 32px;
   margin: 5px 0px 15px 0px;
 }
 
 .pagination button {
   background: linear-gradient(45deg, #242424, #1967d2);
   border: none;
-  padding: 0.5rem;
+  padding: 8px;
   border-radius: 5px;
   cursor: pointer;
   display: flex;
@@ -336,19 +339,17 @@
 }
 
 .pagination button:disabled {
-  background: #6c757d; /* Disabled state color */
+  background: #6c757d;
   cursor: not-allowed;
   opacity: 0.7;
 }
 
 .pagination button:hover:not(:disabled) {
   background: linear-gradient(45deg, #1967d2, #242424);
-  transform: scale(102%); /* Slight zoom effect on hover */
+  transform: scale(102%);
 }
 
-.pagination button svg {
-  fill: #fff; /* White icons */
-}
+.pagination button svg { fill: #fff; }
 
 .pagination span {
   font-size: 1.2rem;
@@ -356,41 +357,37 @@
   font-weight: 400;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .event-container {
-    flex-direction: column;
-  }
+/* ----------------------------------------------------------------------- */
 
-  .filters {
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-
-  .event-list {
-    justify-content: flex-start;
-  }
+@media (max-width: 870px) 
+{
+  .event-card { min-width: 100%; }
 }
 
-@media (min-width: 768px) {
+@media (max-width: 640px) 
+{
+  .explore { padding: 0px 0px 0px 0px; }
+
   .event-container {
-    flex-direction: row;
+    flex-direction: column;
+    padding: 30px 20px 100px 20px;
+    min-width: 100%;
   }
 
   .filters {
     flex-direction: column;
-    max-width: 300px;
-    margin-right: 20px;
-    order: -1; /* Move filters to the left on larger screens */
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-right: 0px;
+    min-width: 100%;
   }
 
-  .filters input,
-  .filters select,
-  .filters button {
-    flex: 1 1 auto;
-  }
+  .event-card { min-width: 100%; }
 
   .event-list {
-    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+    gap: 40px;
+    position: relative;
   }
 }

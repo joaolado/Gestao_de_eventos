@@ -16,9 +16,7 @@
   text-align: center;
 }
 
-.left-section label {
-  font-weight: 600;
-}
+.left-section label { font-weight: 600; }
 
 .right-section {
   flex: 1;
@@ -48,9 +46,7 @@
   color: #000;
 }
 
-.register-page u {
-  font-weight: 600;
-}
+.register-page u { font-weight: 600; }
 
 .input-group {
   width: 500px;
@@ -69,14 +65,9 @@
   font-size: 18px;
 }
 
-.password-container {
-  position: relative;
-}
+.password-container { position: relative; }
 
-.register-page .password-container .eye-close {
-  margin-bottom: 1px;
-}
-
+.register-page .password-container .eye-close { margin-bottom: 1px; }
 
 .toggle-password {
   position: absolute;
@@ -104,22 +95,16 @@
   transition: all 0.2s ease-in-out;
 }
 
-.register-button:hover {
-  background-color: #444;
-}
+.register-button:hover { background-color: #444; }
 
-.register-page p {
-  margin-top: 20px;
-}
+.register-page p { margin-top: 20px; }
 
 .register-page a {
   color: #000;
   text-decoration: none;
 }
 
-.register-page u:hover {
-  color: #1967d2;
-}
+.register-page u:hover { color: #1967d2; }
 
 .register-page .background {
   width: 100%;
@@ -156,9 +141,7 @@
     margin-top: 20px;
   }
 
-  .register-page .logo {
-    font-size: 50px;
-  }
+  .register-page .logo { font-size: 50px; }
 
   .register-page .logo img {
     width: 80px;
@@ -172,16 +155,35 @@
     margin-bottom: 20px;
   }
 
-  .register-page p {
-    margin: 20px 50px;
-  }
+  .register-page p { margin: 20px 50px; }
 
-  .input-group {
-    width: 100%;
-  }
+  .input-group { width: 100%; }
   
   .register-page .background, 
   .register-page .background::before {
     background: none;
+  }
+}
+
+@media screen and (max-width: 500px) 
+{ 
+  .left-section { padding: 10px 10px; }
+
+  .register-page .logo { font-size: 44px; }
+
+  .register-page h2 {
+    font-size: 18px;
+    margin-bottom: 40px;
+  }
+
+  .register-page p {
+    font-size: 16px;
+    margin: 20px 30px;
+  } 
+  
+  .register-page input[type="email"],
+  .register-page input[type="password"],
+  .register-page input[type="text"] {
+    font-size: 12px;
   }
 }

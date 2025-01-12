@@ -16,9 +16,7 @@
   text-align: center;
 }
 
-.left-section label {
-  font-weight: 600;
-}
+.left-section label { font-weight: 600; }
 
 .right-section {
   flex: 1;
@@ -42,9 +40,7 @@
   margin-left: -25px;
 }
 
-.login-page u {
-  font-weight: 600;
-}
+.login-page u { font-weight: 600; }
 
 .login-page h2 {
   font-size: 30px;
@@ -69,13 +65,9 @@
   font-size: 18px;
 }
 
-.password-container {
-  position: relative;
-}
+.password-container { position: relative; }
 
-.login-page .password-container .eye-close {
-  margin-bottom: 1px;
-}
+.login-page .password-container .eye-close { margin-bottom: 1px; }
 
 .toggle-password {
   position: absolute;
@@ -103,22 +95,16 @@
   transition: all 0.2s ease-in-out;
 }
 
-.login-button:hover {
-  background-color: #444;
-}
+.login-button:hover { background-color: #444; }
 
-.login-page p {
-  margin-top: 20px;
-}
+.login-page p { margin-top: 20px; }
 
 .login-page a {
   color: #000;
   text-decoration: none;
 }
 
-.login-page u:hover {
-  color: #1967d2;
-}
+.login-page u:hover { color: #1967d2; }
 
 .login-page .background {
   width: 100%;
@@ -155,9 +141,7 @@
     margin-top: 20px;
   }
 
-  .login-page .logo {
-    font-size: 50px;
-  }
+  .login-page .logo { font-size: 50px; }
 
   .login-page .logo img {
     width: 80px;
@@ -171,16 +155,35 @@
     margin-bottom: 20px;
   }
 
-  .login-page p {
-    margin: 20px 30px;
-  }
+  .login-page p { margin: 20px 30px; }
 
-  .input-group {
-    width: 100%;
-  }
+  .input-group { width: 100%; }
   
   .login-page .background, 
   .login-page .background::before {
     background: none;
+  }
+}
+
+@media screen and (max-width: 500px) 
+{ 
+  .left-section { padding: 10px 10px; }
+
+  .login-page .logo { font-size: 44px; }
+
+  .login-page h2 {
+    font-size: 18px;
+    margin-bottom: 40px;
+  }
+
+  .login-page p {
+    font-size: 16px;
+    margin: 20px 30px;
+  } 
+  
+  .login-page input[type="email"],
+  .login-page input[type="password"],
+  .login-page input[type="text"] {
+    font-size: 12px;
   }
 }

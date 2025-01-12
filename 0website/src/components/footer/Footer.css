@@ -26,36 +26,40 @@
 
 .footer-subscription-heading {
   margin-bottom: 24px;
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
 .footer-subscription-text {
   margin-bottom: 24px;
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 
 .footer-input {
-  min-width: 400px;
+  max-width: 400px;
+  width: 100%;
   padding: 8px 20px;
   border-radius: 2px;
   margin-right: 10px;
   outline: none;
   border: none;
-  font-size: 16px !important;
+  font-size: 1rem !important;
   margin-bottom: 16px;
   border: 1px solid #fff;
 }
 
 .footer-links {
-  width: 100%;
   max-width: 1000px;
+  width: 100%; 
   display: flex;
   justify-content: center;
 }
 
 .footer-link-wrapper {
   display: flex;
+  max-width: 500px;
+  width: 100%; 
+  justify-content: center;
 }
 
 .footer-link-items {
@@ -64,17 +68,14 @@
   align-items: flex-start;
   margin: 16px;
   text-align: left;
-  width: 160px;
+  max-width: 160px;
+  width: 100%;
   box-sizing: border-box;
 }
 
-.footer-link-items h2 {
-  margin-bottom: 16px;
-}
+.footer-link-items h2 { margin-bottom: 16px; }
 
-.footer-link-items > h2 {
-  color: #fff;
-}
+.footer-link-items > h2 { color: #fff; }
 
 .footer-link-items a {
   color: #fff;
@@ -87,18 +88,13 @@
   transition: 0.3s ease-out;
 }
 
-.footer-email-form h2 {
-  margin-bottom: 2rem;
-}
+.footer-email-form h2 { margin-bottom: 2rem; }
 
-.footer-input::placeholder {
-  color: #b1b1b1;
-}
+.footer-input::placeholder { color: #b1b1b1; }
 
-/* Social Icons */
 .social-icon-link {
   color: #fff;
-  font-size: 24px;
+  font-size: 1.5rem;
 }
 
 .social-media {
@@ -145,26 +141,33 @@
 {
   .footer-links {
     padding-top: 2rem;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
   }
 
-  .footer-input {
-    width: 100%;
-  }
+  .footer-input { width: 100%; }
 
-  .btn {
-    width: 100%;
-  }
+  .btn { width: 100%; }
 
-  .footer-link-wrapper {
-    flex-direction: column;
-  }
+  .footer-link-wrapper { flex-direction: column; }
 
-  .social-media-wrap {
-    flex-direction: column;
-  }
+  .social-media-wrap { flex-direction: column; }
 }
 
-@media screen and (max-width: 768px) 
-{
+@media screen and (max-width: 500px) 
+{ 
+  .footer-subscription-heading {
+    margin-bottom: 24px;
+    font-size: 1.25rem;
+  }
+  
+  .footer-subscription-text {
+    margin-bottom: 24px;
+    font-size: 1.125rem;
+  }
 
+  .footer-link-items h2 { font-size: 1.25rem; }
+
+  .social-logo { margin-left: 0; }
 }

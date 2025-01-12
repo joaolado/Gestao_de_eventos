@@ -14,7 +14,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  max-width: 800px;
+  max-width: 680px;
 }
 
 .event-cover img {
@@ -35,9 +35,8 @@
   border: 1px solid #000000;
   transition: all 0.2s ease-in-out;
 }
-.event-cover button:hover {
-  filter: invert(90%);
-}
+
+.event-cover button:hover { filter: invert(90%); }
 
 .event-cover .edit-cover {
   width: 22px;
@@ -52,7 +51,8 @@
 }
 
 .event-form {
-  min-width: 100%;
+  min-width: 300px;
+  width: 100%;
 }
 
 .event-edit {
@@ -87,7 +87,7 @@
 .event-edit textarea,
 .event-edit select {
   margin: 0 0;
-  font-size: 16px !important;
+  font-size: 1rem !important;
 }
 
 .event-edit form input,
@@ -99,7 +99,7 @@
   margin-top: 1px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 0.875rem;
   min-width: 100%;
 }
 
@@ -127,7 +127,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
   margin: 10px 0px 0px 0px; 
   width: 100%;
@@ -144,16 +144,14 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px; 
+  font-size: 1rem; 
   font-weight: 600;
   margin: 0px 10px 10px 0px;
   min-width: 100%;
   transition: all 0.2s ease-in-out;
 }
 
-.event-form .save-catg {
-  margin-bottom: 30px;
-}
+.event-form .save-catg { margin-bottom: 30px; }
 
 .menu-div .menu-button:hover,
 .event-form .submit-button:hover,
@@ -179,13 +177,9 @@
   margin: 10px 0px 0px 0px;
 }
 
-.button-line {
-  margin: 10px 0px 20px 0px;
-}
+.button-line { margin: 10px 0px 20px 0px; }
 
-.event {
-  gap: 20px;
-}
+.event { gap: 20px; }
 
 .event-edit {
   background: linear-gradient(45deg, #ffffff 50%, #e3e5e9 100%);
@@ -201,7 +195,7 @@
 }
 
 .form-group span {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #555555;
   background-color: #f8f9fa;
   padding: 8px 10px;
@@ -209,7 +203,6 @@
   width: 100%;
 }
 
-/* Container for the input and button */
 .new-category-container {
   display: flex !important;
   flex-direction: column !important;
@@ -217,13 +210,12 @@
   
 }
 
-/* Style the event header container */
 .event-header {
   color: white;
   display: flex;
   text-align: center;
-  align-items: center;  /* Vertically center the items */
-  justify-content: space-between;  /* Space out the items */
+  align-items: center;
+  justify-content: space-between;
   padding: 20px;
   background: linear-gradient(45deg, #242424 20%, #1967d2 100%);
   border-radius: 8px;
@@ -234,8 +226,8 @@
   color: white;
   display: flex;
   text-align: center;
-  align-items: center;  /* Vertically center the items */
-  justify-content: center;  /* Space out the items */
+  align-items: center;
+  justify-content: center;
   padding: 20px;
   background: linear-gradient(45deg, #242424 20%, #1967d2 100%);
   border-radius: 8px;
@@ -243,13 +235,14 @@
 }
 
 .event-title {
-  font-size: 34px;
+  font-size: 2.125rem;
   font-weight: 600 !important;
   margin: 0;
+  padding: 10px;
 }
 
 .event-title span {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 600;
   color: #ffffff;
 }
@@ -259,7 +252,7 @@
   align-items: center;    
   gap: 15px;               
   padding: 10px 20px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   background: linear-gradient(45deg, #242424, #1967d2);
   color: white;
@@ -281,7 +274,7 @@
 
 .event-header .explore-button p {
   margin: 0;              
-  font-size: 14px;         
+  font-size: 0.875rem;         
   color: #fff;    
 }
 
@@ -293,11 +286,8 @@
   transition: all 0.3s ease-in-out;
 }
 
-.wishlist-button:hover {
-  transform: scale(120%);
-}
+.wishlist-button:hover { transform: scale(120%); }
 
-/* Style the SVG icon for the wishlist button */
 .wishlist-button svg {
   height: 40px;
   width: 40px;
@@ -305,7 +295,58 @@
   transition: all 0.3s ease-in-out;
 }
 
-/* Change the color of the SVG icon when hovering the wishlist button */
-.wishlist-button:hover svg {
-  filter: brightness(110%)
+.wishlist-button:hover svg { filter: brightness(110%) }
+
+/* ----------------------------------------------------------------------- */
+
+@media screen and (max-width: 960px) 
+{ 
+  .edit-event-container { padding: 50px 20px; }
+
+  .event {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .event-preview { min-width: 100%; }
+
+  .event-form { min-width: 100%; }
+
+  .event-title {
+    padding: 10px;
+    font-size: 1.5rem;
+  }
+
+  .event-title span { font-size: 1.25rem; }
+
+  .event-header .explore-button {
+    gap: 10px;
+    padding: 10px 10px;
+  }
+
+  .event-header .explore-button p { font-size: 0.750rem; }
+}
+
+@media screen and (max-width: 750px) 
+{ 
+  .event-title { font-size: 1.25rem; }
+
+  .event-title span { font-size: 1rem; }
+}
+
+@media screen and (max-width: 650px) 
+{ 
+  .event-header {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin-bottom: 50px;
+  }
+
+  .event-title {
+    padding: 10px;
+    font-size: 1.25rem;
+  }
+
+  .event-title span { font-size: 1rem; }
 }
