@@ -4,7 +4,7 @@
    "USER1-userSuperAdmin":
    {
       "userName": "MPP",
-      "userPassword": "ABC123",
+      "userPassword": "Qwerty00",
       "firstName": "Marcio",
       "lastName": "Pinheiro",
       "phone": "961234123",
@@ -20,8 +20,8 @@
 
    "USER2-userSuperAdmin":
    {
-      "userName": "JC",
-      "userPassword": "ABC123",
+      "userName": "J_C",
+      "userPassword": "Qwerty00",
       "firstName": "Joao",
       "lastName": "Carmo",
       "phone": "960987098",
@@ -35,10 +35,27 @@
    },
 
 
-   "USER3-userAdmin":
+   "USER3-userSuperAdmin":
+   {
+      "userName": "fmorais",
+      "userPassword": "Prof1234",
+      "firstName": "Fabio",
+      "lastName": "Morais",
+      "phone": "965063680",
+      "email": "fmorais@estg.ipvc.pt",
+      "addressLine1": "Rua do Professor",
+      "addressLine2": "n567",
+      "postalCode": "4015-561",
+      "city": "Viana",
+      "region": "Viana",
+      "country": "Portugal"
+   },
+
+
+   "USER4-userClient":
    {
       "userName": "TomTom",
-      "userPassword": "upaupa123",
+      "userPassword": "Normal00",
       "firstName": "Tomas",
       "lastName": "Alves",
       "phone": "987654321",
@@ -52,7 +69,7 @@
    },
 
    
-   "USER4-userClient":
+   "USER5-userClient":
    {
       "userName": "RuteEstacaSolta",
       "userPassword": "solta666",
@@ -69,7 +86,7 @@
    },
 
 
-   "USER5-userClient":
+   "USER6-userClient":
    {
       "userName": "AlfaMale",
       "userPassword": "superAlfa1",
