@@ -4,25 +4,32 @@
    "USER1-userSuperAdmin":
    {
       "email": "marciopinheiro@ipvc.pt",
-      "userPassword": "ABC123"
+      "userPassword": "Qwerty00"
    },
 
 
    "USER2-userSuperAdmin":
    {
       "email": "joaocarmo@ipvc.pt",
-      "userPassword": "ABC123"
+      "userPassword": "Qwerty00"
    },
 
 
-   "USER3-userAdmin":
+   "USER3-userSuperAdmin":
+   {
+      "email": "fmorais@estg.ipvc.pt",
+      "userPassword": "Prof1234"
+   },
+
+
+   "USER4-userClient":
    {
       "email": "tomtom@outlook.com",
-      "userPassword": "upaupa123"
+      "userPassword": "Normal00"
    },
 
    
-   "USER4-userClient":
+   "USER5-userClient":
    {
       "email": "rut.es.so@outlook.com",
       "userPassword": "solta666"
@@ -30,7 +37,7 @@
    },
 
 
-   "USER5-userClient":
+   "USER6-userClient":
    {
       "email": "alfa.1@outlook.com",
       "userPassword": "superAlfa1"

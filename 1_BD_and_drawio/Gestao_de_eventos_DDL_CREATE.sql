@@ -94,29 +94,15 @@ CREATE TABLE events (
         FOREIGN KEY (category_id) REFERENCES events_category (id) );
 
 /* ----------------------------------------------------------------------------------------------------------------- */
-/* CREATE TABLE - Tickets Type */
-
-CREATE TYPE status_tickets_type AS ENUM2 ('Active', 'Disabled');
-
-CREATE TABLE tickets_type (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    description VARCHAR(250),
-    status status_tickets_type DEFAULT 'Active',
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted TIMESTAMP NULL DEFAULT NULL,
-    PRIMARY KEY (id) );
-
-/* ----------------------------------------------------------------------------------------------------------------- */
 /* CREATE TABLE - Tickets Info */
 
+CREATE TYPE tickets_type AS ENUM2 ('Standard', 'Premium', 'VIP');
 CREATE TYPE status_tickets_info AS ENUM3 ('Available', 'Sold Out', 'Coming Soon');
 
 CREATE TABLE tickets_info (
     id SERIAL PRIMARY KEY,
     events_id INT,
-    tickets_type_id INT,
+    type tickets_type DEFAULT 'Standard',
     SKU VARCHAR(250),
     price DECIMAL(10, 2),
     quantity INT,
@@ -126,9 +112,7 @@ CREATE TABLE tickets_info (
     deleted TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY (id),
     CONSTRAINT events_fk1
-		    FOREIGN KEY (events_id) REFERENCES events (id),
-    CONSTRAINT tickets_type_fk2
-		    FOREIGN KEY (tickets_type_id) REFERENCES tickets_type (id) );
+		    FOREIGN KEY (events_id) REFERENCES events (id));
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 /* CREATE TABLE - Ordered Tickets */
@@ -182,6 +166,21 @@ CREATE TABLE payment_details (
 		    FOREIGN KEY (order_id) REFERENCES order_details (id),
     CONSTRAINT users_payments_fk2
 		    FOREIGN KEY (users_payments_id) REFERENCES users_payments (id) );
+
+/* ----------------------------------------------------------------------------------------------------------------- */
+/* CREATE TABLE - Users Wishlist */
+
+CREATE TABLE users_wishlist (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    event_id INT,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT user_wish_fk1
+		    FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT event_wish_fk2
+		    FOREIGN KEY (event_id) REFERENCES events (id));
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 /* CREATE TABLE - Shared Events */
