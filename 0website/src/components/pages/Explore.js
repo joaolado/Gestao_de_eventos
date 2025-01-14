@@ -385,7 +385,7 @@ const Explore = () =>
 
               .filter((event) => 
               {
-                // If no Categories are Selected, Show Sll Events
+                // If no Categories are Selected, Show All Events
                 if (filters.categoryName.length === 0) 
                 {
                   return true;

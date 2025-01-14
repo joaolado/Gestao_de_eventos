@@ -249,88 +249,6 @@
 					"response": []
 				},
 				{
-					"name": "add-to-wishlist",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"eventId\":\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4005/api/v1/profile/add-to-wishlist",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4005",
-							"path": [
-								"api",
-								"v1",
-								"profile",
-								"add-to-wishlist"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "remove-from-wishlist",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"eventId\":\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4005/api/v1/profile/remove-from-wishlist",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4005",
-							"path": [
-								"api",
-								"v1",
-								"profile",
-								"remove-from-wishlist"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "get-shared-events",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -410,6 +328,88 @@
 								"v1",
 								"profile",
 								"share-event"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-to-wishlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eventId\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4005/api/v1/profile/add-to-wishlist",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4005",
+							"path": [
+								"api",
+								"v1",
+								"profile",
+								"add-to-wishlist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove-from-wishlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eventId\":\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4005/api/v1/profile/remove-from-wishlist",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4005",
+							"path": [
+								"api",
+								"v1",
+								"profile",
+								"remove-from-wishlist"
 							]
 						}
 					},
@@ -575,7 +575,7 @@
 					"response": []
 				},
 				{
-					"name": "update",
+					"name": "update /:id",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -591,7 +591,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": ,\r\n    \"name\": \"\",\r\n    \"description\": \"\"\r\n}",
+							"raw": "{\r\n    \"name\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -599,7 +599,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4005/api/v1/eventsCategory/update",
+							"raw": "http://localhost:4005/api/v1/eventsCategory/update/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -609,7 +609,8 @@
 								"api",
 								"v1",
 								"eventsCategory",
-								"update"
+								"update",
+								""
 							]
 						}
 					},

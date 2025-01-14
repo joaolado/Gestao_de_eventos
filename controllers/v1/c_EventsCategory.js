@@ -8,7 +8,14 @@ exports.getAll = async (req, res) =>
     try 
     {
         // Read all from DB
-        const response = await prisma.eventsCategory.findMany();
+        const response = await prisma.eventsCategory.findMany({
+
+            orderBy: 
+            {
+                name: 'asc',
+            },
+
+        });
 
         // Return All EventsCategory
         res.status(200).json(response);
@@ -111,14 +118,15 @@ exports.update = async (req, res) =>
 {
     const 
     { 
-        id, 
-        name, 
-        description, 
-    
+        name,     
+
     } = req.body;
 
     try 
     {   
+        // Get EventsCategory ID Requested
+        const id = parseInt(req.params.id); // Ensure ID is an integer
+
         // Finds EventsCategory to Update their Data
         const updatedEventsCategory = await prisma.eventsCategory.update({
 
@@ -130,17 +138,16 @@ exports.update = async (req, res) =>
             data: 
             {
                 name: name,
-                description: description,
             },
         });
 
         // Return EventsCategory Updated
-        res.status(200).json(updatedEventsCategory);
+        res.status(200).json({ success: true, message: 'Events Category Updated Successfully.', updatedEventsCategory });
     }
 
     catch (error) 
     {
-        res.status(400).json({ error: 'Failed to Update Events Category.', details: error.message });
+        res.status(400).json({ success: false, error: 'Failed to Update Events Category.', details: error.message });
     }
 };
 
@@ -162,11 +169,11 @@ exports.delete = async (req, res) =>
         });
 
         // Returns EventsCategory Deleted
-        res.status(200).json({ message: 'Events Category Deleted Successfully.' });
+        res.status(200).json({ success: true, message: 'Events Category Deleted Successfully.' });
     }
 
     catch (error)
     {
-        res.status(400).json({ error: 'Failed to Delete Events Category.', details: error.message });
+        res.status(400).json({ success: false, error: 'Failed to Delete Events Category.', details: error.message });
     }
 };

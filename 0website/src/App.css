@@ -32,6 +32,27 @@
     font-size: 6.25rem;
   }  
 
+  /* Style Scrollbar Track */
+  ::-webkit-scrollbar {
+    width: 12px; 
+    height: 12px;
+  }
+
+  /* Style Scrollbar Track (Background) */
+  ::-webkit-scrollbar-track {
+    background: linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%);
+    border-radius: 0px;
+  }
+
+  /* Style Scrollbar Thumb (Draggable Part) */
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(360deg, #242424 5%, #1967d2 20%, #1967d2 80%, #1b1919 95%);
+    border-radius: 3px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  ::-webkit-scrollbar-thumb:hover { background: linear-gradient(360deg, #242424 5%, #555 20%, #555 80%, #1b1919 95%); }
+
 /* ----------------------------------------------------------------------- */
 
 @media screen and (max-width: 500px) 

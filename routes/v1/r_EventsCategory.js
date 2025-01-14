@@ -12,7 +12,7 @@ eventsCategoryRouter.get('/:id', controller.getById);                           
 
 // Protected Routes (Authentication Required - Token)
 eventsCategoryRouter.post('/create', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.create);       // Create a new EventsCategory
-eventsCategoryRouter.put('/update', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.update);        // Update a EventsCategory
+eventsCategoryRouter.put('/update/:id', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.update);    // Update a EventsCategory
 eventsCategoryRouter.delete('/delete/:id', authenticateToken, authorizeRole(['UserAdmin', 'UserSuperAdmin']), controller.delete); // Delete a EventsCategory by ID
 
 module.exports = eventsCategoryRouter;

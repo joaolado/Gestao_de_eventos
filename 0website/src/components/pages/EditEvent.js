@@ -361,7 +361,93 @@ const EditEvent = () =>
       toast.error('Error Saving New Category.');
     }
   };
-  
+
+  // Update Category
+  const updateCategory = async (categoryId, updatedName) => 
+  {
+    // Don't Proceed if the Updated Name is Empty
+    if (!updatedName) return;
+
+    try 
+    {
+        // Make an API Call to Update the Category
+        const response = await fetchAPI(`/api/v1/eventsCategory/update/${categoryId}`, 
+        {
+            method: 'PUT',
+            body: JSON.stringify({ name: updatedName }),
+        });
+
+        // If the Category was Successfully Updated, Update the UI
+        if (response.success) 
+        {
+            toast.success('Category Updated Successfully.');
+
+            // Update the Category in the State
+            setCategories((prevCategories) =>
+
+                prevCategories.map((category) =>
+                    category.id === categoryId ? { ...category, name: updatedName } : category
+                )
+            );
+        } 
+        
+        else 
+        {
+            toast.error('Error Updating Category.');
+        }
+    } 
+    
+    catch (error) 
+    {
+        console.error('Error Updating Category:', error);
+        toast.error('Error Updating Category.');
+    }
+  };
+
+  // Delete Category
+  const deleteCategory = async (categoryId) => 
+  {
+    try 
+    {
+        // Make an API Call to Delete the Category
+        const response = await fetchAPI(`/api/v1/eventsCategory/delete/${categoryId}`, 
+        {
+            method: 'DELETE',
+        });
+
+        // If the Category was Successfully Deleted, Update the UI
+        if (response.success) 
+        {
+            toast.success('Category Deleted Successfully.');
+
+            // Remove the Deleted Category from the State
+            setCategories((prevCategories) =>
+
+                prevCategories.filter((category) => category.id !== categoryId)
+            );
+        } 
+        
+        else 
+        {
+            toast.error('Error Deleting Category.');
+        }
+    } 
+    
+    catch (error) 
+    {
+        console.error('Error Deleting Category:', error);
+        toast.error('Error Deleting Category.');
+    }
+  };
+
+  // Get the ID of the Selected Category
+  const getSelectedCategoryId = () => 
+  {
+    const selectedCategory = categories.find((cat) => cat.name === editEvent.categoryName);
+
+    return selectedCategory?.id || null;
+  };
+
   // Validate the Form Before Submitting
   const validateForm = () => 
   {
@@ -986,13 +1072,13 @@ const EditEvent = () =>
                     />
                   </div>
 
-                  <div className="form-group">
+                  <div className="form-group">                  
                     <label htmlFor="categoryName">Category</label>
                     <select
                       id="categoryName"
                       name="categoryName"
                       value={editEvent.categoryName}
-                      onChange={handleChange}
+                      onChange={handleChange}                     
                     >
                       <option value="" disabled>
                         Select a Category
@@ -1004,7 +1090,7 @@ const EditEvent = () =>
                         <option key={cat.id} value={cat.name}>
                           {cat.name}
                         </option>
-                      ))} 
+                      ))}
                     </select>
 
                     {editEvent.categoryName === 'new' && (
@@ -1015,11 +1101,42 @@ const EditEvent = () =>
                           type="text"
                           value={newCategoryName}
                           onChange={(e) => setNewCategoryName(e.target.value)}
-                          className="new-catg"
                         />
 
-                        <button className="save-catg" type="button" onClick={saveNewCategory}>
-                          Save Category
+                        <button 
+                          className="save-catg" 
+                          type="button" 
+                          onClick={saveNewCategory}
+                          >
+                          Create Category
+                        </button>
+                      </div>
+                    )}
+
+                    {editEvent.categoryName && editEvent.categoryName !== "new" && (
+                      <div>
+                        <label htmlFor="updateCategory">Update Category Name</label>
+                        <input
+                          id="updateCategory"
+                          type="text"
+                          value={newCategoryName}
+                          onChange={(e) => setNewCategoryName(e.target.value)}
+                        />
+
+                        <button
+                          className="save-catg edit-catg"
+                          type="button"
+                          onClick={() => updateCategory(getSelectedCategoryId(), newCategoryName)}
+                          >
+                          Update Category
+                        </button>
+
+                        <button
+                          className="save-catg"
+                          type="button"
+                          onClick={() => deleteCategory(getSelectedCategoryId())}
+                          >
+                          Delete Category
                         </button>
                       </div>
                     )}
@@ -1306,8 +1423,40 @@ const EditEvent = () =>
                           onChange={(e) => setNewCategoryName(e.target.value)}
                         />
 
-                        <button className="save-catg" type="button" onClick={saveNewCategory}>
-                          Save Category
+                        <button 
+                          className="save-catg" 
+                          type="button" 
+                          onClick={saveNewCategory}
+                          >
+                          Create Category
+                        </button>
+                      </div>
+                    )}
+
+                    {editEvent.categoryName && editEvent.categoryName !== "new" && (
+                      <div>
+                        <label htmlFor="updateCategory">Update Category Name</label>
+                        <input
+                          id="updateCategory"
+                          type="text"
+                          value={newCategoryName}
+                          onChange={(e) => setNewCategoryName(e.target.value)}
+                        />
+
+                        <button
+                          className="save-catg edit-catg"
+                          type="button"
+                          onClick={() => updateCategory(getSelectedCategoryId(), newCategoryName)}
+                          >
+                          Update Category
+                        </button>
+
+                        <button
+                          className="save-catg"
+                          type="button"
+                          onClick={() => deleteCategory(getSelectedCategoryId())}
+                          >
+                          Delete Category
                         </button>
                       </div>
                     )}
