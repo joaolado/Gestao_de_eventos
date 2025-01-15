@@ -28,7 +28,6 @@ const registerUser = async (req, res) =>
             },
         });
 
-        // Successful Registration
         res.status(201).json( {message: 'Successful Registration.', user });
     } 
 
@@ -57,7 +56,6 @@ const loginUser = async (req, res) =>
             // Token Expiration Time
             const token = jwt.sign({ usersId: users.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-            // Successful Login
             res.json({ message: 'Successful Login.', token });
         }
 

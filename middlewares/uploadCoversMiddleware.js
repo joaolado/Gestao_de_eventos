@@ -37,7 +37,7 @@ const storage = multer.diskStorage({
 
             if (!event) 
             {
-                return cb(new Error('Event Not Found.')); // If Not Found, Use 'default'
+                return cb(new Error('Event Not Found.'));
             }
 
             // Generate a Unique File Name With Timestamp
@@ -67,7 +67,7 @@ const storage = multer.diskStorage({
             await prisma.events.update({
 
                 where: { id: parseInt(id) },
-                data: { cover: fileName }, // Save Only the filename
+                data: { cover: fileName },
 
             });
 
@@ -98,7 +98,7 @@ const upload = multer({
 
         else 
         {
-            cb(new Error('Only images are Allowed! ( jpeg | jpg | png | gif )')); // Allowed Extensions
+            cb(new Error('Only images are Allowed! ( jpeg | jpg | png | gif )'));
         }
     },
 

@@ -27,7 +27,7 @@ const Explore = () =>
   const [totalPages, setTotalPages] = useState(1);       // Track the Total Pages
   const [pageSize] = useState(8);                        // Number of Events per Page
 
-  const location = useLocation();  // Access the C URL and Query Parameters
+  const location = useLocation();  // Access the URL and Query Parameters
   const navigate = useNavigate();  // Hook for Navigation
 
   // Query parameters and set Initial Filters
@@ -101,8 +101,8 @@ const Explore = () =>
       // Make an API Call to Get Events Query
       const data = await fetchAPI(`/api/v1/events?${query}`, { method: 'GET' });
 
-      setEvents(data.data);           // Update Events State
-      setTotalPages(data.totalPages); // Update Total Pages
+      setEvents(data.data);           
+      setTotalPages(data.totalPages); 
     } 
     
     catch (error) 
@@ -160,15 +160,15 @@ const Explore = () =>
     {
       let updatedCategories = [...prevFilters.categoryName];
 
+      // Remove Category if Already Selected
       if (updatedCategories.includes(categoryName)) 
       {
-        // Remove Category if Already Selected
         updatedCategories = updatedCategories.filter((name) => name !== categoryName);
       } 
-      
+
+      // Add Category if Not Selected
       else 
       {
-        // Add Category if Not Selected
         updatedCategories.push(categoryName);
       }
       

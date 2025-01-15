@@ -164,7 +164,6 @@ const Dashboard = () =>
       }
     };
 
-    // Call the Fetch Function to Load Data
     fetchProfile();
     fetchWishlist();
     fetchSharedEvents();
@@ -260,15 +259,14 @@ const Dashboard = () =>
       if (response.success) 
       {
         toast.success('Profile Updated Successfully.');
-        setIsEditing(false);         // Stop Editing After Successful Update
-        setEmailEdited(false);       // Reset Email Edit State
-        setPasswordEdited(false);    // Reset Password Edit State
-        setProfilePicEdited(false);  // Reset Profile Picture Edit State
+        setIsEditing(false);         
+        setEmailEdited(false);      
+        setPasswordEdited(false);    
+        setProfilePicEdited(false); 
       } 
       
       else 
       {
-        // Show Error if Update Fails
         toast.error('Profile Update failed.' + response.message);
       }
 

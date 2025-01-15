@@ -16,7 +16,7 @@ exports.getProfile = async (req, res) =>
 
             where: 
             { 
-                id: userId // Use userId from the Token
+                id: userId
             }, 
 
             select: 
@@ -46,7 +46,6 @@ exports.getProfile = async (req, res) =>
             } 
         });
 
-        // Return Profile
         res.status(200).json(response);
     }
 
@@ -96,7 +95,7 @@ exports.profile = async (req, res) =>
 
         });
 
-        // If Address Exists, Update it; Otherwise, Create a New One
+        // If Address Exists, Update it - Otherwise, Create a New One
         const addressData = {
             addressLine1,
             addressLine2,
@@ -111,8 +110,8 @@ exports.profile = async (req, res) =>
             // If User Already has an Address, Update it
             await prisma.usersAddress.update({
 
-                where: { id: user.addressId }, // Find the Address by ID
-                data: addressData,             // Update Address With New Data
+                where: { id: user.addressId }, 
+                data: addressData,           
 
             });
         } 
@@ -140,7 +139,7 @@ exports.profile = async (req, res) =>
 
             where: 
             { 
-                id: userId, // Use userId from the Token
+                id: userId,
             }, 
 
             data: 
@@ -160,7 +159,6 @@ exports.profile = async (req, res) =>
             },
         });
 
-        // Return the Updated User Profile
         res.status(200).json({ success: true, message: 'User Profile Updated Successfully.', updatedUsers });
 
     } 
@@ -184,7 +182,7 @@ exports.getWishlist = async (req, res) =>
 
             where: 
             { 
-                id: userId, // Use userId from the Token
+                id: userId,
             }, 
 
             select: 
@@ -209,7 +207,6 @@ exports.getWishlist = async (req, res) =>
             } 
         });
 
-        // Return Wishlist
         res.status(200).json(response);
     }
 
@@ -286,7 +283,7 @@ exports.removeFromWishlist = async (req, res) =>
 
             where: 
             {
-                userId: userId, // Use userId from the Token
+                userId: userId,
                 eventId: eventId,
             },
         });

@@ -43,7 +43,7 @@ function Navbar({ isLoggedIn, handleLogout })
     showButton();
   }, []);
 
-   // Add an Event Listener to Handle Window Resize and Adjust the Button Visibility
+  // Add an Event Listener to Handle Window Resize and Adjust the Button Visibility
   window.addEventListener('resize', showButton);
 
   //-----------------------------------------------------------------------------------------------------------------

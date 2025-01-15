@@ -40,7 +40,6 @@ function Search()
       }
     };
 
-    // Call the Fetch Function to Load Data
     fetchCategories();
   }, []);
 

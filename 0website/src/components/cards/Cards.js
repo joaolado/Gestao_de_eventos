@@ -27,10 +27,10 @@ function Cards()
         // Check if the Fetched Data is in the Expected Format
         if (data && data.data && Array.isArray(data.data)) 
         {
-          // Sort the Events by Start Date in Descending =rder
+          // Sort the Events by Start Date in Descending Order
           const sortedEvents = data.data.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
-          setEvents(sortedEvents.slice(0, 4)); // Get the last 5 Events
+          setEvents(sortedEvents.slice(0, 4)); // Get the last 4 Events
         } 
         
         else 
@@ -44,8 +44,7 @@ function Cards()
         console.error('Error Fetching Events:', error);
       }
     };
-    
-    // Call the Fetch Function to Load Data
+
     fetchEvents();
   }, []);
 

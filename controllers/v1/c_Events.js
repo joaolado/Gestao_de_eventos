@@ -53,7 +53,7 @@ exports.getAll = async (req, res) =>
                 return res.status(404).json({ error: `Invalid Status. Allowed Status are: ${validStatuses.join(', ')}` });
             }
 
-            filters.status = { equals: status }; // Filter by Valid Status
+            filters.status = { equals: status };
         }
 
         // Deleted Filter
@@ -68,7 +68,7 @@ exports.getAll = async (req, res) =>
         }
 
         // Include EventsCategory Filter if categoryName is Provided
-        let categoryFilter = {}; // Initialize an Empty Filter for Categories
+        let categoryFilter = {};
         
         if (categoryName && categoryName.length > 0) 
         {
@@ -80,7 +80,7 @@ exports.getAll = async (req, res) =>
                 
                 where: 
                 { 
-                    name: { in: categoriesArray } // Find Categories with Names Matching the Array
+                    name: { in: categoriesArray }
                 },
 
             });
@@ -165,7 +165,7 @@ exports.getAll = async (req, res) =>
         // Transform the Response to Replace Category with Category Name
         const formattedResponse = response.map(event => ({
             ...event,
-            category: event.category?.name || null, // Simplify Events Category to its Name
+            category: event.category?.name || null,
         }));
 
         // Return All Events
@@ -174,8 +174,8 @@ exports.getAll = async (req, res) =>
             data: formattedResponse,
             page: parseInt(page),
             pageSize: parseInt(pageSize),
-            totalPages: Math.ceil(totalCount / pageSize), // Total Number of Pages
-            totalCount: totalCount,                       // Total Number of Events
+            totalPages: Math.ceil(totalCount / pageSize), 
+            totalCount: totalCount,                      
 
         });
     }
@@ -241,7 +241,7 @@ exports.getById = async (req, res) =>
         // Transform the Response to Replace Category with Category Name
         const formattedResponse = {
             ...response,
-            category: response.category?.name || null, // Simplify Events Category to its Name
+            category: response.category?.name || null,
         };
         
         // Return Event
@@ -284,7 +284,6 @@ exports.editEvent = async (req, res) =>
         // Check if a File is Uploaded
         const cover = req.file ? req.file.filename : undefined;
 
-        // Initialize categoryId as Undefined
         let categoryId;
 
         if (categoryName) 
@@ -295,9 +294,9 @@ exports.editEvent = async (req, res) =>
                 where: { name: categoryName },
             });
 
+            // If categoryName is Provided and Exists, use its ID
             if (category) 
             {
-                // If categoryName is Provided and Exists, use its ID
                 categoryId = category.id;
             } 
             
@@ -331,8 +330,8 @@ exports.editEvent = async (req, res) =>
                     name: name,
                     description: description,
                     cover: cover,
-                    startDate: startDate ? new Date(startDate) : undefined, // Only Update if Provided
-                    endDate: endDate ? new Date(endDate) : undefined,       // Only Update if Provided
+                    startDate: startDate ? new Date(startDate) : undefined,
+                    endDate: endDate ? new Date(endDate) : undefined,
                     capacity: capacity,
                     categoryId: categoryId || undefined,
                     addressLine1: addressLine1,
@@ -462,7 +461,6 @@ exports.delete = async (req, res) =>
             },
         });
 
-        // Returns Events Deleted
         res.status(200).json({ message: 'Event Deleted successfully. ', deletedEvents });
     }
 
@@ -494,7 +492,6 @@ exports.restore = async (req, res) =>
             }, 
         });
 
-        // Returns Events Restored
         res.status(200).json({ message: 'Event Restored Successfully. ', restoredEvent });
     } 
 

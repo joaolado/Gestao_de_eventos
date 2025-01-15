@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
 
                 where: 
                 { 
-                    id: userId // Use userId from the Token
+                    id: userId
                 }, 
 
                 select: 
@@ -39,7 +39,7 @@ const storage = multer.diskStorage({
 
             if (!user) 
             {
-                return cb(new Error('User Not Found.')); // If Not Found, Use 'default'
+                return cb(new Error('User Not Found.'));
             }
 
             // Check for Old profilePic and Delete it
@@ -66,7 +66,7 @@ const storage = multer.diskStorage({
             await prisma.users.update({
 
                 where: { id: userId },
-                data: { profilePic: fileName }, // Save Only the filename
+                data: { profilePic: fileName },
 
             });
 
@@ -97,7 +97,7 @@ const upload = multer({
 
         else 
         {
-            cb(new Error('Only images are Allowed! ( jpeg | jpg | png | gif )')); // Allowed Extensions
+            cb(new Error('Only images are Allowed! ( jpeg | jpg | png | gif )'));
         }
     },
 

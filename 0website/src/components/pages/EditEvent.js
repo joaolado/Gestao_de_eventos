@@ -81,7 +81,6 @@ const EditEvent = () =>
       }
     };
   
-    // Call the Fetch Function to Load Data
     fetchWishlist();
   }, [editEvent.id]);  // Re-run Whenever the Event ID Changes
   
@@ -165,8 +164,7 @@ const EditEvent = () =>
         setIsLoading(false);
       }
     };  
-    
-    // Call the Fetch Function to Load Data
+
     fetchUserType();
     fetchEvent();
   }, [id]);
@@ -243,9 +241,9 @@ const EditEvent = () =>
       }));
     }
     
+    // Update Other Fields Directly in the Event State
     else 
     { 
-      // Update Other Fields Directly in the Event State
       setEditEvent((prevEvent) => ({ ...prevEvent, [name]: value }));
     }
   };
@@ -500,14 +498,14 @@ const EditEvent = () =>
       city: editEvent.city,
       region: editEvent.region || '',
       country: editEvent.country,
-      status: editEvent.status,  // Ensure status is being sent in the update request
+      status: editEvent.status,
 
       price: editEvent.tickets.price ? parseInt(editEvent.tickets.price, 10) : null,
       quantity: editEvent.tickets.quantity ? parseInt(editEvent.tickets.quantity, 10) : null,
     };
 
-    // Include the Event ID Only for Updates
-    if (editEvent.id) { updatedEvent.id = editEvent.id; } // Only include ID if it exists (for updates)
+    // Only include ID if it exists (for updates)
+    if (editEvent.id) { updatedEvent.id = editEvent.id; } 
     
     // Ensure Tickets Data is Included
     if (!updatedEvent.tickets) updatedEvent.tickets = editEvent.tickets;
@@ -527,8 +525,8 @@ const EditEvent = () =>
       {
         toast.success('Event Updated Successfully.');
         setCurrentView("menu");
-        setIsEditing(false);         // Stop Editing After Successful Update
-        setCoverEdited(false);       // Reset Cover Edit State
+        setIsEditing(false);        
+        setCoverEdited(false); 
       } 
       
       else 

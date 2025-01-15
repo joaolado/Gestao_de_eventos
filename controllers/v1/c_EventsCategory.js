@@ -17,7 +17,6 @@ exports.getAll = async (req, res) =>
 
         });
 
-        // Return All EventsCategory
         res.status(200).json(response);
     }
     
@@ -44,7 +43,6 @@ exports.getById = async (req, res) =>
             },
         });
 
-        // Return EventsCategory
         res.status(200).json(response);
     }
 
@@ -95,7 +93,6 @@ exports.create = async (req, res) =>
             });
         }
   
-        // If Category Exists, Return a Message
         res.status(400).json({
             success: false,
             message: 'Event Category Already Exists.',
@@ -141,7 +138,6 @@ exports.update = async (req, res) =>
             },
         });
 
-        // Return EventsCategory Updated
         res.status(200).json({ success: true, message: 'Events Category Updated Successfully.', updatedEventsCategory });
     }
 
@@ -168,7 +164,6 @@ exports.delete = async (req, res) =>
             },
         });
 
-        // Returns EventsCategory Deleted
         res.status(200).json({ success: true, message: 'Events Category Deleted Successfully.' });
     }
 
