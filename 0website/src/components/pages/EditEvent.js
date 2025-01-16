@@ -1060,7 +1060,7 @@ const EditEvent = () =>
                 <form className="event-form" onSubmit={handleSubmit}>
 
                   <div className="form-group">
-                    <label htmlFor="name">Event Name</label>
+                    <label htmlFor="name">Event Name *</label>
                     <input
                       type="text"
                       id="name"
@@ -1071,7 +1071,7 @@ const EditEvent = () =>
                   </div>
 
                   <div className="form-group">                  
-                    <label htmlFor="categoryName">Category</label>
+                    <label htmlFor="categoryName">Category *</label>
                     <select
                       id="categoryName"
                       name="categoryName"
@@ -1170,7 +1170,7 @@ const EditEvent = () =>
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="startDate">Start Date</label>
+                    <label htmlFor="startDate">Start Date *</label>
                     <input
                       type="date"
                       id="startDate"
@@ -1181,7 +1181,7 @@ const EditEvent = () =>
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="endDate">End Date</label>
+                    <label htmlFor="endDate">End Date *</label>
                     <input
                       type="date"
                       id="endDate"
@@ -1380,7 +1380,7 @@ const EditEvent = () =>
                 <form className="event-form" onSubmit={handleSubmit}>
 
                   <div className="form-group">
-                    <label htmlFor="name">Event Name</label>
+                    <label htmlFor="name">Event Name *</label>
                     <input
                       type="text"
                       id="name"
@@ -1391,7 +1391,7 @@ const EditEvent = () =>
                   </div>
 
                   <div className="form-group">                  
-                    <label htmlFor="categoryName">Category</label>
+                    <label htmlFor="categoryName">Category *</label>
                     <select
                       id="categoryName"
                       name="categoryName"
@@ -1490,7 +1490,7 @@ const EditEvent = () =>
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="startDate">Start Date</label>
+                    <label htmlFor="startDate">Start Date *</label>
                     <input
                       type="date"
                       id="startDate"
@@ -1501,7 +1501,7 @@ const EditEvent = () =>
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="endDate">End Date</label>
+                    <label htmlFor="endDate">End Date *</label>
                     <input
                       type="date"
                       id="endDate"
